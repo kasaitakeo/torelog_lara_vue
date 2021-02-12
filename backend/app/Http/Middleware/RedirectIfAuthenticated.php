@@ -18,8 +18,10 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        // ログイン状態で非ログイン状態でのみアクセスできる機能にリクエストを送信した場合
+        // SPA 的にはページへのリダイレクト（HTML）が返るのは相応しくないので、先ほど作成したログインユーザー返却 API にリダイレクトするように修正
         if (Auth::guard($guard)->check()) {
-            return redirect(RouteServiceProvider::HOME);
+            return redirect()->route('user');
         }
 
         return $next($request);

@@ -4,6 +4,10 @@ import VueRouter from 'vue-router'
 // ページコンポーネントをインポートする
 import LogList from './pages/LogList.vue'
 import Login from './pages/Login.vue'
+import SystemError from './pages/errors/System.vue'
+
+// ナビゲーションガード追加のため
+import store from './store'
 
 // VueRouterプラグインを使用->これにより<RouterView />を使用できる
 Vue.use(VueRouter)
@@ -16,8 +20,21 @@ const routes = [
   },
   {
     path: '/login',
-    component: Login
+    component: Login,
+    // beforeEnter は定義されたルートにアクセスされてページコンポーネントが切り替わる直前に呼び出される関数
+    // 第一引数 to はアクセスされようとしているルートのルートオブジェクト、第二引数 from はアクセス元のルート、そして第三引数 next はページの移動先（切り替わり先）を決めるための関数
+    beforeEnter (to, form, next) {
+      if (store.getters['auth/check']) {
+        next('/')
+      } else {
+        next()
+      }
+    }
   },
+  {
+    path: '/500',
+    component: SystemError
+  }
 ]
 
 // VueRouterインスタンスを作成する
