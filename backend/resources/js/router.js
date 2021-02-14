@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import LogList from './pages/LogList.vue'
 import Login from './pages/Login.vue'
 import SystemError from './pages/errors/System.vue'
+import LogForm from './pages/LogForm.vue'
 
 // ナビゲーションガード追加のため
 import store from './store'
@@ -30,6 +31,10 @@ const routes = [
         next()
       }
     }
+  },
+  {
+    path: '/LogForm',
+    component: LogForm
   },
   {
     path: '/500',
