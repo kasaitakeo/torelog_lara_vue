@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -22,6 +22,11 @@ class User extends Authenticatable
         'email',
         'password'
     ];
+
+    // public function logs()
+    // {
+    //     return $this->hasMany('App/Models/');
+    // }
 
     public function followers()
     {

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Log;
+use App\Models\User;
 use App\Models\Follower;
 use App\Models\Comment;
 use App\Models\Event;
@@ -18,20 +20,33 @@ class LogsController extends Controller
      */
     public function index(Log $log, Follower $follower)
     {
-        // ログインユーザー取得
-        $user = auth()->user();
+        
+        // $logs = $log->with()
 
-        // Models\Followerで定義した関数followingIdsでログインユーザーがフォローしているユーザーを取得(array)
-        $follow_ids = $follower->followingIds($user->id);
-
-        // followed_idだけ抜き出す following_idは自分のidでいらないから->そもそも配列で取得した時点でfollowed_idのみ取り出せているのでは？
-        // $following_ids = $follow_ids->pluck('followed_id')->toArray();
-
-        // Models/Logで定義したgetTimelinesでログインユーザーがフォローしているユーザーのログのみ取得
-        $timelines = $log->getTimelines($user->id, $follow_ids);
-
-        return $timelines;
+        // return Log::all();
+        return $log->all();
     }
+    // /**
+    //  * ログ一覧取得
+    //  * 
+    //  * 
+    //  */
+    // public function index(Log $log, Follower $follower)
+    // {
+    //     // ログインユーザー取得
+    //     $user = auth()->user();
+
+    //     // Models\Followerで定義した関数followingIdsでログインユーザーがフォローしているユーザーを取得(array)
+    //     $follow_ids = $follower->followingIds($user->id);
+
+    //     // followed_idだけ抜き出す following_idは自分のidでいらないから->そもそも配列で取得した時点でfollowed_idのみ取り出せているのでは？
+    //     // $following_ids = $follow_ids->pluck('followed_id')->toArray();
+
+    //     // Models/Logで定義したgetTimelinesでログインユーザーがフォローしているユーザーのログのみ取得
+    //     $timelines = $log->getTimelines($user->id, $follow_ids);
+
+    //     return $timelines;
+    // }
 
     /**
      * ログ作成
@@ -41,7 +56,10 @@ class LogsController extends Controller
      */
     public function store(Request $request, Log $log)
     {
+        // $user = Auth::user();
         $user = auth()->user();
+        // $user = $request->user();
+        // dd($user);
 
         // requestのデータ(collect型)をall()を使用し配列で取得する
         $data = $request->all();
@@ -60,5 +78,39 @@ class LogsController extends Controller
 
         // レスポンスコード201(created)を返却
         return response(201);
+    }
+
+    /**
+     * ログ詳細取得
+     * 
+     * 
+     */
+    public function show(Log $log, $id)
+    {
+        return $log->where('id', $id)->first();
+    }
+
+    /**
+     * ログアップデート
+     * @param int $log
+     * @return Response
+     */
+    public function update(Request $request, Log $log)
+    {
+        $log->update($request->all());
+
+        return $log;
+    }
+
+    /**
+     * ログ削除
+     * 
+     * 
+     */
+    public function destroy(Log $log)
+    {
+        $log->delete();
+
+        return $log;
     }
 }

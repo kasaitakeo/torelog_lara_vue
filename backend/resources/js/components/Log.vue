@@ -1,5 +1,7 @@
 <template>
-  <div>log</div>
+  <div>
+    <p v-for></p>
+  </div>
 </template>
 <script>
 export default {

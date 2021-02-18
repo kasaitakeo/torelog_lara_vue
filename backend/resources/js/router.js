@@ -5,7 +5,9 @@ import VueRouter from 'vue-router'
 import LogList from './pages/LogList.vue'
 import Login from './pages/Login.vue'
 import SystemError from './pages/errors/System.vue'
-import LogForm from './pages/LogForm.vue'
+import LogCreate from './components/LogCreate.vue'
+import LogShow from './components/LogShow.vue'
+import LogEdit from './components/LogEdit.vue'
 
 // ナビゲーションガード追加のため
 import store from './store'
@@ -33,8 +35,33 @@ const routes = [
     }
   },
   {
-    path: '/LogForm',
-    component: LogForm
+    path: '/logs/create',
+    name: 'log.create',
+    component: LogCreate
+  },
+  {
+    path: '/logs/:logId',
+    name: 'log.show',
+    component: LogShow,
+    props: true
+    // props: route => ({
+    //   logId: route.params.id
+    // })
+  },
+  // {
+  //   path: '/logs/:logId',
+  //   name: 'log.show',
+  //   component: LogShow,
+  //   // props: true
+  //   props: route => ({
+  //     logId: route.params.id
+  //   })
+  // },
+  {
+    path: '/logs/:logId/edit',
+    name: 'log.edit',
+    component: LogEdit,
+    props: true
   },
   {
     path: '/500',

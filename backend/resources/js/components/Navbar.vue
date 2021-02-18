@@ -5,21 +5,14 @@
     </RouterLink>
     <div class="navbar__menu">
       <div v-if="isLogin" class="navbar__item">
-        <button class="button">
-          <i class="icon ion-mb-add"></i>
-          submit torelog
-        </button>
+        <RouterLink v-bind:to="{name: 'log.create'}">
+          <button class="btn btn-success">torelog</button>
+        </RouterLink>
       </div>
       <span v-if="isLogin" class="navbar__item">
         {{ username }}
       </span>
       <div v-else class="navbar__item">
-        <RouterLink class="button button--link" to="/login">
-          Login / Register
-        </RouterLink>
-        <RouterLink class="button button--link" to="/login">
-          Login / Register
-        </RouterLink>
         <RouterLink class="button button--link" to="/login">
           Login / Register
         </RouterLink>

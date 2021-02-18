@@ -30,19 +30,19 @@ Route::get('/user', function () {
 // 'prefix' => 'contactでフォルダを指定することができ、頭につくcontact省略できる。'middleware' => 'auth'で認証機能 コールバックファンクションに通常のルーティングかく
 // Route::group(['prefix' => 'contact', 'middleware' => 'auth'], function () {} )
 
-Route::group(['prefix' => 'logs', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'logs'], function () {
     // トレログ一覧
-    Route::get('index', 'LogsController@index')->name('log.index');
+    Route::get('', 'LogsController@index')->name('log.index');
 
     // トレログ作成（投稿）
-    Route::post('create', 'LogsController@create')->name('log.create');
+    Route::post('', 'LogsController@store')->name('log.store');
 
     // トレログ詳細
-    Route::get('show/{id}', 'LogsController@show')->name('log.show');
+    Route::get('/{id}', 'LogsController@show')->name('log.show');
 
     // トレログ更新
-    Route::post('update/{id}', 'LogsController@update')->name('log.update');
+    Route::put('/{id}', 'LogsController@update')->name('log.update');
 
     // トレログ削除
-    Route::post('destroy/{id}', 'LogsController@destroy')->name('log.destroy');
+    Route::delete('/{id}', 'LogsController@destroy')->name('log.destroy');
 });
