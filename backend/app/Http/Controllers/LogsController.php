@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\User;
 use App\Models\Log;
-use App\Models\User;
 use App\Models\Follower;
 use App\Models\Comment;
 use App\Models\Event;
@@ -85,9 +85,9 @@ class LogsController extends Controller
      * 
      * 
      */
-    public function show(Log $log, $id)
+    public function show(Log $log)
     {
-        return $log->where('id', $id)->first();
+        return $log;
     }
 
     /**
@@ -109,6 +109,7 @@ class LogsController extends Controller
      */
     public function destroy(Log $log)
     {
+        // $log->logDestroy($log->id);
         $log->delete();
 
         return $log;

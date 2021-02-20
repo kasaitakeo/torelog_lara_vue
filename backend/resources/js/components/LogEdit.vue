@@ -9,7 +9,7 @@
                     </div>
                     <div class="form-group row">
                         <label for="content" class="col-sm-3 col-form-label">Content</label>
-                        <input type="text" class="col-sm-9 form-control" id="content" v-model="log.content">
+                        <input type="text" class="col-sm-9 form-control" id="content" v-model="log.text">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -23,7 +23,7 @@ import { OK } from '../util'
 
 export default {
   props: {
-    logId: String
+    logId: Number
   },
   data () {
     return {
@@ -32,9 +32,10 @@ export default {
   },
   methods: {
     async getLog() {
+      // console.log(this.logId)
       const response = await axios.get('/api/logs/' + this.logId)
 
-      console.log(response)
+      // console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
@@ -54,7 +55,8 @@ export default {
       this.$router.push({name: '/'})
     }
   },
-  mounted () {
-    this.getLog();
+  async mounted () {
+    await this.getLog()
   }
 }
+</script>

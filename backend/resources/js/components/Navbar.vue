@@ -8,6 +8,9 @@
         <RouterLink v-bind:to="{name: 'log.create'}">
           <button class="btn btn-success">torelog</button>
         </RouterLink>
+        <RouterLink v-bind:to="{name: 'user'}">
+          <button class="btn btn-success">userlist</button>
+        </RouterLink>
       </div>
       <span v-if="isLogin" class="navbar__item">
         {{ username }}

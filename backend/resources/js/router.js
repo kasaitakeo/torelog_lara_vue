@@ -2,12 +2,15 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // ページコンポーネントをインポートする
-import LogList from './pages/LogList.vue'
 import Login from './pages/Login.vue'
 import SystemError from './pages/errors/System.vue'
+import LogList from './pages/LogList.vue'
 import LogCreate from './components/LogCreate.vue'
 import LogShow from './components/LogShow.vue'
 import LogEdit from './components/LogEdit.vue'
+import UserList from './pages/UserList.vue'
+import UserShow from './components/UserShow.vue'
+import UserEdit from './components/UserEdit.vue'
 
 // ナビゲーションガード追加のため
 import store from './store'
@@ -19,6 +22,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    name: '/',
     component: LogList
   },
   {
@@ -44,23 +48,28 @@ const routes = [
     name: 'log.show',
     component: LogShow,
     props: true
-    // props: route => ({
-    //   logId: route.params.id
-    // })
   },
-  // {
-  //   path: '/logs/:logId',
-  //   name: 'log.show',
-  //   component: LogShow,
-  //   // props: true
-  //   props: route => ({
-  //     logId: route.params.id
-  //   })
-  // },
   {
     path: '/logs/:logId/edit',
     name: 'log.edit',
     component: LogEdit,
+    props: true
+  },
+  {
+    path: '/users',
+    name: 'user',
+    component: UserList,
+  },
+  {
+    path: '/users/:userId',
+    name: 'user.show',
+    component: UserShow,
+    props: true
+  },
+  {
+    path: '/users/:userId/edit',
+    name: 'user.edit',
+    component: UserEdit,
     props: true
   },
   {
