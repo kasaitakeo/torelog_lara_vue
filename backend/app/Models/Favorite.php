@@ -11,7 +11,7 @@ class Favorite extends Model
 
     // いいねしているかどうかの判定処理
     // これはいいねを押した際にツイートに対して既にいいね済みであればfalse、逆に存在しなければtrue これで正しいデータが飛んできたかどうかを判定
-    public function isFavorite(Int $user_id, Int $log_id) 
+    public function isFavorite($user_id, $log_id) 
     {
         return (boolean) $this->where('user_id', $user_id)->where('log_id', $log_id)->first();
     }
@@ -27,7 +27,7 @@ class Favorite extends Model
         return;
     }
 
-    public function destroyFavorite(Int $favorite_id)
+    public function destroyFavorite($favorite_id)
     {
         return $this->where('id', $favorite_id)->delete();
     }

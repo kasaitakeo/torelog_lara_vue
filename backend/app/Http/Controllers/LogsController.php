@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-use App\User;
+use App\Models\User;
 use App\Models\Log;
 use App\Models\Follower;
 use App\Models\Comment;
@@ -18,13 +18,13 @@ class LogsController extends Controller
      * 
      * 
      */
-    public function index(Log $log, Follower $follower)
+    public function index(Follower $follower)
     {
-        
-        // $logs = $log->with()
+        $logs = Log::with(['user', 'favorites', 'comments'])
+        ->orderBy(Log::CREATED_AT, 'desc')->paginate();
 
-        // return Log::all();
-        return $log->all();
+        return $logs;
+        // return $log->all();
     }
     // /**
     //  * ログ一覧取得

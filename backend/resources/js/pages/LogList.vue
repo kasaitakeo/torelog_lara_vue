@@ -4,7 +4,10 @@
       <tr v-for="log in logs" :key="log.id">
         <th scope="row">{{ log.id }}</th>
         <td>{{ log.text }}</td>
-        <td>{{ logUser(log.user_id) }}</td>
+        <td>{{ userId }}</td>
+        <td>{{ log.user.name }}</td>
+        <td>{{ log.favorites.length }}favorites</td>
+        <!-- <td>{{ favoriteCount(log) }}</td> -->
         <td>
           <RouterLink v-bind:to="{name: 'log.show', params: {logId: log.id}}">
             <button>show</button> 
@@ -18,6 +21,15 @@
         <td>
           <button class="btn btn-danger" @click="deleteLog(log.id)">delete</button>
         </td>
+        <td>
+          
+        </td>
+        <td v-if="favoriteStatus(log.favorites)">
+          <button class="btn btn-primary" @click="favoriteLog(log.id)">favorite</button>
+        </td>
+        <td v-else>
+          <button class="btn btn-secondary" @click="unFavoriteLog(log.id)">unfavorite</button>
+        </td>
       </tr>
     </div>
   </div>
@@ -28,13 +40,17 @@ import { OK } from '../util'
 
 export default {
   components: {
-  },
+    },
   data () {
     return {
       logs: [],
-      users: []
     }
   },
+  computed: {
+    userId () {
+      return this.$store.getters['auth/userId']
+    },
+  },  
   methods: {
     async getLogs () {
       const response = await axios.get('/api/logs')
@@ -45,25 +61,7 @@ export default {
         return false
       }
 
-      this.logs = response.data
-    },
-    async getUsers () {
-      const response = await axios.get('/api/users')
-
-      if (response.status !== OK) {
-        this.$store.commit('error/setCode', response.status)
-        return false
-      }
-
-      this.users = response.data
-    },
-    logUser (user_id) {
-      for (let user in this.users) {
-        if (user.id === user_id) {
-          console.log(user.name)
-          return user.name
-        }
-      }
+      this.logs = response.data.data
     },
     async deleteLog (id) {
       const response = await axios.delete('/api/logs/' + id)
@@ -76,11 +74,47 @@ export default {
       }
 
       this.getLogs()
+    },
+    async favoriteLog (id) {
+      const response = await axios.post('/api/favorites', {
+        log_id: id
+      })
+
+      console.log(response)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false  
+      }
+
+      this.getLogs()
+    },
+    async unFavoriteLog (id) {
+      const response = await axios.post('/api/favorites/' + id)
+
+      console.log(response)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false  
+      }
+
+      this.getLogs()
+    },
+    favoriteStatus (favorites) {
+
+      console.log(this.userId)
+
+      for (let favorite in favorites) {
+        if (favorite.user_id !== this.userId) {
+          return false
+        } 
+      }
+      return true
     }
   },
   mounted () {
     this.getLogs()
-    this.getUsers()
   }
 }
 </script>

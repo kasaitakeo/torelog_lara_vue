@@ -2439,8 +2439,8 @@ __webpack_require__.r(__webpack_exports__);
     isLogin: function isLogin() {
       return this.$store.getters['auth/check'];
     },
-    username: function username() {
-      return this.$store.getters['auth/username'];
+    userName: function userName() {
+      return this.$store.getters['auth/userName'];
     }
   }
 });
@@ -2698,14 +2698,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {},
   data: function data() {
     return {
-      logs: [],
-      users: []
+      logs: []
     };
+  },
+  computed: {
+    userId: function userId() {
+      return this.$store.getters['auth/userId'];
+    }
   },
   methods: {
     getLogs: function getLogs() {
@@ -2734,7 +2750,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 7:
-                _this.logs = response.data;
+                _this.logs = response.data.data;
 
               case 8:
               case "end":
@@ -2744,7 +2760,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    getUsers: function getUsers() {
+    deleteLog: function deleteLog(id) {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
@@ -2754,13 +2770,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios.get('/api/users');
+                return axios["delete"]('/api/logs/' + id);
 
               case 2:
                 response = _context2.sent;
+                console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context2.next = 6;
+                  _context2.next = 7;
                   break;
                 }
 
@@ -2768,10 +2785,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context2.abrupt("return", false);
 
-              case 6:
-                _this2.users = response.data;
-
               case 7:
+                _this2.getLogs();
+
+              case 8:
               case "end":
                 return _context2.stop();
             }
@@ -2779,15 +2796,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    logUser: function logUser(user_id) {
-      for (var user in this.users) {
-        if (user.id === user_id) {
-          console.log(user.name);
-          return user.name;
-        }
-      }
-    },
-    deleteLog: function deleteLog(id) {
+    favoriteLog: function favoriteLog(id) {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
@@ -2797,7 +2806,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios["delete"]('/api/logs/' + id);
+                return axios.post('/api/favorites', {
+                  log_id: id
+                });
 
               case 2:
                 response = _context3.sent;
@@ -2822,11 +2833,57 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee3);
       }))();
+    },
+    unFavoriteLog: function unFavoriteLog(id) {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return axios.post('/api/favorites/' + id);
+
+              case 2:
+                response = _context4.sent;
+                console.log(response);
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context4.next = 7;
+                  break;
+                }
+
+                _this4.$store.commit('error/setCode', response.status);
+
+                return _context4.abrupt("return", false);
+
+              case 7:
+                _this4.getLogs();
+
+              case 8:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
+    favoriteStatus: function favoriteStatus(favorites) {
+      console.log(this.userId);
+
+      for (var favorite in favorites) {
+        if (favorite.user_id !== this.userId) {
+          return false;
+        }
+      }
+
+      return true;
     }
   },
   mounted: function mounted() {
     this.getLogs();
-    this.getUsers();
   }
 });
 
@@ -4740,7 +4797,7 @@ var render = function() {
         _vm._v(" "),
         _vm.isLogin
           ? _c("span", { staticClass: "navbar__item" }, [
-              _vm._v("\n      " + _vm._s(_vm.username) + "\n    ")
+              _vm._v("\n      " + _vm._s(_vm.userName) + "\n    ")
             ])
           : _c(
               "div",
@@ -4931,7 +4988,11 @@ var render = function() {
           _vm._v(" "),
           _c("td", [_vm._v(_vm._s(log.text))]),
           _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(_vm.logUser(log.user_id)))]),
+          _c("td", [_vm._v(_vm._s(_vm.userId))]),
+          _vm._v(" "),
+          _c("td", [_vm._v(_vm._s(log.user.name))]),
+          _vm._v(" "),
+          _c("td", [_vm._v(_vm._s(log.favorites.length) + "favorites")]),
           _vm._v(" "),
           _c(
             "td",
@@ -4974,7 +5035,39 @@ var render = function() {
               },
               [_vm._v("delete")]
             )
-          ])
+          ]),
+          _vm._v(" "),
+          _c("td"),
+          _vm._v(" "),
+          _vm.favoriteStatus(log.favorites)
+            ? _c("td", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    on: {
+                      click: function($event) {
+                        return _vm.favoriteLog(log.id)
+                      }
+                    }
+                  },
+                  [_vm._v("favorite")]
+                )
+              ])
+            : _c("td", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    on: {
+                      click: function($event) {
+                        return _vm.unFavoriteLog(log.id)
+                      }
+                    }
+                  },
+                  [_vm._v("unfavorite")]
+                )
+              ])
         ])
       }),
       0
@@ -22294,15 +22387,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!*********************************************!*\
   !*** ./resources/js/components/LogEdit.vue ***!
   \*********************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LogEdit_vue_vue_type_template_id_c29df45a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LogEdit.vue?vue&type=template&id=c29df45a& */ "./resources/js/components/LogEdit.vue?vue&type=template&id=c29df45a&");
 /* harmony import */ var _LogEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LogEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/LogEdit.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _LogEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _LogEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -22332,7 +22424,7 @@ component.options.__file = "resources/js/components/LogEdit.vue"
 /*!**********************************************************************!*\
   !*** ./resources/js/components/LogEdit.vue?vue&type=script&lang=js& ***!
   \**********************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23022,8 +23114,11 @@ var getters = {
   check: function check(state) {
     return !!state.user;
   },
-  username: function username(state) {
+  userName: function userName(state) {
     return state.user ? state.user.name : '';
+  },
+  userId: function userId(state) {
+    return state.user ? state.user.id : '';
   }
 };
 var mutations = {

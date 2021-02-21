@@ -1,7 +1,7 @@
 <?php
 
 // Userは元々app直下にあるのでapp/Modelsに移動してください。その際namespaceを変更するのを忘れずに
-namespace App;
+namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;

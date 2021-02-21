@@ -16,25 +16,27 @@ class FavoritesController extends Controller
 
         $is_favorite = $favorite->isFavorite($user->id, $log_id);
 
-        if(!$is_favorite) {
+        if (!$is_favorite) {
             $favorite->storeFavorite($user->id, $log_id);
             return back();
         }
         return back();
     }
 
-    public function destroy(Favorite $favorite)
+    public function destroy($id, Favorite $favorite)
     {
-        $user_id = $favorite->user_id;
+        $user = auth()->user();
 
-        $log_id = $favorite->log_id;
+        $log_id = $id;
 
-        $favorite_id = $favorite->id;
-
-        $is_favorite = $favorite->isFavorite($user_id, $log_id);
-
-        if($is_favorite) {
-            $favorite->destroyFavorite($favorite_id);
+        // $favorite_id = $favorite->where('user_id', $user->id)->where('log_id', $log_id)->get('id');
+        
+        $is_favorite = $favorite->isFavorite($user->id, $log_id);
+        
+        if ($is_favorite) {
+            $favorite->where('user_id', $user->id)->where('log_id', $log_id)->delete();
+            // $favorite->destroyFavorite($favorite_id);
+            // $favorite->where('id', $favorite_id)->delete();
             return back();
         }
         

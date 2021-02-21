@@ -85,7 +85,7 @@ Route::group(['prefix' => 'events'], function () {
 Route::post('/comments/{comment}', 'CommentsController@store')->name('comment.store');
 
 // いいね
-Route::put('favorites/{favorite}', 'FavoritesController@update')->name('favorite.update');
+Route::post('/favorites', 'FavoritesController@store')->name('favorite.store');
 
 // いいね解除
-Route::delete('favorites/{favorite}', 'FavoritesController@destroy')->name('favorite.destroy');
+Route::post('/favorites/{id}', 'FavoritesController@destroy')->name('favorite.destroy');
