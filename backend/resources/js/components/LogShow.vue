@@ -1,22 +1,11 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-sm-6">
-                <form>
-                    <div class="form-group row border-bottom">
-                        <label for="id" class="col-sm-3 col-form-label">ID</label>
-                        <input type="text" class="col-sm-9 form-control-plaintext" readonly id="id"
-                               v-model="log.id">
-                    </div>
-                    <div class="form-group row border-bottom">
-                        <label for="content" class="col-sm-3 col-form-label">Content</label>
-                        <input type="text" class="col-sm-9 form-control-plaintext" readonly id="content"
-                               v-model="log.text">
-                    </div>
-                </form>
-            </div>
-        </div>
+  <div>
+    <p>name: {{ log.user.name }}</p>
+    <p>log: {{ log.text }}</p>
+    <div v-for="comment in log.comments" :key="comment.id">
+      <p>comment: {{ comment.text }}</p>
     </div>
+  </div>
 </template>
 <script>
 import { OK } from '../util'
@@ -33,11 +22,6 @@ export default {
   methods: {
     async getLog () {
       console.log(this.logId)
-      // await axios.get(`api/logs/${this.logId}`)
-      // .then((res) => {
-      //   this.log = res.data
-      // })
-      // const response = await axios.get(`api/logs/${this.logId}`)
       const response = await axios.get('/api/logs/' + this.logId)
 
       console.log(response)
@@ -50,8 +34,8 @@ export default {
       this.log = response.data
     }
   },
-  async mounted () {
-    await this.getLog()
+  mounted () {
+    this.getLog()
   }
 
 }

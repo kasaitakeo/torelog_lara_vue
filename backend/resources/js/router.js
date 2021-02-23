@@ -8,9 +8,13 @@ import LogList from './pages/LogList.vue'
 import LogCreate from './components/LogCreate.vue'
 import LogShow from './components/LogShow.vue'
 import LogEdit from './components/LogEdit.vue'
+import EventCreate from './components/EventCreate.vue'
+import EventShow from './components/EventShow.vue'
+import EventEdit from './components/EventEdit.vue'
 import UserList from './pages/UserList.vue'
 import UserShow from './components/UserShow.vue'
 import UserEdit from './components/UserEdit.vue'
+import CommentCreate from './components/CommentCreate.vue'
 
 // ナビゲーションガード追加のため
 import store from './store'
@@ -56,6 +60,23 @@ const routes = [
     props: true
   },
   {
+    path: '/events/create',
+    name: 'event.create',
+    component: EventCreate
+  },
+  {
+    path: '/events/:eventId',
+    name: 'event.show',
+    component: EventShow,
+    props: true
+  },
+  {
+    path: '/events/:eventId/edit',
+    name: 'event.edit',
+    component: EventEdit,
+    props: true
+  },
+  {
     path: '/users',
     name: 'user',
     component: UserList,
@@ -70,6 +91,12 @@ const routes = [
     path: '/users/:userId/edit',
     name: 'user.edit',
     component: UserEdit,
+    props: true
+  },
+  {
+    path: '/comments/:logId/create',
+    name: 'comment.create',
+    component: CommentCreate,
     props: true
   },
   {

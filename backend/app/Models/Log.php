@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\softDeletes;
+use App\Models\User;
+use App\Models\Favorite;
+use App\Models\Comment;
 
 class Log extends Model
 {
@@ -21,7 +24,7 @@ class Log extends Model
 
     /**
      * Eloquentリレーション
-     * hasOneと同じ１対１の関係
+     * 
      */
     public function user()
     {

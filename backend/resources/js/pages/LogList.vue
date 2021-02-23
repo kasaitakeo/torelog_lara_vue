@@ -5,9 +5,14 @@
         <th scope="row">{{ log.id }}</th>
         <td>{{ log.text }}</td>
         <td>{{ userId }}</td>
+        <td>
+          <RouterLink v-bind:to="{name: 'user.show', params: {userId: log.user.id}}">
+            <button>{{ log.user.name }}</button> 
+          </RouterLink>
+        </td>
         <td>{{ log.user.name }}</td>
         <td>{{ log.favorites.length }}favorites</td>
-        <!-- <td>{{ favoriteCount(log) }}</td> -->
+        <td>{{ log.comments.length }}comments</td>
         <td>
           <RouterLink v-bind:to="{name: 'log.show', params: {logId: log.id}}">
             <button>show</button> 
@@ -22,7 +27,11 @@
           <button class="btn btn-danger" @click="deleteLog(log.id)">delete</button>
         </td>
         <td>
-          
+        </td>
+        <td>
+          <RouterLink v-bind:to="{name: 'comment.create', params: {logId: log.id}}">
+            <button>addcomment</button> 
+          </RouterLink>
         </td>
         <td v-if="favoriteStatus(log.favorites)">
           <button class="btn btn-primary" @click="favoriteLog(log.id)">favorite</button>

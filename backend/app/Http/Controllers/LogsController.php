@@ -85,9 +85,12 @@ class LogsController extends Controller
      * 
      * 
      */
-    public function show(Log $log)
+    public function show($log_id)
     {
-        return $log;
+        $log_data = Log::with(['user', 'favorites', 'comments'])
+        ->where('id', $log_id)->first();
+
+        return $log_data;
     }
 
     /**

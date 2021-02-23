@@ -31,15 +31,22 @@ class EventsController extends Controller
     {
         //
         $user = auth()->user();
-        $event_datas = $request->all();
-        // $validator = Validator::make($data, [
-        //     'text' => ['required', 'string', 'max:140']
-        // ]);
 
-        // $validator->validate();
-        $event->eventStore($user->id, $event_datas);
+        $event->user_id = $user->id;
+        $event->part = $request->input('eventPart');
+        $event->event_name = $request->input('eventName');
+        $event->event_explanation = $request->input('eventExplanation');
 
-        return redirect('events');
+        $event->save();
+        // $event_datas = $request->all();
+        // // $validator = Validator::make($data, [
+        // //     'text' => ['required', 'string', 'max:140']
+        // // ]);
+
+        // // $validator->validate();
+        // $event->eventStore($user->id, $event_datas);
+
+        // return;
     }
 
     public function event_select(Request $request, Event $event)

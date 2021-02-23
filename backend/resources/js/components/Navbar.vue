@@ -5,6 +5,9 @@
     </RouterLink>
     <div class="navbar__menu">
       <div v-if="isLogin" class="navbar__item">
+        <RouterLink v-bind:to="{name: 'event.create'}">
+          <button class="btn btn-success">addevent</button>
+        </RouterLink>
         <RouterLink v-bind:to="{name: 'log.create'}">
           <button class="btn btn-success">torelog</button>
         </RouterLink>

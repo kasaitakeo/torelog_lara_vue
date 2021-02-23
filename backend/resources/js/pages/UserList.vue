@@ -14,6 +14,11 @@
             <button>edit</button>
           </RouterLink>
         </td>
+        <td v-for="event in events" :key="event.id">
+          <RouterLink :to="{name: 'event.show', params: {eventId: event.id}}">
+            <button>{{ event.name }}</button>
+          </RouterLink>
+        </td>
       </tr>
     </div>
   </div>
@@ -25,7 +30,8 @@ import { OK } from '../util'
 export default {
   data () {
     return {
-      users: []
+      users: [],
+      event: []
     }
   },
   methods: {
@@ -38,10 +44,23 @@ export default {
       }
 
       this.users = response.data
-    }
+    },
+    async getEvents () {
+      const response = await axios.get('/api/events')
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.events = response.data
+    },
+
   },
   mounted () {
     this.getUsers()
+
+    this.getEvents()
   }
 }
 </script>

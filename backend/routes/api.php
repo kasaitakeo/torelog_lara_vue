@@ -82,7 +82,7 @@ Route::group(['prefix' => 'events'], function () {
 });
 
 // コメント作成
-Route::post('/comments/{comment}', 'CommentsController@store')->name('comment.store');
+Route::post('/comments', 'CommentsController@store')->name('comment.store');
 
 // いいね
 Route::post('/favorites', 'FavoritesController@store')->name('favorite.store');
