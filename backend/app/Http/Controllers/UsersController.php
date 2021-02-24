@@ -17,12 +17,12 @@ class UsersController extends Controller
         return $user->all();
     }
 
-    public function show(User $user)
+    public function show($user_id)
     {
-        // $login_user = auth()->user();
+        $user_data = User::with('events')->where('id', $user_id)->first();
+        // ->where('id', $user_id)->first();
 
-        // return $user->where('id', $login_user)->first();
-        return $user;
+        return $user_data;
     }
 
     public function update(Request $request,User $user)

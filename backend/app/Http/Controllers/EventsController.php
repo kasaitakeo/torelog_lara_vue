@@ -12,11 +12,12 @@ class EventsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Event $event)
+    public function index(Event $event, Request $request)
     {
         //
-        $user = auth()->user();
-        $all_events = $event->getAllEvents(auth()->user()->id);
+        $user_id = $request->get('user_id');
+
+        $all_events = $event->where('user_id', $user_id)->all();
 
         return $all_events;
     }
@@ -38,55 +39,6 @@ class EventsController extends Controller
         $event->event_explanation = $request->input('eventExplanation');
 
         $event->save();
-        // $event_datas = $request->all();
-        // // $validator = Validator::make($data, [
-        // //     'text' => ['required', 'string', 'max:140']
-        // // ]);
-
-        // // $validator->validate();
-        // $event->eventStore($user->id, $event_datas);
-
-        // return;
-    }
-
-    public function event_select(Request $request, Event $event)
-    {
-        $user = auth()->user();
-        $data = $request->all();
-        // dd($data);
-
-        if (isset($data['events'])) {
-            $event_ids = $data['events'];
-            // dd($event_ids);
-            foreach ($event_ids as $event_id) {
-
-                $event_datas[] = $event->getEvents($event_id);
-
-                // dd($event_datas);
-                // foreach ($event_datas as $event_data) {
-                //     $event_names[] = $event_data->event_name;
-                //     $event_parts[] = $event_data->part;
-                // }
-                // 重複しないよう初期化 $event_datas[]にもともと入っていた$event_idも一緒にforeachしてしまう
-                // $event_datas = null;
-                $request->session()->put('event_datas', $event_datas);
-                // dd($event_datas);
-
-                // $request->session()->put('event_names', $event_names);
-                // $request->session()->put('event_parts', $event_parts);
-                // $product = array(1,2,3,4);
-                // Session::Push('cart', $product);
-
-            }
-
-            return view('sessions.index', [
-                'user' => $user,
-                // 'event_datas' => $event_datas
-            ]);
-
-        } else {
-            return back();
-        }
     }
 
     /**
@@ -95,9 +47,12 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
+    public function show($id)
     {
-        //
+        $event_data = event::with(['user'])
+        ->where('id', $id)->first();
+
+        return $event_data;
     }
     /**
      * Update the specified resource in storage.
@@ -106,9 +61,15 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
+    public function update(Request $request, $id)
     {
         //
+        $event = EventForm::find($id);
+
+        $event->event_name = $request->input('eventName');
+        $event->event_explanation = $request->input('eventExplanation');
+
+        $event->save();
     }
 
     /**

@@ -22,7 +22,7 @@ class Event extends Model
     // 逆に$guardedというのはブラックリストで登録/更新できないカラムを指定します。基本的にはどちらでも可です
     protected $fillable = [
         'event_name',
-        'event_name',
+        'event_explanation',
         'part',
     ];
 
@@ -31,10 +31,10 @@ class Event extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getAllEvents(Int $user_id)
+    public function getAllEvents($user_id)
     {
         // return $this->Where('user_id',  $user_id)->pluck('event_name');
-        return $this->Where('user_id',  $user_id)->get();
+        return $this->Where('user_id',  $user_id);
     }
 
     public function eventStore(Int $user_id, Array $event_datas)

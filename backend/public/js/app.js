@@ -2217,24 +2217,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    eventId: Number
+  },
   data: function data() {
     return {
-      part: '',
-      eventName: '',
-      eventExplanation: ''
+      event: {},
+      msg: '',
+      errora: null
     };
   },
-  method: {
-    evenetCreate: function evenetCreate() {
+  methods: {
+    getEvent: function getEvent() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
@@ -2244,26 +2240,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.post('/api/events', {
-                  part: _this.part,
-                  eventName: _this.eventName,
-                  eventExplanation: _this.eventExplanation
-                });
+                return axios.get('/api/events/' + _this.eventId);
 
               case 2:
                 response = _context.sent;
 
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
                   _context.next = 6;
-                  break;
-                }
-
-                _this.errors = response.data.errors;
-                return _context.abrupt("return", false);
-
-              case 6:
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 9;
                   break;
                 }
 
@@ -2271,19 +2254,57 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 9:
-                _this.msg = 'event created';
+              case 6:
+                _this.event = response.data;
 
-                _this.$router.push('/');
-
-              case 11:
+              case 7:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
+    },
+    submit: function submit() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.put('/api/events/' + _this2.event.id, _this2.event);
+
+              case 2:
+                response = _context2.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                _this2.$store.commit('error/setCode', response.status);
+
+                return _context2.abrupt("return", false);
+
+              case 6:
+                _this2.$router.push({
+                  name: 'event'
+                });
+
+              case 7:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
+  },
+  mounted: function mounted() {
+    this.getEvent();
   }
 });
 
@@ -2320,29 +2341,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    eventId: Number
+  },
   data: function data() {
     return {
-      part: '',
-      eventName: '',
-      eventExplanation: ''
+      event: {}
     };
   },
-  method: {
-    evenetCreate: function evenetCreate() {
+  methods: {
+    getEvent: function getEvent() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
@@ -2352,26 +2362,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.post('/api/events', {
-                  part: _this.part,
-                  eventName: _this.eventName,
-                  eventExplanation: _this.eventExplanation
-                });
+                return axios.get('/api/events/' + _this.eventId);
 
               case 2:
                 response = _context.sent;
 
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
                   _context.next = 6;
-                  break;
-                }
-
-                _this.errors = response.data.errors;
-                return _context.abrupt("return", false);
-
-              case 6:
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 9;
                   break;
                 }
 
@@ -2379,12 +2376,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 9:
-                _this.msg = 'event created';
+              case 6:
+                _this.event = response.data;
 
-                _this.$router.push('/');
-
-              case 11:
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -2392,6 +2387,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     }
+  },
+  mounted: function mounted() {
+    this.getEvent();
   }
 });
 
@@ -3000,6 +2998,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -3025,9 +3028,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context.sent;
+                console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context.next = 6;
+                  _context.next = 7;
                   break;
                 }
 
@@ -3035,20 +3039,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 6:
+              case 7:
                 _this.user = response.data;
 
-              case 7:
+              case 8:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
-    }
+    } // async getEvents () {
+    //   const response = await axios.get('/api/events', {
+    //     user_id: this.user.id
+    //   })
+    //   console.log(response)
+    //   if (response.status !== OK) {
+    //     this.$store.commit('error/setCode', response.status)
+    //     return false
+    //   }
+    //   this.events = response.data
+    // }
+
   },
   mounted: function mounted() {
-    this.getUser();
+    this.getUser(); // this.getEvents()
   }
 });
 
@@ -3516,17 +3531,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      users: [],
-      event: []
+      users: []
     };
   },
   methods: {
@@ -3563,41 +3572,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee);
-      }))();
-    },
-    getEvents: function getEvents() {
-      var _this2 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.get('/api/events');
-
-              case 2:
-                response = _context2.sent;
-
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context2.next = 6;
-                  break;
-                }
-
-                _this2.$store.commit('error/setCode', response.status);
-
-                return _context2.abrupt("return", false);
-
-              case 6:
-                _this2.events = response.data;
-
-              case 7:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
       }))();
     }
   },
@@ -5112,55 +5086,11 @@ var render = function() {
         }
       },
       [
-        _c("span", [_vm._v("SelectedPart: " + _vm._s(_vm.selected))]),
+        _c("span", [_vm._v("SelectedPart: " + _vm._s(_vm.event.part))]),
         _vm._v(" "),
-        _c(
-          "select",
-          {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.part,
-                expression: "part"
-              }
-            ],
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.part = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          },
-          [
-            _c("option", { attrs: { disabled: "", value: "" } }, [
-              _vm._v("Please select one part")
-            ]),
-            _vm._v(" "),
-            _c("option", [_vm._v("chest")]),
-            _vm._v(" "),
-            _c("option", [_vm._v("back")]),
-            _vm._v(" "),
-            _c("option", [_vm._v("sholder")]),
-            _vm._v(" "),
-            _c("option", [_vm._v("leg")]),
-            _vm._v(" "),
-            _c("option", [_vm._v("arm")]),
-            _vm._v(" "),
-            _c("option", [_vm._v("abdominal")])
-          ]
-        ),
+        _c("br"),
         _vm._v(" "),
-        _c("span", [_vm._v("event name:" + _vm._s(_vm.eventName))]),
+        _c("span", [_vm._v("event name:" + _vm._s(_vm.event.event_name))]),
         _vm._v(" "),
         _c("br"),
         _vm._v(" "),
@@ -5169,24 +5099,26 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.eventName,
-              expression: "eventName"
+              value: _vm.event.name,
+              expression: "event.name"
             }
           ],
-          attrs: { placeholder: "edit me" },
-          domProps: { value: _vm.eventName },
+          attrs: { placeholder: "add event name" },
+          domProps: { value: _vm.event.name },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.eventName = $event.target.value
+              _vm.$set(_vm.event, "name", $event.target.value)
             }
           }
         }),
         _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
         _c("span", [
-          _vm._v("event explanation:" + _vm._s(_vm.eventExplanation))
+          _vm._v("event explanation:" + _vm._s(_vm.event.event_explanation))
         ]),
         _vm._v(" "),
         _c("br"),
@@ -5196,18 +5128,18 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.eventExplanation,
-              expression: "eventExplanation"
+              value: _vm.event_explanation,
+              expression: "event_explanation"
             }
           ],
-          attrs: { placeholder: "add multiple lines" },
-          domProps: { value: _vm.eventExplanation },
+          attrs: { placeholder: "add event explanation" },
+          domProps: { value: _vm.event_explanation },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.eventExplanation = $event.target.value
+              _vm.event_explanation = $event.target.value
             }
           }
         }),
@@ -5241,124 +5173,33 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "form",
-      {
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.eventCreate($event)
+  return _c(
+    "div",
+    [
+      _c("p", [_vm._v("ID: " + _vm._s(_vm.event.id))]),
+      _vm._v(" "),
+      _c("p", [_vm._v("part: " + _vm._s(_vm.event.part))]),
+      _vm._v(" "),
+      _c("p", [_vm._v("event name: " + _vm._s(_vm.event.event_name))]),
+      _vm._v(" "),
+      _c("p", [
+        _vm._v("event explanation: " + _vm._s(_vm.event.event_explanation))
+      ]),
+      _vm._v(" "),
+      _c("p", [_vm._v("creater: " + _vm._s(_vm.event.user.name))]),
+      _vm._v(" "),
+      _c(
+        "RouterLink",
+        {
+          attrs: {
+            to: { name: "event.edit", params: { eventId: _vm.event.id } }
           }
-        }
-      },
-      [
-        _c("span", [_vm._v("SelectedPart: " + _vm._s(_vm.selected))]),
-        _vm._v(" "),
-        _c(
-          "select",
-          {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.part,
-                expression: "part"
-              }
-            ],
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.part = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          },
-          [
-            _c("option", { attrs: { disabled: "", value: "" } }, [
-              _vm._v("Please select one part")
-            ]),
-            _vm._v(" "),
-            _c("option", [_vm._v("chest")]),
-            _vm._v(" "),
-            _c("option", [_vm._v("back")]),
-            _vm._v(" "),
-            _c("option", [_vm._v("sholder")]),
-            _vm._v(" "),
-            _c("option", [_vm._v("leg")]),
-            _vm._v(" "),
-            _c("option", [_vm._v("arm")]),
-            _vm._v(" "),
-            _c("option", [_vm._v("abdominal")])
-          ]
-        ),
-        _vm._v(" "),
-        _c("span", [_vm._v("event name:" + _vm._s(_vm.eventName))]),
-        _vm._v(" "),
-        _c("br"),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.eventName,
-              expression: "eventName"
-            }
-          ],
-          attrs: { placeholder: "edit me" },
-          domProps: { value: _vm.eventName },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.eventName = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("span", [
-          _vm._v("event explanation:" + _vm._s(_vm.eventExplanation))
-        ]),
-        _vm._v(" "),
-        _c("br"),
-        _vm._v(" "),
-        _c("textarea", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.eventExplanation,
-              expression: "eventExplanation"
-            }
-          ],
-          attrs: { placeholder: "add multiple lines" },
-          domProps: { value: _vm.eventExplanation },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.eventExplanation = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("button", { attrs: { type: "submit" } }, [_vm._v("event create")])
-      ]
-    ),
-    _vm._v(" "),
-    _c("p", [_vm._v(_vm._s(_vm.msg))])
-  ])
+        },
+        [_c("button", [_vm._v("event edit")])]
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -5847,11 +5688,34 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("p", [_vm._v(_vm._s(_vm.user.id))]),
-    _vm._v(" "),
-    _c("p", [_vm._v(_vm._s(_vm.user.name))])
-  ])
+  return _c(
+    "div",
+    [
+      _c("p", [_vm._v(_vm._s(_vm.user.id))]),
+      _vm._v(" "),
+      _c("p", [_vm._v(_vm._s(_vm.user.name))]),
+      _vm._v(" "),
+      _vm._l(_vm.user.events, function(event) {
+        return _c(
+          "td",
+          { key: event.id },
+          [
+            _c(
+              "RouterLink",
+              {
+                attrs: {
+                  to: { name: "event.show", params: { eventId: event.id } }
+                }
+              },
+              [_c("button", [_vm._v(_vm._s(event.event_name))])]
+            )
+          ],
+          1
+        )
+      })
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -6383,70 +6247,43 @@ var render = function() {
     _c(
       "div",
       _vm._l(_vm.users, function(user) {
-        return _c(
-          "tr",
-          { key: user.id },
-          [
-            _c("th", [_vm._v(_vm._s(user.id))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(user.name))]),
-            _vm._v(" "),
-            _c(
-              "td",
-              [
-                _c(
-                  "RouterLink",
-                  {
-                    attrs: {
-                      to: { name: "user.show", params: { userId: user.id } }
-                    }
-                  },
-                  [_c("button", [_vm._v("show")])]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "td",
-              [
-                _c(
-                  "RouterLink",
-                  {
-                    attrs: {
-                      to: { name: "user.edit", params: { userId: user.id } }
-                    }
-                  },
-                  [_c("button", [_vm._v("edit")])]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _vm._l(_vm.events, function(event) {
-              return _c(
-                "td",
-                { key: event.id },
-                [
-                  _c(
-                    "RouterLink",
-                    {
-                      attrs: {
-                        to: {
-                          name: "event.show",
-                          params: { eventId: event.id }
-                        }
-                      }
-                    },
-                    [_c("button", [_vm._v(_vm._s(event.name))])]
-                  )
-                ],
-                1
+        return _c("tr", { key: user.id }, [
+          _c("th", [_vm._v(_vm._s(user.id))]),
+          _vm._v(" "),
+          _c("td", [_vm._v(_vm._s(user.name))]),
+          _vm._v(" "),
+          _c(
+            "td",
+            [
+              _c(
+                "RouterLink",
+                {
+                  attrs: {
+                    to: { name: "user.show", params: { userId: user.id } }
+                  }
+                },
+                [_c("button", [_vm._v("show")])]
               )
-            })
-          ],
-          2
-        )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "td",
+            [
+              _c(
+                "RouterLink",
+                {
+                  attrs: {
+                    to: { name: "user.edit", params: { userId: user.id } }
+                  }
+                },
+                [_c("button", [_vm._v("edit")])]
+              )
+            ],
+            1
+          )
+        ])
       }),
       0
     )
