@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Log;
 use App\Models\Event;
 
 class User extends Authenticatable
@@ -42,6 +43,15 @@ class User extends Authenticatable
         return $this->belongsToMany(self::class, 'followers', 'following_id', 'followed_id');
     }
 
+    /**
+     * Eloquentリレーション
+     * １対多の場合(メソッド名が複数形)
+     */
+    public function logs()
+    {
+        return $this->hasMany(Log::class);
+    
+    }
     /**
      * Eloquentリレーション
      * １対多の場合(メソッド名が複数形)

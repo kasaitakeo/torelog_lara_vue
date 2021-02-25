@@ -19,11 +19,36 @@ class UsersController extends Controller
 
     public function show($user_id)
     {
-        $user_data = User::with('events')->where('id', $user_id)->first();
+        $user_data = User::with('events', 'logs')->where('id', $user_id)->first();
         // ->where('id', $user_id)->first();
 
         return $user_data;
+        
     }
+
+    // public function show(User $user, Tweet $tweet, Follower $follower)
+    // {
+    //     // $login_userはログインしている自身の情報
+    //     $login_user = auth()->user();
+    //     $is_following = $login_user->isFollowing($user->id);
+    //     $is_followed = $login_user->isFollowed($user->id);
+    //     // $timelinesはユーザのツイート情報
+    //     $timelines = $tweet->getUserTimeLine($user->id);
+    //     // $~~countってついてるのがカウント関連
+    //     $tweet_count = $tweet->getTweetCount($user->id);
+    //     $follow_count = $follower->getFollowCount($user->id);
+    //     $follower_count = $follower->getFollowerCount($user->id);
+
+    //     return [
+    //         'user'           => $user,
+    //         'is_following'   => $is_following,
+    //         'is_followed'    => $is_followed,
+    //         'timelines'      => $timelines,
+    //         'tweet_count'    => $tweet_count,
+    //         'follow_count'   => $follow_count,
+    //         'follower_count' => $follower_count
+    //     ];
+    // }
 
     public function update(Request $request,User $user)
     {

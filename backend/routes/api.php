@@ -58,10 +58,10 @@ Route::group(['prefix' => 'users'], function () {
     Route::put('/{user}', 'UsersController@update')->name('user.update');
     
     // フォロー
-    Route::put('/{user}/follow', 'UsersController@follow')->name('user.follow');
+    Route::post('/follow/{user}', 'UsersController@follow')->name('user.follow');
 
     // フォロー解除
-    Route::delete('/{user}/unfollow', 'UsersController@unfollow')->name('user.unfollow');
+    Route::post('/unfollow/{user}', 'UsersController@unfollow')->name('user.unfollow');
 });
 
 Route::group(['prefix' => 'events'], function () {

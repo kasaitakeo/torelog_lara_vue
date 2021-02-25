@@ -2,11 +2,16 @@
   <div>
     <p>{{ user.id }}</p>
     <p>{{ user.name }}</p>
-    <td v-for="event in user.events" :key="event.id">
-      <RouterLink :to="{name: 'event.show', params: {eventId: event.id}}">
-        <button>{{ event.event_name }}</button>
+    <div v-for="log in user.logs" :key="log.id">
+      <RouterLink :to="{name: 'log.show', params: {logId: log.id}}">
+        <p>{{ log.text }}</p>
       </RouterLink>
-    </td>
+    </div>
+    <div v-for="event in user.events" :key="event.id">
+      <RouterLink :to="{name: 'event.show', params: {eventId: event.id}}">
+        <p>{{ event.event_name }}</p>
+      </RouterLink>
+    </div>
   </div>
   
 </template>

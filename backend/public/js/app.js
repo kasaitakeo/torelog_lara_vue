@@ -3003,6 +3003,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -3531,6 +3536,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3572,6 +3588,80 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee);
+      }))();
+    },
+    follow: function follow(id) {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.post('/api/follow', {
+                  user_id: id
+                });
+
+              case 2:
+                response = _context2.sent;
+                console.log(response);
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context2.next = 7;
+                  break;
+                }
+
+                _this2.$store.commit('error/setCode', response.status);
+
+                return _context2.abrupt("return", false);
+
+              case 7:
+                _this2.getUsers();
+
+              case 8:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    unfollow: function unfollow(id) {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios.post('/api/unfollow/' + id);
+
+              case 2:
+                response = _context3.sent;
+                console.log(response);
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context3.next = 7;
+                  break;
+                }
+
+                _this3.$store.commit('error/setCode', response.status);
+
+                return _context3.abrupt("return", false);
+
+              case 7:
+                _this3.getLogs();
+
+              case 8:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
       }))();
     }
   },
@@ -5695,9 +5785,26 @@ var render = function() {
       _vm._v(" "),
       _c("p", [_vm._v(_vm._s(_vm.user.name))]),
       _vm._v(" "),
+      _vm._l(_vm.user.logs, function(log) {
+        return _c(
+          "div",
+          { key: log.id },
+          [
+            _c(
+              "RouterLink",
+              {
+                attrs: { to: { name: "log.show", params: { logId: log.id } } }
+              },
+              [_c("p", [_vm._v(_vm._s(log.text))])]
+            )
+          ],
+          1
+        )
+      }),
+      _vm._v(" "),
       _vm._l(_vm.user.events, function(event) {
         return _c(
-          "td",
+          "div",
           { key: event.id },
           [
             _c(
@@ -5707,7 +5814,7 @@ var render = function() {
                   to: { name: "event.show", params: { eventId: event.id } }
                 }
               },
-              [_c("button", [_vm._v(_vm._s(event.event_name))])]
+              [_c("p", [_vm._v(_vm._s(event.event_name))])]
             )
           ],
           1
@@ -6282,7 +6389,51 @@ var render = function() {
               )
             ],
             1
-          )
+          ),
+          _vm._v(" "),
+          _c(
+            "td",
+            [
+              _c(
+                "RouterLink",
+                {
+                  attrs: { to: { name: "user.", params: { userId: user.id } } }
+                },
+                [_c("button", [_vm._v("edit")])]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("td", [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                on: {
+                  click: function($event) {
+                    return _vm.follow(user.id)
+                  }
+                }
+              },
+              [_vm._v("follow")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("td", [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                on: {
+                  click: function($event) {
+                    return _vm.unfollow(user.id)
+                  }
+                }
+              },
+              [_vm._v("unfollow")]
+            )
+          ])
         ])
       }),
       0

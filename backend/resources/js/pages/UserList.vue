@@ -14,6 +14,17 @@
             <button>edit</button>
           </RouterLink>
         </td>
+        <td>
+          <RouterLink :to="{name: 'user.', params: {userId: user.id}}">
+            <button>edit</button>
+          </RouterLink>
+        </td>
+        <td>
+          <button class="btn btn-danger" @click="follow(user.id)">follow</button>
+        </td>
+        <td>
+          <button class="btn btn-danger" @click="unfollow(user.id)">unfollow</button>
+        </td>
       </tr>
     </div>
   </div>
@@ -38,6 +49,32 @@ export default {
       }
 
       this.users = response.data
+    },
+    async follow (id) {
+      const response = await axios.post('/api/follow', {
+        user_id: id
+      })
+
+      console.log(response)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false  
+      }
+
+      this.getUsers()
+    },
+    async unfollow (id) {
+      const response = await axios.post('/api/unfollow/' + id)
+
+      console.log(response)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false  
+      }
+
+      this.getLogs()
     },
   },
   mounted () {
