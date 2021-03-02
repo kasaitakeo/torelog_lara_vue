@@ -81,6 +81,24 @@ Route::group(['prefix' => 'events'], function () {
     Route::delete('/{event}', 'EventsController@destroy')->name('event.destroy');
 });
 
+Route::get('/{log_id}/event_logs', 'EventLogsController@index')->name('event_log.index');
+Route::group(['prefix' => 'event_logs'], function () {
+    // 種目一覧
+    Route::get('/{log_id}', 'EventLogsController@index')->name('event_log.index');
+
+    // 種目作成
+    Route::post('', 'EventLogsController@store')->name('event_log.store');
+
+    // 種目詳細
+    // Route::get('/{event}', 'EventLogsController@show')->name('event_log.show');
+
+    // 種目更新
+    // Route::put('/{event}', 'EventLogsController@update')->name('event_log.update');
+
+    // 種目削除
+    Route::delete('/{event_log_id}', 'EventLogsController@delete')->name('event_log.delete');
+});
+
 // コメント作成
 Route::post('/comments', 'CommentsController@store')->name('comment.store');
 

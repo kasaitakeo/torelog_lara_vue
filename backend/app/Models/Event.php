@@ -31,6 +31,11 @@ class Event extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function eventLogs()
+    {
+        return $this->hasMany('App\Models\EventLog');
+    }
+
     public function getAllEvents($user_id)
     {
         // return $this->Where('user_id',  $user_id)->pluck('event_name');

@@ -12,12 +12,12 @@ class EventsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Event $event, Request $request)
+    public function index(Event $event)
     {
         //
-        $user_id = $request->get('user_id');
+        $user = auth()->user();
 
-        $all_events = $event->where('user_id', $user_id)->all();
+        $all_events = $event->where('user_id', $user->id)->get()->all();
 
         return $all_events;
     }

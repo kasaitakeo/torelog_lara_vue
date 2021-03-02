@@ -1,75 +1,98 @@
 <template>
   <div>
-    <form @submit.prevent="postEventLog">
-      <div v-for="event in events">
-        <form>
-          <input type="hidden" :value="logId">
-          <input type="hidden" value="event.Id">
-          <ul>
-            <li>重量：
-            <select name="weight">
-            <div v-for="n in 200">
-              <div v-if="n === 50">
-                <option value="{{ n }}" selected>{{ $i }}KG</option>
-
-              </div>
-            </div>
-                    @continue;
-                @endif
-            <option value="{{ $i }}">{{ $i }}KG</option>
-            @endfor
-            </select>
-            </li>
-            <li>回数：
-            <select name="rep">
-            @for ($i = 0; $i < 30; $i++)
-                @if ($i === 10) {
-                    <option value="{{ $i }}" selected>{{ $i }}REP</option>
-                    @continue;
-                @endif
-            <option value="{{ $i }}">{{ $i }}REP</option>
-            @endfor
-            </select>
-            </li>
-            <li>セット数：
-            <select name="set">
-            @for ($i = 0; $i < 30; $i++)
-                @if ($i === 10) {
-                    <option value="{{ $i }}" selected>{{ $i }}SET</option>
-                    @continue;
-                @endif
-            <option value="{{ $i }}">{{ $i }}SET</option>
-            @endfor
-            </select>
-            </li>
-        </ul>
-        <button type="submit" class="btn btn-primary">追加する</button>
-
-        </form>
-      </div>
-    </form>
+    <PostEventLog
+      class="grid__item"
+      v-for="event in events"
+      :key="event.id"
+      :event="event"
+      @post="postEventLog"
+    />
+    <EventLog
+      v-for="event_log in event_logs"
+      :key="event_log.id"
+      :item="event_log"
+      @deleteEventLog="deleteEventLog"
+    />
     <form @submit.prevent="postLog">
       <textarea v-model="logContent"></textarea>
       <button type="submit">ログ作成</button>
     </form>
-    <p>{{ logContent }}</p>
-    <p>{{ msg }}</p>
   </div>
 </template>
 
 <script>
 import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
+import { OK } from '../util'
+import PostEventLog from '../components/PostEventLog.vue'
+import EventLog from '../components/EventLog.vue'
 
 export default {
+  components: {
+    PostEventLog,
+    EventLog,
+  },
   data () {
     return {
+      logId: '',
+      events: {},
+      event_logs: {},
       logContent: '',
       msg: '',
       errors: null
     }
   },
+  computed: {
+    userId () {
+      return this.$store.getters['auth/userId']
+    },
+  },  
   methods: {
+    async postEventLog ({ id, weight, rep, set }) {
+
+      const response = await axios.post('/api/event_logs', {
+        log_id: this.logId,
+        event_id: id,
+        weight: weight,
+        rep: rep,
+        set: set
+      })
+
+      console.log(response)
+
+      // if (response.status !== UNPROCESSABLE_ENTITY) {
+      //   this.errors = response.data.errors
+      //   return false
+      // }
+
+      // if (response.status !== CREATED) {
+      //   this.$store.commit('error/setCode', response.status)
+      //   return false
+      // }
+
+      this.getEventLogs()
+      this.msg = 'eventlogが追加されました'
+    },
+    async deleteEventLog ({ id }) {
+      
+      const response = await axios.delete(`/api/event_logs/${id}`)
+      console.log(response)
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.getEventLogs()
+    },
     async postLog () {
+
+      const response = await axios.post('/api/logs')
+
+      // console.log(response)
+      console.log(response.data)
+
+      this.logId = response.data
+    },
+    async updateLog () {
 
       const response = await axios.post('/api/logs', {
         text: this.logContent
@@ -88,7 +111,37 @@ export default {
       this.msg = 'logが投稿されました'
 
       this.$router.push('/')
+    },
+    async getEvents () {
+      const response = await axios.get('/api/events')
+
+      console.log(response)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.events = response.data
+    },
+    async getEventLogs () {
+      const response = await axios.get(`/api/${this.logId}/event_logs`)
+
+      console.log(response)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.event_logs = response.data
     }
+  },
+  mounted () {
+    this.postLog()
+    this.getEvents()
+    // this.getEventLogs()
+
   }
 }
 </script>
