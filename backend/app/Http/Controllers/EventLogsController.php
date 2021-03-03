@@ -31,4 +31,9 @@ class EventLogsController extends Controller
     {
         $event_log->where('id', $event_log_id)->delete();
     }
+
+    public function allDelete(EventLog $event_log, $log_id)
+    {
+        $event_log->where('log_id', $log_id)->delete();
+    }
 }

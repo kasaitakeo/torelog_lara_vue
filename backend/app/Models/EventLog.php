@@ -11,4 +11,9 @@ class EventLog extends Model
     {
         return $this->belongsTo('App\Models\Event');
     }
+
+    public function log()
+    {
+        return $this->belongsTo('App\Models\Log');
+    }
 }

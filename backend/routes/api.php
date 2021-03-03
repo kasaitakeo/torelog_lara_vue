@@ -31,19 +31,19 @@ Route::get('/user', function () {
 // Route::group(['prefix' => 'contact', 'middleware' => 'auth'], function () {} )
 
 Route::group(['prefix' => 'logs'], function () {
-    // トレログ一覧
+    // ログ一覧
     Route::get('', 'LogsController@index')->name('log.index');
 
-    // トレログ作成（投稿）
+    // ログ作成（投稿）
     Route::post('', 'LogsController@store')->name('log.store');
 
-    // トレログ詳細
+    // ログ詳細
     Route::get('/{log}', 'LogsController@show')->name('log.show');
 
-    // トレログ更新
+    // ログ更新
     Route::put('/{log}', 'LogsController@update')->name('log.update');
 
-    // トレログ削除
+    // ログ削除
     Route::delete('/{log}', 'LogsController@destroy')->name('log.destroy');
 });
 
@@ -81,21 +81,17 @@ Route::group(['prefix' => 'events'], function () {
     Route::delete('/{event}', 'EventsController@destroy')->name('event.destroy');
 });
 
+// 種目ログ取得
 Route::get('/{log_id}/event_logs', 'EventLogsController@index')->name('event_log.index');
-Route::group(['prefix' => 'event_logs'], function () {
-    // 種目一覧
-    Route::get('/{log_id}', 'EventLogsController@index')->name('event_log.index');
 
-    // 種目作成
+// 種目ログ作成中のログ分を全て削除
+Route::delete('/{log_id}/event_logs', 'EventLogsController@allDelete')->name('event_log.all_delete');
+
+Route::group(['prefix' => 'event_logs'], function () {
+    // 種目ログ作成
     Route::post('', 'EventLogsController@store')->name('event_log.store');
 
-    // 種目詳細
-    // Route::get('/{event}', 'EventLogsController@show')->name('event_log.show');
-
-    // 種目更新
-    // Route::put('/{event}', 'EventLogsController@update')->name('event_log.update');
-
-    // 種目削除
+    // 種目ログ削除
     Route::delete('/{event_log_id}', 'EventLogsController@delete')->name('event_log.delete');
 });
 

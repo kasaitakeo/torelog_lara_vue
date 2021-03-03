@@ -15,38 +15,15 @@ class LogsController extends Controller
 {
     /**
      * ログ一覧取得
-     * 
-     * 
      */
-    public function index(Follower $follower)
+    public function index(Log $log)
     {
-        $logs = Log::with(['user', 'favorites', 'comments'])
-        ->orderBy(Log::CREATED_AT, 'desc')->paginate();
+        $logs = $log->with(['user', 'favorites', 'comments','event_logs' => function($query){
+            $query->with('event');
+        }])->orderBy(Log::CREATED_AT, 'desc')->paginate();
 
         return $logs;
-        // return $log->all();
     }
-    // /**
-    //  * ログ一覧取得
-    //  * 
-    //  * 
-    //  */
-    // public function index(Log $log, Follower $follower)
-    // {
-    //     // ログインユーザー取得
-    //     $user = auth()->user();
-
-    //     // Models\Followerで定義した関数followingIdsでログインユーザーがフォローしているユーザーを取得(array)
-    //     $follow_ids = $follower->followingIds($user->id);
-
-    //     // followed_idだけ抜き出す following_idは自分のidでいらないから->そもそも配列で取得した時点でfollowed_idのみ取り出せているのでは？
-    //     // $following_ids = $follow_ids->pluck('followed_id')->toArray();
-
-    //     // Models/Logで定義したgetTimelinesでログインユーザーがフォローしているユーザーのログのみ取得
-    //     $timelines = $log->getTimelines($user->id, $follow_ids);
-
-    //     return $timelines;
-    // }
 
     /**
      * ログ作成

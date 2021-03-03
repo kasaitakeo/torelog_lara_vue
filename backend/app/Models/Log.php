@@ -49,6 +49,11 @@ class Log extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function event_logs()
+    {
+        return $this->hasMany('App\Models\EventLog');
+    }
+
     /**
      * 自分のログのみ取得
      * @param Int $user_id

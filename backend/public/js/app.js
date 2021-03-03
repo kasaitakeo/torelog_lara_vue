@@ -2112,6 +2112,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2165,10 +2167,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 11:
                 _this.msg = 'event created';
+                _this.eventPart = '';
+                _this.eventName = '';
+                _this.eventExplanation = '';
 
                 _this.$router.push('/');
 
-              case 13:
+              case 16:
               case "end":
                 return _context.stop();
             }
@@ -2584,6 +2589,81 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2599,6 +2679,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       events: {},
       event_logs: {},
       logContent: '',
+      active: 0,
+      eventParts: [{
+        id: 0,
+        name: '胸'
+      }, {
+        id: 1,
+        name: '背中'
+      }, {
+        id: 2,
+        name: '肩'
+      }, {
+        id: 3,
+        name: '脚'
+      }, {
+        id: 4,
+        name: '上腕二頭筋'
+      }, {
+        id: 5,
+        name: '上腕三頭筋'
+      }, {
+        id: 6,
+        name: '腹筋'
+      }, {
+        id: 7,
+        name: 'その他'
+      }],
       msg: '',
       errors: null
     };
@@ -2609,6 +2715,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
+    activate: function activate(id) {
+      this.active = id;
+    },
     postEventLog: function postEventLog(_ref) {
       var _this = this;
 
@@ -2630,14 +2739,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 response = _context.sent;
-                console.log(response); // if (response.status !== UNPROCESSABLE_ENTITY) {
-                //   this.errors = response.data.errors
-                //   return false
-                // }
-                // if (response.status !== CREATED) {
-                //   this.$store.commit('error/setCode', response.status)
-                //   return false
-                // }
+                console.log(response);
 
                 _this.getEventLogs();
 
@@ -2688,7 +2790,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    postLog: function postLog() {
+    deleteAllEventLog: function deleteAllEventLog() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
@@ -2698,15 +2800,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios.post('/api/logs');
+                return axios["delete"]("/api/".concat(_this3.logId, "/event_logs"));
 
               case 2:
                 response = _context3.sent;
-                // console.log(response)
-                console.log(response.data);
-                _this3.logId = response.data;
+                console.log(response);
 
-              case 5:
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context3.next = 7;
+                  break;
+                }
+
+                _this3.$store.commit('error/setCode', response.status);
+
+                return _context3.abrupt("return", false);
+
+              case 7:
+                _this3.getEventLogs();
+
+              case 8:
               case "end":
                 return _context3.stop();
             }
@@ -2714,7 +2826,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
-    updateLog: function updateLog() {
+    postLog: function postLog() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
@@ -2724,37 +2836,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return axios.post('/api/logs', {
-                  text: _this4.logContent
-                });
+                return axios.post('/api/logs');
 
               case 2:
                 response = _context4.sent;
+                // console.log(response)
+                console.log(response.data);
+                _this4.logId = response.data;
 
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
-                  _context4.next = 6;
-                  break;
-                }
-
-                _this4.errors = response.data.errors;
-                return _context4.abrupt("return", false);
-
-              case 6:
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context4.next = 9;
-                  break;
-                }
-
-                _this4.$store.commit('error/setCode', response.status);
-
-                return _context4.abrupt("return", false);
-
-              case 9:
-                _this4.msg = 'logが投稿されました';
-
-                _this4.$router.push('/');
-
-              case 11:
+              case 5:
               case "end":
                 return _context4.stop();
             }
@@ -2762,7 +2852,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     },
-    getEvents: function getEvents() {
+    updateLog: function updateLog() {
       var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
@@ -2772,25 +2862,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context5.prev = _context5.next) {
               case 0:
                 _context5.next = 2;
-                return axios.get('/api/events');
+                return axios.put("/api/logs/".concat(_this5.logId), {
+                  text: _this5.logContent
+                });
 
               case 2:
                 response = _context5.sent;
-                console.log(response);
+                console.log(response.data);
+                _this5.msg = 'logが投稿されました';
 
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context5.next = 7;
-                  break;
-                }
+                _this5.$router.push('/');
 
-                _this5.$store.commit('error/setCode', response.status);
-
-                return _context5.abrupt("return", false);
-
-              case 7:
-                _this5.events = response.data;
-
-              case 8:
+              case 6:
               case "end":
                 return _context5.stop();
             }
@@ -2798,7 +2881,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee5);
       }))();
     },
-    getEventLogs: function getEventLogs() {
+    deleteLog: function deleteLog() {
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
@@ -2808,7 +2891,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context6.prev = _context6.next) {
               case 0:
                 _context6.next = 2;
-                return axios.get("/api/".concat(_this6.logId, "/event_logs"));
+                return axios["delete"]("/api/logs/".concat(_this6.logId));
 
               case 2:
                 response = _context6.sent;
@@ -2824,20 +2907,120 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context6.abrupt("return", false);
 
               case 7:
-                _this6.event_logs = response.data;
-
-              case 8:
               case "end":
                 return _context6.stop();
             }
           }
         }, _callee6);
       }))();
+    },
+    getEvents: function getEvents() {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return axios.get('/api/events');
+
+              case 2:
+                response = _context7.sent;
+                console.log(response);
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context7.next = 7;
+                  break;
+                }
+
+                _this7.$store.commit('error/setCode', response.status);
+
+                return _context7.abrupt("return", false);
+
+              case 7:
+                _this7.events = response.data;
+
+              case 8:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
+      }))();
+    },
+    getEventLogs: function getEventLogs() {
+      var _this8 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                _context8.next = 2;
+                return axios.get("/api/".concat(_this8.logId, "/event_logs"));
+
+              case 2:
+                response = _context8.sent;
+                console.log(response);
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context8.next = 7;
+                  break;
+                }
+
+                _this8.$store.commit('error/setCode', response.status);
+
+                return _context8.abrupt("return", false);
+
+              case 7:
+                _this8.event_logs = response.data;
+
+              case 8:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }))();
+    },
+    confirmSave: function confirmSave(event) {
+      event.returnValue = "編集中のものは保存されませんが、よろしいですか？";
+
+      if (event.returnValue) {
+        this.deleteLog();
+        this.deleteAllEventLog();
+      }
     }
   },
   mounted: function mounted() {
     this.postLog();
-    this.getEvents(); // this.getEventLogs()
+    this.getEvents();
+  },
+  // created () {
+  //   window.addEventListener("beforeunload", this.confirmSave)
+  // },
+  destroyed: function destroyed() {
+    window.removeEventListener("beforeunload", this.confirmSave);
+  },
+  beforeRouteLeave: function beforeRouteLeave(to, from, next) {
+    if (typeof this.event_logs !== 'undefined') {
+      this.deleteLog();
+      next();
+    } // if (isset(this.event_logs) && !isset(this.logContent)) {
+    //   const answer = window.confirm("編集中のトレログの一言が未入力のまま保存されますがよろしいですか？")
+    //   if (answer) {
+    //     next()
+    //   } else {
+    //     next(false)
+    //   } 
+    // } else {
+    //   this.deleteLog()
+    //   next()
+    // }
+
   }
 });
 
@@ -3138,30 +3321,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -5407,124 +5566,119 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "form",
-      {
+    _c("form", { on: { submit: _vm.eventCreate } }, [
+      _c("span", [_vm._v("種目部位選択: " + _vm._s(_vm.eventPart))]),
+      _vm._v(" "),
+      _c(
+        "select",
+        {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.eventPart,
+              expression: "eventPart"
+            }
+          ],
+          on: {
+            change: function($event) {
+              var $$selectedVal = Array.prototype.filter
+                .call($event.target.options, function(o) {
+                  return o.selected
+                })
+                .map(function(o) {
+                  var val = "_value" in o ? o._value : o.value
+                  return val
+                })
+              _vm.eventPart = $event.target.multiple
+                ? $$selectedVal
+                : $$selectedVal[0]
+            }
+          }
+        },
+        [
+          _c("option", { attrs: { disabled: "", value: "" } }, [
+            _vm._v("種目部位を選択してください")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "胸" } }, [_vm._v("胸")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "背中" } }, [_vm._v("背中")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "肩" } }, [_vm._v("肩")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "脚" } }, [_vm._v("脚")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "上腕二頭筋" } }, [
+            _vm._v("上腕二頭筋")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "上腕三頭筋" } }, [
+            _vm._v("上腕三頭筋")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "腹筋" } }, [_vm._v("腹筋")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "その他" } }, [_vm._v("その他")])
+        ]
+      ),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("span", [_vm._v("種目:" + _vm._s(_vm.eventName))]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.eventName,
+            expression: "eventName"
+          }
+        ],
+        attrs: { placeholder: "種目名を入力してください" },
+        domProps: { value: _vm.eventName },
         on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.eventCreate($event)
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.eventName = $event.target.value
           }
         }
-      },
-      [
-        _c("span", [_vm._v("SelectedPart: " + _vm._s(_vm.eventPart))]),
-        _vm._v(" "),
-        _c(
-          "select",
+      }),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("span", [_vm._v("種目解説:" + _vm._s(_vm.eventExplanation))]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("textarea", {
+        directives: [
           {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.eventPart,
-                expression: "eventPart"
-              }
-            ],
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.eventPart = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          },
-          [
-            _c("option", { attrs: { disabled: "", value: "" } }, [
-              _vm._v("Please select one eventpart")
-            ]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "胸" } }, [_vm._v("chest")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "背中" } }, [_vm._v("back")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "肩" } }, [_vm._v("sholder")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "脚" } }, [_vm._v("leg")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "腕" } }, [_vm._v("arm")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "腹筋" } }, [_vm._v("abdominal")])
-          ]
-        ),
-        _vm._v(" "),
-        _c("br"),
-        _vm._v(" "),
-        _c("span", [_vm._v("event name:" + _vm._s(_vm.eventName))]),
-        _vm._v(" "),
-        _c("br"),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.eventName,
-              expression: "eventName"
-            }
-          ],
-          attrs: { placeholder: "add event name" },
-          domProps: { value: _vm.eventName },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.eventName = $event.target.value
-            }
+            name: "model",
+            rawName: "v-model",
+            value: _vm.eventExplanation,
+            expression: "eventExplanation"
           }
-        }),
-        _vm._v(" "),
-        _c("br"),
-        _vm._v(" "),
-        _c("span", [
-          _vm._v("event explanation:" + _vm._s(_vm.eventExplanation))
-        ]),
-        _vm._v(" "),
-        _c("br"),
-        _vm._v(" "),
-        _c("textarea", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.eventExplanation,
-              expression: "eventExplanation"
+        ],
+        attrs: { placeholder: "種目の解説を入力してください" },
+        domProps: { value: _vm.eventExplanation },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
             }
-          ],
-          attrs: { placeholder: "add event explanation" },
-          domProps: { value: _vm.eventExplanation },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.eventExplanation = $event.target.value
-            }
+            _vm.eventExplanation = $event.target.value
           }
-        }),
-        _vm._v(" "),
-        _c("button", { attrs: { type: "submit" } }, [_vm._v("event create")])
-      ]
-    ),
+        }
+      }),
+      _vm._v(" "),
+      _c("button", { attrs: { type: "submit" } }, [_vm._v("種目追加")])
+    ]),
     _vm._v(" "),
     _c("p", [_vm._v(_vm._s(_vm.msg))])
   ])
@@ -5811,13 +5965,234 @@ var render = function() {
   return _c(
     "div",
     [
+      _c("section", [
+        _c(
+          "ul",
+          _vm._l(_vm.eventParts, function(eventPart) {
+            return _c("li", { key: eventPart.id }, [
+              _c(
+                "a",
+                {
+                  class: { active: _vm.active === eventPart.id },
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      return _vm.activate(eventPart.id)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(eventPart.name))]
+              )
+            ])
+          }),
+          0
+        )
+      ]),
+      _vm._v(" "),
       _vm._l(_vm.events, function(event) {
-        return _c("PostEventLog", {
-          key: event.id,
-          staticClass: "grid__item",
-          attrs: { event: event },
-          on: { post: _vm.postEventLog }
-        })
+        return _c("div", { key: event.id }, [
+          event.part === "胸"
+            ? _c("div", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.active === 0,
+                        expression: "active === 0"
+                      }
+                    ],
+                    staticClass: "tab__content"
+                  },
+                  [
+                    _c("PostEventLog", {
+                      staticClass: "grid__item",
+                      attrs: { event: event },
+                      on: { post: _vm.postEventLog }
+                    })
+                  ],
+                  1
+                )
+              ])
+            : event.part === "背中"
+            ? _c("div", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.active === 1,
+                        expression: "active === 1"
+                      }
+                    ],
+                    staticClass: "tab__content"
+                  },
+                  [
+                    _c("PostEventLog", {
+                      staticClass: "grid__item",
+                      attrs: { event: event },
+                      on: { post: _vm.postEventLog }
+                    })
+                  ],
+                  1
+                )
+              ])
+            : event.part === "肩"
+            ? _c("div", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.active === 2,
+                        expression: "active === 2"
+                      }
+                    ],
+                    staticClass: "tab__content"
+                  },
+                  [
+                    _c("PostEventLog", {
+                      staticClass: "grid__item",
+                      attrs: { event: event },
+                      on: { post: _vm.postEventLog }
+                    })
+                  ],
+                  1
+                )
+              ])
+            : event.part === "脚"
+            ? _c("div", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.active === 3,
+                        expression: "active === 3"
+                      }
+                    ],
+                    staticClass: "tab__content"
+                  },
+                  [
+                    _c("PostEventLog", {
+                      staticClass: "grid__item",
+                      attrs: { event: event },
+                      on: { post: _vm.postEventLog }
+                    })
+                  ],
+                  1
+                )
+              ])
+            : event.part === "上腕二頭筋"
+            ? _c("div", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.active === 4,
+                        expression: "active === 4"
+                      }
+                    ],
+                    staticClass: "tab__content"
+                  },
+                  [
+                    _c("PostEventLog", {
+                      staticClass: "grid__item",
+                      attrs: { event: event },
+                      on: { post: _vm.postEventLog }
+                    })
+                  ],
+                  1
+                )
+              ])
+            : event.part === "上腕三頭筋"
+            ? _c("div", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.active === 5,
+                        expression: "active === 5"
+                      }
+                    ],
+                    staticClass: "tab__content"
+                  },
+                  [
+                    _c("PostEventLog", {
+                      staticClass: "grid__item",
+                      attrs: { event: event },
+                      on: { post: _vm.postEventLog }
+                    })
+                  ],
+                  1
+                )
+              ])
+            : event.part === "腹筋"
+            ? _c("div", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.active === 6,
+                        expression: "active === 6"
+                      }
+                    ],
+                    staticClass: "tab__content"
+                  },
+                  [
+                    _c("PostEventLog", {
+                      staticClass: "grid__item",
+                      attrs: { event: event },
+                      on: { post: _vm.postEventLog }
+                    })
+                  ],
+                  1
+                )
+              ])
+            : event.part === "その他"
+            ? _c("div", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.active === 7,
+                        expression: "active === 7"
+                      }
+                    ],
+                    staticClass: "tab__content"
+                  },
+                  [
+                    _c("PostEventLog", {
+                      staticClass: "grid__item",
+                      attrs: { event: event },
+                      on: { post: _vm.postEventLog }
+                    })
+                  ],
+                  1
+                )
+              ])
+            : _vm._e()
+        ])
       }),
       _vm._v(" "),
       _vm._l(_vm.event_logs, function(event_log) {
@@ -5834,7 +6209,7 @@ var render = function() {
           on: {
             submit: function($event) {
               $event.preventDefault()
-              return _vm.postLog($event)
+              return _vm.updateLog($event)
             }
           }
         },
@@ -6203,7 +6578,7 @@ var render = function() {
                   }
                 }
               },
-              _vm._l(100, function(n) {
+              _vm._l(30, function(n) {
                 return _c("option", { key: n, domProps: { value: n } }, [
                   _vm._v(_vm._s(n) + "rep")
                 ])
@@ -6241,16 +6616,12 @@ var render = function() {
                   }
                 }
               },
-              [
-                _vm._l(100, function(n) {
-                  return _c("option", { key: n, domProps: { value: n } }, [
-                    _vm._v(_vm._s(n) + "set")
-                  ])
-                }),
-                _vm._v(" "),
-                _vm._v(" -->\n          ")
-              ],
-              2
+              _vm._l(10, function(n) {
+                return _c("option", { key: n, domProps: { value: n } }, [
+                  _vm._v(_vm._s(n) + "set")
+                ])
+              }),
+              0
             )
           ])
         ]),

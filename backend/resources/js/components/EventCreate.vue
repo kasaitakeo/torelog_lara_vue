@@ -1,25 +1,27 @@
 <template>
   <div>
-    <form @submit.prevent="eventCreate">
-      <span>SelectedPart: {{ eventPart }}</span>
+    <form @submit="eventCreate">
+      <span>種目部位選択: {{ eventPart }}</span>
       <select v-model="eventPart">
-        <option disabled value="">Please select one eventpart</option>
-        <option value="胸">chest</option>
-        <option value="背中">back</option>
-        <option value="肩">sholder</option>
-        <option value="脚">leg</option>
-        <option value="腕">arm</option>
-        <option value="腹筋">abdominal</option>
+        <option disabled value="">種目部位を選択してください</option>
+        <option value="胸">胸</option>
+        <option value="背中">背中</option>
+        <option value="肩">肩</option>
+        <option value="脚">脚</option>
+        <option value="上腕二頭筋">上腕二頭筋</option>
+        <option value="上腕三頭筋">上腕三頭筋</option>
+        <option value="腹筋">腹筋</option>
+        <option value="その他">その他</option>
       </select>
       <br>
-      <span>event name:{{ eventName }}</span>
+      <span>種目:{{ eventName }}</span>
       <br>
-      <input v-model="eventName" placeholder="add event name">
+      <input v-model="eventName" placeholder="種目名を入力してください">
       <br>
-      <span>event explanation:{{ eventExplanation }}</span>
+      <span>種目解説:{{ eventExplanation }}</span>
       <br>
-      <textarea v-model="eventExplanation" placeholder="add event explanation"></textarea>
-      <button type="submit">event create</button>
+      <textarea v-model="eventExplanation" placeholder="種目の解説を入力してください"></textarea>
+      <button type="submit">種目追加</button>
     </form>
     <p>{{ msg }}</p>
   </div>
@@ -60,6 +62,12 @@ export default {
       }
 
       this.msg = 'event created'
+
+      this.eventPart = ''
+
+      this.eventName = ''
+
+      this.eventExplanation = ''
 
       this.$router.push('/')
     }
