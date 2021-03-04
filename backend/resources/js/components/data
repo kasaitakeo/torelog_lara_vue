@@ -1,0 +1,102 @@
+<div v-for="event_log in log.event_logs" :key="event_log.id">
+  <div v-if="event_log.event.part === '胸'" v-show="event_log.event.part !== null">
+    <EventLog
+      :item="event_log"
+      :ableDelete="false"
+    />
+  </div>
+  <div v-else-if="event_log.event.part === '背中'" v-show="event_log.event.part !== null">
+    <EventLog
+      :item="event_log"
+      :ableDelete="false"
+    />
+  </div>
+  <div v-else-if="event_log.event.part === '肩'" v-show="event_log.event.part !== null">
+    <EventLog
+      :item="event_log"
+      :ableDelete="false"
+    />
+  </div>
+  <div v-else-if="event_log.event.part === '脚'" v-show="event_log.event.part !== null">
+    <EventLog
+      :item="event_log"
+      :ableDelete="false"
+    />
+  </div>
+  <div v-else-if="event_log.event.part === '上腕二頭筋'" v-show="event_log.event.part !== null">
+    <EventLog
+      :item="event_log"
+      :ableDelete="false"
+    />
+  </div>
+  <div v-else-if="event_log.event.part === '上腕三頭筋'" v-show="event_log.event.part !== null">
+    <EventLog
+      :item="event_log"
+      :ableDelete="false"
+    />
+  </div>
+  <div v-else-if="event_log.event.part === '腹筋'" v-show="event_log.event.part !== null">
+    <EventLog
+      :item="event_log"
+      :ableDelete="false"
+    />
+  </div>
+  <div v-else-if="event_log.event.part === 'その他'" v-show="event_log.event.part !== null">
+    <EventLog
+      :item="event_log"
+      :ableDelete="false"
+    />
+  </div>
+</div>
+
+
+
+<template>
+  <div>
+    <p>
+      <span>部位：{{ item.event.part }}</span>  
+      <span>種目：{{ item.event.event_name }}</span>  
+    </p>
+    <span>{{ item.weight }}kg</span>
+    <span>{{ item.rep }}rep</span>
+    <span>{{ item.set }}set</span>
+    <div class="tab__content" v-show="ableDelete">
+      <form @submit.prevent="deleteEventLog"><button type="submit">削除</button></form>
+    </div>  
+  </div>
+</template>
+
+
+<div v-if="event_log.event.part === '胸'" v-show="event_log.event.part !== null">
+  
+</div>
+<div v-else-if="event_log.event.part === '背中'" v-show="event_log.event.part !== null">
+  
+</div>
+<div v-else-if="event_log.event.part === '肩'" v-show="event_log.event.part !== null">
+  
+</div>
+<div v-else-if="event_log.event.part === '脚'" v-show="event_log.event.part !== null">
+  
+</div>
+<div v-else-if="event_log.event.part === '上腕二頭筋'" v-show="event_log.event.part !== null">
+  
+</div>
+<div v-else-if="event_log.event.part === '上腕三頭筋'" v-show="event_log.event.part !== null">
+  
+</div>
+<div v-else-if="event_log.event.part === '腹筋'" v-show="event_log.event.part !== null">
+  
+</div>
+<div v-else-if="event_log.event.part === 'その他'" v-show="event_log.event.part !== null">
+  
+</div>
+
+<EventLog
+  v-for="event_log in log.event_logs" 
+  :key="event_log.id"
+  :item="event_log"
+  :ableDelete="false"
+/>
+
+

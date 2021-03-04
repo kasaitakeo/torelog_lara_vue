@@ -3,19 +3,26 @@
     <div>
       <tr v-for="log in logs" :key="log.id">
         <th scope="row">{{ log.id }}</th>
-        <td>{{ log.text }}</td>
         <td>{{ userId }}</td>
         <td>
           <RouterLink v-bind:to="{name: 'user.show', params: {userId: log.user.id}}">
             <button>{{ log.user.name }}</button> 
           </RouterLink>
         </td>
-        <td>{{ log.user.name }}</td>
+        <div >
+          <EventLog
+            v-for="event_log in log.event_logs" 
+            :key="event_log.id"
+            :item="event_log"
+            :ableDelete="false"
+          />
+          <td>{{ log.text }}</td>
+        </div>
         <td>{{ log.favorites.length }}favorites</td>
         <td>{{ log.comments.length }}comments</td>
         <td>
           <RouterLink v-bind:to="{name: 'log.show', params: {logId: log.id}}">
-            <button>show</button> 
+            <button>ログ詳細</button> 
           </RouterLink>
         </td>
         <td>
@@ -46,10 +53,12 @@
 
 <script>
 import { OK } from '../util'
+import EventLog from '../components/EventLog.vue'
 
 export default {
   components: {
-    },
+    EventLog,
+  },
   data () {
     return {
       logs: [],

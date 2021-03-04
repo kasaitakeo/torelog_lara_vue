@@ -19,7 +19,11 @@ class UsersController extends Controller
 
     public function show($user_id)
     {
-        $user_data = User::with('events', 'logs')->where('id', $user_id)->first();
+        $user_data = User::with(['logs' => function($query){
+            $query->with(['event_logs' => function($query){
+                $query->with('event');
+            }]);
+        }])->where('id', $user_id)->first();
         // ->where('id', $user_id)->first();
 
         return $user_data;

@@ -49,7 +49,9 @@ class LogsController extends Controller
      */
     public function show($log_id)
     {
-        $log_data = Log::with(['user', 'favorites', 'comments'])
+        $log_data = Log::with(['user', 'favorites', 'comments', 'event_logs' => function($query){
+            $query->with('event');
+        }])
         ->where('id', $log_id)->first();
 
         return $log_data;

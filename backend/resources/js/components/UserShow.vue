@@ -2,27 +2,48 @@
   <div>
     <p>{{ user.id }}</p>
     <p>{{ user.name }}</p>
+    <p v-if="user.id === loginUserId">
+      <RouterLink :to="{name: 'user.edit', params: {userId: user.id}}">
+        <button>edit</button>
+      </RouterLink>
+    </p>
     <div v-for="log in user.logs" :key="log.id">
+      <p>{{ log.id }}</p>
       <RouterLink :to="{name: 'log.show', params: {logId: log.id}}">
+        <EventLog
+            v-for="event_log in log.event_logs" 
+            :key="event_log.id"
+            :item="event_log"
+            :ableDelete="false"
+          />
         <p>{{ log.text }}</p>
       </RouterLink>
     </div>
-    <div v-for="event in user.events" :key="event.id">
+    <!-- <div v-for="event in user.events" :key="event.id">
       <RouterLink :to="{name: 'event.show', params: {eventId: event.id}}">
         <p>{{ event.event_name }}</p>
       </RouterLink>
-    </div>
+    </div> -->
   </div>
 
 </template>
 
 <script>
 import { OK } from '../util'
+import EventLog from '../components/EventLog.vue'
 
 export default {
+  components: {
+    EventLog,
+  },
   props: {
     userId: Number
   },
+  computed: {
+    loginUserId () {
+      return this.$store.getters['auth/userId']
+    },
+  },  
   data () {
     return {
       user: {},

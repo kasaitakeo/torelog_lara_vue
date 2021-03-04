@@ -10,16 +10,6 @@
           </RouterLink>
         </td>
         <td>
-          <RouterLink :to="{name: 'user.edit', params: {userId: user.id}}">
-            <button>edit</button>
-          </RouterLink>
-        </td>
-        <td>
-          <RouterLink :to="{name: 'user.', params: {userId: user.id}}">
-            <button>edit</button>
-          </RouterLink>
-        </td>
-        <td>
           <button class="btn btn-danger" @click="follow(user.id)">follow</button>
         </td>
         <td>
@@ -79,8 +69,6 @@ export default {
   },
   mounted () {
     this.getUsers()
-
-    this.getEvents()
   }
 }
 </script>

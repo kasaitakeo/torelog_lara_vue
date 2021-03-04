@@ -2345,10 +2345,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     item: {
       type: Object,
+      required: true
+    },
+    ableDelete: {
+      type: Boolean,
       required: true
     }
   },
@@ -2567,6 +2573,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
 //
 //
 //
@@ -3198,6 +3205,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -3205,7 +3222,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      log: {}
+      log: [],
+      user: ''
     };
   },
   methods: {
@@ -3218,13 +3236,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log(_this.logId);
-                _context.next = 3;
+                _context.next = 2;
                 return axios.get('/api/logs/' + _this.logId);
 
-              case 3:
+              case 2:
                 response = _context.sent;
                 console.log(response);
+                console.log(response.data.user.name);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
                   _context.next = 8;
@@ -3237,8 +3255,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 8:
                 _this.log = response.data;
+                _this.user = response.data.user.name;
 
-              case 9:
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -3530,6 +3549,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+/* harmony import */ var _components_EventLog_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/EventLog.vue */ "./resources/js/components/EventLog.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -3554,10 +3574,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    EventLog: _components_EventLog_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
   props: {
     userId: Number
+  },
+  computed: {
+    loginUserId: function loginUserId() {
+      return this.$store.getters['auth/userId'];
+    }
   },
   data: function data() {
     return {
@@ -3632,6 +3673,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+/* harmony import */ var _components_EventLog_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/EventLog.vue */ "./resources/js/components/EventLog.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -3684,9 +3726,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {},
+  components: {
+    EventLog: _components_EventLog_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
   data: function data() {
     return {
       logs: []
@@ -4083,16 +4135,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -4213,7 +4255,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   mounted: function mounted() {
     this.getUsers();
-    this.getEvents();
   }
 });
 
@@ -5818,16 +5859,32 @@ var render = function() {
     _c("span", [_vm._v(_vm._s(_vm.item.set) + "set")]),
     _vm._v(" "),
     _c(
-      "form",
+      "div",
       {
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.deleteEventLog($event)
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.ableDelete,
+            expression: "ableDelete"
           }
-        }
+        ],
+        staticClass: "tab__content"
       },
-      [_c("button", { attrs: { type: "submit" } }, [_vm._v("削除")])]
+      [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.deleteEventLog($event)
+              }
+            }
+          },
+          [_c("button", { attrs: { type: "submit" } }, [_vm._v("削除")])]
+        )
+      ]
     )
   ])
 }
@@ -6198,7 +6255,7 @@ var render = function() {
       _vm._l(_vm.event_logs, function(event_log) {
         return _c("EventLog", {
           key: event_log.id,
-          attrs: { item: event_log },
+          attrs: { item: event_log, ableDelete: true },
           on: { deleteEventLog: _vm.deleteEventLog }
         })
       }),
@@ -6379,7 +6436,25 @@ var render = function() {
   return _c(
     "div",
     [
+      _c("p", [_vm._v("name: " + _vm._s(_vm.user))]),
+      _vm._v(" "),
       _c("p", [_vm._v("name: " + _vm._s(_vm.log.user.name))]),
+      _vm._v(" "),
+      _c("p", [_vm._v("name: " + _vm._s(_vm.log.user.email))]),
+      _vm._v(" "),
+      _vm._l(_vm.log.event_logs, function(event_log) {
+        return _c("div", { key: event_log.id }, [
+          _c("p", [_vm._v("部位: " + _vm._s(event_log.event.part))]),
+          _vm._v(" "),
+          _c("p", [_vm._v("種目名: " + _vm._s(event_log.event.event_name))]),
+          _vm._v(" "),
+          _c("p", [_vm._v(_vm._s(event_log.weight) + "KG")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("log: " + _vm._s(event_log.rep) + "REP")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("log: " + _vm._s(event_log.set) + "SET")])
+        ])
+      }),
       _vm._v(" "),
       _c("p", [_vm._v("log: " + _vm._s(_vm.log.text))]),
       _vm._v(" "),
@@ -6770,36 +6845,47 @@ var render = function() {
       _vm._v(" "),
       _c("p", [_vm._v(_vm._s(_vm.user.name))]),
       _vm._v(" "),
+      _vm.user.id === _vm.loginUserId
+        ? _c(
+            "p",
+            [
+              _c(
+                "RouterLink",
+                {
+                  attrs: {
+                    to: { name: "user.edit", params: { userId: _vm.user.id } }
+                  }
+                },
+                [_c("button", [_vm._v("edit")])]
+              )
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _vm._l(_vm.user.logs, function(log) {
         return _c(
           "div",
           { key: log.id },
           [
+            _c("p", [_vm._v(_vm._s(log.id))]),
+            _vm._v(" "),
             _c(
               "RouterLink",
               {
                 attrs: { to: { name: "log.show", params: { logId: log.id } } }
               },
-              [_c("p", [_vm._v(_vm._s(log.text))])]
-            )
-          ],
-          1
-        )
-      }),
-      _vm._v(" "),
-      _vm._l(_vm.user.events, function(event) {
-        return _c(
-          "div",
-          { key: event.id },
-          [
-            _c(
-              "RouterLink",
-              {
-                attrs: {
-                  to: { name: "event.show", params: { eventId: event.id } }
-                }
-              },
-              [_c("p", [_vm._v(_vm._s(event.event_name))])]
+              [
+                _vm._l(log.event_logs, function(event_log) {
+                  return _c("EventLog", {
+                    key: event_log.id,
+                    attrs: { item: event_log, ableDelete: false }
+                  })
+                }),
+                _vm._v(" "),
+                _c("p", [_vm._v(_vm._s(log.text))])
+              ],
+              2
             )
           ],
           1
@@ -6838,8 +6924,6 @@ var render = function() {
         return _c("tr", { key: log.id }, [
           _c("th", { attrs: { scope: "row" } }, [_vm._v(_vm._s(log.id))]),
           _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(log.text))]),
-          _vm._v(" "),
           _c("td", [_vm._v(_vm._s(_vm.userId))]),
           _vm._v(" "),
           _c(
@@ -6858,7 +6942,20 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(log.user.name))]),
+          _c(
+            "div",
+            [
+              _vm._l(log.event_logs, function(event_log) {
+                return _c("EventLog", {
+                  key: event_log.id,
+                  attrs: { item: event_log, ableDelete: false }
+                })
+              }),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(log.text))])
+            ],
+            2
+          ),
           _vm._v(" "),
           _c("td", [_vm._v(_vm._s(log.favorites.length) + "favorites")]),
           _vm._v(" "),
@@ -6872,7 +6969,7 @@ var render = function() {
                 {
                   attrs: { to: { name: "log.show", params: { logId: log.id } } }
                 },
-                [_c("button", [_vm._v("show")])]
+                [_c("button", [_vm._v("ログ詳細")])]
               )
             ],
             1
@@ -7355,36 +7452,6 @@ var render = function() {
                   }
                 },
                 [_c("button", [_vm._v("show")])]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "td",
-            [
-              _c(
-                "RouterLink",
-                {
-                  attrs: {
-                    to: { name: "user.edit", params: { userId: user.id } }
-                  }
-                },
-                [_c("button", [_vm._v("edit")])]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "td",
-            [
-              _c(
-                "RouterLink",
-                {
-                  attrs: { to: { name: "user.", params: { userId: user.id } } }
-                },
-                [_c("button", [_vm._v("edit")])]
               )
             ],
             1

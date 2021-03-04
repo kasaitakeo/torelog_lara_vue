@@ -86,6 +86,7 @@
       v-for="event_log in event_logs"
       :key="event_log.id"
       :item="event_log"
+      :ableDelete="true"
       @deleteEventLog="deleteEventLog"
     />
     <form @submit.prevent="updateLog">

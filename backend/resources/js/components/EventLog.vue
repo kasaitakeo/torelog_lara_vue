@@ -7,7 +7,9 @@
     <span>{{ item.weight }}kg</span>
     <span>{{ item.rep }}rep</span>
     <span>{{ item.set }}set</span>
-    <form @submit.prevent="deleteEventLog"><button type="submit">削除</button></form>
+    <div class="tab__content" v-show="ableDelete">
+      <form @submit.prevent="deleteEventLog"><button type="submit">削除</button></form>
+    </div>  
   </div>
 </template>
 
@@ -18,6 +20,10 @@ export default {
       type: Object,
       required: true
     },
+    ableDelete: {
+      type: Boolean,
+      required: true
+    }
   },
   data () {
     return {
