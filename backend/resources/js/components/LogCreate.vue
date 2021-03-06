@@ -9,76 +9,15 @@
       </ul>
     </section>
     <div v-for="event in events" :key="event.id">
-      <div v-if="event.part === '胸'">
-        <div class="tab__content" v-show="active === 0">
-          <PostEventLog
-            class="grid__item"
-            :event="event"
-            @post="postEventLog"
-          />
-        </div>
-      </div>
-      <div v-else-if="event.part === '背中'">
-        <div class="tab__content" v-show="active === 1">
-          <PostEventLog
-            class="grid__item"
-            :event="event"
-            @post="postEventLog"
-          />
-        </div>
-      </div>
-      <div v-else-if="event.part === '肩'">
-        <div class="tab__content" v-show="active === 2">
-          <PostEventLog
-            class="grid__item"
-            :event="event"
-            @post="postEventLog"
-          />
-        </div>
-      </div>
-      <div v-else-if="event.part === '脚'">
-        <div class="tab__content" v-show="active === 3">
-          <PostEventLog
-            class="grid__item"
-            :event="event"
-            @post="postEventLog"
-          />
-        </div>
-      </div>
-      <div v-else-if="event.part === '上腕二頭筋'">
-        <div class="tab__content" v-show="active === 4">
-          <PostEventLog
-            class="grid__item"
-            :event="event"
-            @post="postEventLog"
-          />
-        </div>
-      </div>
-      <div v-else-if="event.part === '上腕三頭筋'">
-        <div class="tab__content" v-show="active === 5">
-          <PostEventLog
-            class="grid__item"
-            :event="event"
-            @post="postEventLog"
-          />
-        </div>
-      </div>
-      <div v-else-if="event.part === '腹筋'">
-        <div class="tab__content" v-show="active === 6">
-          <PostEventLog
-            class="grid__item"
-            :event="event"
-            @post="postEventLog"
-          />
-        </div>
-      </div>
-      <div v-else-if="event.part === 'その他'">
-        <div class="tab__content" v-show="active === 7">
-          <PostEventLog
-            class="grid__item"
-            :event="event"
-            @post="postEventLog"
-          />
+      <div v-for="part in eventParts" :key="part.id">
+        <div v-if="event.part === part.name">
+          <div class="tab__content" v-show="active === part.id">
+            <Event
+              class="grid__item"
+              :event="event"
+              @post="postEventLog"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -99,12 +38,12 @@
 <script>
 import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
 import { OK } from '../util'
-import PostEventLog from '../components/PostEventLog.vue'
+import Event from '../components/Event.vue'
 import EventLog from '../components/EventLog.vue'
 
 export default {
   components: {
-    PostEventLog,
+    Event,
     EventLog,
   },
   data () {
@@ -245,30 +184,17 @@ export default {
 
     this.getEvents()
   },
-  // created () {
-  //   window.addEventListener("beforeunload", this.confirmSave)
-  // },
   destroyed () {
     window.removeEventListener("beforeunload", this.confirmSave);
   },
   beforeRouteLeave (to, from, next) {
-    if (typeof this.event_logs !== 'undefined') {
+    if (typeof this.event_logs === 'undefined') {
       this.deleteLog()
 
       next()
+    } else {
+      next()
     }
-    // if (isset(this.event_logs) && !isset(this.logContent)) {
-    //   const answer = window.confirm("編集中のトレログの一言が未入力のまま保存されますがよろしいですか？")
-    //   if (answer) {
-    //     next()
-    //   } else {
-    //     next(false)
-    //   } 
-    // } else {
-    //   this.deleteLog()
-
-    //   next()
-    // }
   },
 }
 </script>

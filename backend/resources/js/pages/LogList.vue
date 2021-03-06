@@ -26,16 +26,6 @@
           </RouterLink>
         </td>
         <td>
-          <RouterLink v-bind:to="{name: 'log.edit', params: {logId: log.id}}">
-            <button>edit</button> 
-          </RouterLink>
-        </td>
-        <td>
-          <button class="btn btn-danger" @click="deleteLog(log.id)">delete</button>
-        </td>
-        <td>
-        </td>
-        <td>
           <RouterLink v-bind:to="{name: 'comment.create', params: {logId: log.id}}">
             <button>addcomment</button> 
           </RouterLink>
@@ -80,18 +70,6 @@ export default {
       }
 
       this.logs = response.data.data
-    },
-    async deleteLog (id) {
-      const response = await axios.delete('/api/logs/' + id)
-
-      console.log(response)
-
-      if (response.status !== OK) {
-        this.$store.commit('error/setCode', response.status)
-        return false  
-      }
-
-      this.getLogs()
     },
     async favoriteLog (id) {
       const response = await axios.post('/api/favorites', {

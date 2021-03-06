@@ -2,6 +2,9 @@
   <div>
     <p>{{ user.id }}</p>
     <p>{{ user.name }}</p>
+    <RouterLink :to="{name: 'event', params: {userId: user.id}}">
+      <button>種目リスト</button>
+    </RouterLink>
     <p v-if="user.id === loginUserId">
       <RouterLink :to="{name: 'user.edit', params: {userId: user.id}}">
         <button>edit</button>

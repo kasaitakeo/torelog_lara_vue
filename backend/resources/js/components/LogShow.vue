@@ -1,9 +1,8 @@
 <template>
   <div>
-    <p>name: {{ user }}</p>
+    <p>name: {{ user.name }}</p>
     <!-- {{ log.user.name }}だとnameが未定義のプロパティになる？？？ -->
-    <p>name: {{ log.user.name }}</p>
-    <p>name: {{ log.user.email }}</p>
+    <!-- <p>name: {{ log.user.name }}</p> -->
     <div v-for="event_log in log.event_logs" :key="event_log.id">
       <p>部位: {{ event_log.event.part }}</p>
       <p>種目名: {{ event_log.event.event_name }}</p>
@@ -14,6 +13,12 @@
     <p>log: {{ log.text }}</p>
     <div v-for="comment in log.comments" :key="comment.id">
       <p>comment: {{ comment.text }}</p>
+    </div>
+    <div v-if="user.id === loginUserId">
+      <RouterLink v-bind:to="{name: 'log.edit', params: {logId: log.id}}">
+        <button>edit</button> 
+      </RouterLink>
+      <button class="btn btn-danger" @click="deleteLog(log.id)">delete</button>
     </div>
   </div>
 </template>
@@ -26,9 +31,14 @@ export default {
   },
   data () {
     return {
-      log: [],
+      log: {},
       user: ''
     }
+  },
+  computed: {
+    loginUserId () {
+      return this.$store.getters['auth/userId']
+    },
   },
   methods: {
     async getLog () {
@@ -43,8 +53,20 @@ export default {
       }
 
       this.log = response.data
-      this.user = response.data.user.name
-    }
+      this.user = response.data.user
+    },
+    async deleteLog (id) {
+      const response = await axios.delete('/api/logs/' + id)
+
+      console.log(response)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false  
+      }
+
+      this.getLogs()
+    },
   },
   mounted () {
     this.getLog()

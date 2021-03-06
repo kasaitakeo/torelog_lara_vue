@@ -20,7 +20,8 @@ class LogsController extends Controller
     {
         $logs = $log->with(['user', 'favorites', 'comments','event_logs' => function($query){
             $query->with('event');
-        }])->orderBy(Log::CREATED_AT, 'desc')->paginate();
+        }])->orderBy(Log::CREATED_AT, 'desc')
+        ->paginate();
 
         return $logs;
     }
@@ -33,12 +34,13 @@ class LogsController extends Controller
      */
     public function store(Log $log)
     {
-        // $user = Auth::user();
         $user = auth()->user();
         
         $log->user_id = $user->id;
+
         $log->save();
 
+        // CreateLog.vueでlogIdを保持するため
         return $log->id;
     }
 
@@ -52,6 +54,8 @@ class LogsController extends Controller
         $log_data = Log::with(['user', 'favorites', 'comments', 'event_logs' => function($query){
             $query->with('event');
         }])
+        // findだと上手くデータ取得できない
+        // ->find((int)$log_id)->first();
         ->where('id', $log_id)->first();
 
         return $log_data;
@@ -65,28 +69,28 @@ class LogsController extends Controller
     public function update(Request $request, Log $log)
     {
         $user = auth()->user();
-        // $user = $request->user();
-        // dd($user);
 
-        // requestのデータ(collect型)をall()を使用し配列で取得する
-        $data = $request->all();
+        $text = $request->input('text');
 
         // Validatorファザードでバリデーションを実行するにはmakeメソッド(新しいコレクションを作成)を使用してインスタンスを作成
         // 引数はValidator::make('値の配列', '検証ルールの配列')で記述
-        $validator = Validator::make($data, [
-            'text' => ['required', 'string', 'max:300']
-        ]);
+        // $validator = Validator::make($text, [
+        //     'text' => ['required', 'string', 'max:300']
+        // ]);
 
         // validateメソッドは、POSTされた値のバリデーションに成功するとコードは通常通り続けて実行され、バリデーションに失敗すると自動的に例外が投げられユーザーへ適切なエラーメッセージが返されるメソッド
-        $validator->validate();
+        // $validator->validate();
         
         // logモデルのlogStore()メソッドでrequestされたdataを保存
-        $log->logStore($user->id, $data);
+        // $log->logStore($user->id, $data);
+        $log->text = $text;
+
+        $log->save();
 
         // レスポンスコード201(created)を返却
-        $log->update($request->all());
+        // $log->update($request->all());
 
-        return $log;
+        return;
     }
 
     /**
@@ -99,6 +103,6 @@ class LogsController extends Controller
         // $log->logDestroy($log->id);
         $log->delete();
 
-        return $log;
+        return;
     }
 }
