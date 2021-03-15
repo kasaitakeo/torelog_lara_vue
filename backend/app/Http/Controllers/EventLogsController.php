@@ -25,6 +25,8 @@ class EventLogsController extends Controller
         $event_log->set = $request->input('set');
 
         $event_log->save();
+
+        return response('', 201);
     }
 
     public function delete(EventLog $event_log, $event_log_id)

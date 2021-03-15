@@ -48,6 +48,11 @@ export default {
 
       this.$router.push('/')
     }
-  }
+  },
+  mounted () {
+    if (!this.$store.getters['auth/check']) {
+      this.$router.push('/')
+    }
+  },
 }
 </script>

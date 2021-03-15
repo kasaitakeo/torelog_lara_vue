@@ -18,7 +18,7 @@ class LogsController extends Controller
      */
     public function index(Log $log)
     {
-        $logs = $log->with(['user', 'favorites', 'comments','event_logs' => function($query){
+        $logs = $log->with(['user', 'favorites', 'comments', 'event_logs' => function($query){
             $query->with('event');
         }])->orderBy(Log::CREATED_AT, 'desc')
         ->paginate();
@@ -41,7 +41,8 @@ class LogsController extends Controller
         $log->save();
 
         // CreateLog.vueでlogIdを保持するため
-        return $log->id;
+        return response($log->id, 201);
+        // return $log->id;
     }
 
     /**
@@ -51,14 +52,16 @@ class LogsController extends Controller
      */
     public function show($log_id)
     {
-        $log_data = Log::with(['user', 'favorites', 'comments', 'event_logs' => function($query){
+        $log = Log::with(['user', 'favorites', 'comments' => function($query){
+            $query->with('user');
+        }, 'event_logs' => function($query){
             $query->with('event');
         }])
         // findだと上手くデータ取得できない
         // ->find((int)$log_id)->first();
         ->where('id', $log_id)->first();
 
-        return $log_data;
+        return $log;
     }
 
     /**
@@ -70,7 +73,7 @@ class LogsController extends Controller
     {
         $user = auth()->user();
 
-        $text = $request->input('text');
+        $log->text = $request->input('text');
 
         // Validatorファザードでバリデーションを実行するにはmakeメソッド(新しいコレクションを作成)を使用してインスタンスを作成
         // 引数はValidator::make('値の配列', '検証ルールの配列')で記述
@@ -83,14 +86,14 @@ class LogsController extends Controller
         
         // logモデルのlogStore()メソッドでrequestされたdataを保存
         // $log->logStore($user->id, $data);
-        $log->text = $text;
+        // $log->text = $text;
 
         $log->save();
 
         // レスポンスコード201(created)を返却
         // $log->update($request->all());
 
-        return;
+        return response('', 201);
     }
 
     /**

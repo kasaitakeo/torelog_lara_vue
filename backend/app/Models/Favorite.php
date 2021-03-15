@@ -16,7 +16,7 @@ class Favorite extends Model
         return (boolean) $this->where('user_id', $user_id)->where('log_id', $log_id)->first();
     }
 
-    public function storeFavorite(Int $user_id, Int $log_id)
+    public function storeFavorite($user_id, $log_id)
     {
         $this->user_id = $user_id;
 

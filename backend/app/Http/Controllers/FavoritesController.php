@@ -12,15 +12,19 @@ class FavoritesController extends Controller
     {
         $user = auth()->user();
 
+        if ($user === null) {
+            return back();
+        }
+
         $log_id = $request->log_id;
 
         $is_favorite = $favorite->isFavorite($user->id, $log_id);
 
         if (!$is_favorite) {
             $favorite->storeFavorite($user->id, $log_id);
-            return back();
+            return;
         }
-        return back();
+        return;
     }
 
     public function destroy($id, Favorite $favorite)
@@ -37,10 +41,10 @@ class FavoritesController extends Controller
             $favorite->where('user_id', $user->id)->where('log_id', $log_id)->delete();
             // $favorite->destroyFavorite($favorite_id);
             // $favorite->where('id', $favorite_id)->delete();
-            return back();
+            return;
         }
         
-        return back();
+        return;
     }
 
 }

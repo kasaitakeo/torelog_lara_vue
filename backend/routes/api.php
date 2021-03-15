@@ -73,13 +73,14 @@ Route::group(['prefix' => 'events'], function () {
 
     // 種目詳細
     Route::get('/{event}', 'EventsController@show')->name('event.show');
-
+    
     // 種目更新
     Route::put('/{event}', 'EventsController@update')->name('event.update');
-
+    
     // 種目削除
     Route::delete('/{event}', 'EventsController@destroy')->name('event.destroy');
 });
+Route::get('/{user}/events', 'EventsController@userEvents')->name('user.event');
 
 // 種目ログ取得
 Route::get('/{log_id}/event_logs', 'EventLogsController@index')->name('event_log.index');

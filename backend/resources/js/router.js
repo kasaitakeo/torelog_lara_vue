@@ -5,16 +5,16 @@ import VueRouter from 'vue-router'
 import Login from './pages/Login.vue'
 import SystemError from './pages/errors/System.vue'
 import LogList from './pages/LogList.vue'
-import LogCreate from './components/LogCreate.vue'
-import LogShow from './components/LogShow.vue'
-import LogEdit from './components/LogEdit.vue'
-import EventCreate from './components/EventCreate.vue'
-import EventShow from './components/EventShow.vue'
-import EventEdit from './components/EventEdit.vue'
+import LogCreate from './pages/LogCreate.vue'
+import LogShow from './pages/LogShow.vue'
+import LogEdit from './pages/LogEdit.vue'
+import EventCreate from './pages/EventCreate.vue'
+import EventShow from './pages/EventShow.vue'
+import EventEdit from './pages/EventEdit.vue'
 import UserList from './pages/UserList.vue'
-import UserShow from './components/UserShow.vue'
-import UserEdit from './components/UserEdit.vue'
-import CommentCreate from './components/CommentCreate.vue'
+import UserShow from './pages/UserShow.vue'
+import UserEdit from './pages/UserEdit.vue'
+import CommentCreate from './pages/CommentCreate.vue'
 
 // ナビゲーションガード追加のため
 import store from './store'
@@ -87,6 +87,12 @@ const routes = [
     component: UserShow,
     props: true
   },
+  // {
+  //   path: '/users/:userId/event',
+  //   name: 'user.event',
+  //   component: UserEvent,
+  //   props: true
+  // },
   {
     path: '/users/:userId/edit',
     name: 'user.edit',

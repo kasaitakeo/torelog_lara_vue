@@ -52,6 +52,9 @@ export default {
     }
   },
   mounted () {
+    if (!this.$store.getters['auth/check']) {
+      this.$router.push('/')
+    }
     this.getUser()
   }
 }

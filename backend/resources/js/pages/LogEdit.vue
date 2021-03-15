@@ -30,7 +30,7 @@
     />
     <form @submit.prevent="updateLog">
       <textarea v-model="logContent"></textarea>
-      <button type="submit">ログ作成</button>
+      <button type="submit">ログ更新</button>
     </form>
   </div>
 </template>
@@ -46,9 +46,13 @@ export default {
     Event,
     EventLog,
   },
+  props: {
+    logId: Number
+  },
   data () {
     return {
-      logId: '',
+      log: '',
+      editLogId: '',
       events: {},
       event_logs: {},
       logContent: '',
@@ -73,6 +77,21 @@ export default {
     },
   },  
   methods: {
+    async getLog() {
+      // console.log(this.logId)
+      const response = await axios.get('/api/logs/' + this.logId)
+
+      console.log(response)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.log = response.data
+      this.event_logs = response.data.event_logs
+      this.logContent = response.data.text
+    },
     activate (id) {
       this.active = id
     },
@@ -113,15 +132,6 @@ export default {
       }
 
       this.getEventLogs()
-    },
-    async postLog () {
-
-      const response = await axios.post('/api/logs')
-
-      // console.log(response)
-      console.log(response.data)
-
-      this.logId = response.data
     },
     async updateLog () {
       
@@ -180,7 +190,11 @@ export default {
     }
   },
   mounted () {
-    this.postLog()
+    if (!this.$store.getters['auth/check']) {
+      this.$router.push('/')
+    }
+
+    this.getLog()
 
     this.getEvents()
   },

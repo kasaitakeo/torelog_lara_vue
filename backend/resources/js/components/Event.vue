@@ -1,30 +1,70 @@
 <template>
   <div>
-    <form @submit.prevent="post">
+      <v-card
+        class="mx-auto"
+        max-width="800"
+      >
         <p>{{ event.event_name }}</p>
-        <ul>
-          <li>重量：
-            <select v-model="weight">
-              <option v-for="n in 100" :key="n" :value="n * 2">{{ n * 2 }}kg</option>
-            </select>
-          </li>
-          <li>回数：
-            <select v-model="rep">
-              <option v-for="n in 30" :key="n" :value="n">{{ n }}rep</option>
-            </select>
-          </li>
-          <li>セット数：
-            <select v-model="set">
-              <option v-for="n in 10" :key="n" :value="n">{{ n }}set</option>
-            </select>
-          </li>
-        </ul>
-        <button type="submit">追加する</button>
-      </form>
-    </div>
+        <div v-if="this.$route.path === '/logs/create'">
+        <form @submit.prevent="eventPost">
+          <v-row
+            align="center"
+            justify="center"
+          >
+          <v-card raised width="200" class="ma-2">
+            <v-select 
+            width="60"
+            v-model="weight"
+            :items="weightItems" 
+            label="重量" 
+            data-vv-name="select" 
+            required 
+            >
+            </v-select>
+          </v-card>
+          <v-card raised width="200" class="ma-2">
+            <v-select 
+            v-model="rep" 
+            :items="repItems"
+            label="回数" 
+            data-vv-name="select" 
+            required 
+            >
+            </v-select>
+          </v-card>
+          <v-card raised width="200" class="ma-2">
+            <v-select 
+            v-model="set"
+            :items="setItems"
+            label="セット数" 
+            data-vv-name="select" 
+            required 
+            >
+            </v-select>
+          </v-card>
+          <v-btn
+            type="submit"
+            class="mx-2"
+            fab
+            dark
+            small
+            color="indigo"
+          >
+            <v-icon dark>
+              mdi-plus
+            </v-icon>
+          </v-btn>
+          </v-row>
+          <!-- <button type="submit">追加する</button> -->
+        </form>
+        </div>
+      </v-card>
+  </div>
 </template>
 
 <script>
+import eventBus from '../eventBus.js'
+
 export default {
   props: {
     event: {
@@ -34,15 +74,18 @@ export default {
   },
   data () {
     return {
+      weightItems: [...Array(251).keys()],
+      repItems: [...Array(31).keys()],
+      setItems: [...Array(21).keys()],
       weight: '',
       rep: '',
       set: '',
     }
   },
   methods: {
-    async post () {
+    async eventPost () {
       
-      this.$emit('post', {
+      eventBus.$emit('eventPost', {
         id: this.event.id,
         weight: this.weight,
         rep: this.rep,

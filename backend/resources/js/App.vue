@@ -1,19 +1,26 @@
 <template>
   <div>
-    <header>
-      <Navbar />
-    </header>
-    <main>
-      <div class="container">
-        <RouterView />
-      </div>
-    </main>
+    <v-app id="inspire">
+    <Header/>
+      <!-- <Navbar /> -->
+    <v-container>
+      <v-main>
+        <Message />
+        <div class="container">
+          <RouterView />
+        </div>
+      </v-main>
+    </v-container>
     <Footer />
+
+    </v-app>
   </div>
 </template>
 
 <script>
 import Navbar from './components/Navbar.vue'
+import Header from './components/Header.vue'
+import Message from './components/Message.vue'
 import Footer from './components/Footer.vue'
 
 import { INTERNAL_SERVER_ERROR } from './util'
@@ -21,6 +28,8 @@ import { INTERNAL_SERVER_ERROR } from './util'
 export default {
   components: {
     Navbar,
+    Header,
+    Message,
     Footer
   },
   computed: {

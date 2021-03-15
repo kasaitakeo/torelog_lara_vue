@@ -69,10 +69,19 @@ export default {
 
       this.eventExplanation = ''
 
+      this.$store.commit('message/setContent', {
+        content: '種目が追加されました！',
+        timeout: 6000
+      })
+
       this.$router.push('/')
     }
-  }
-
+  },
+  mounted () {
+    if (!this.$store.getters['auth/check']) {
+      this.$router.push('/')
+    }
+  },
 }
 </script>
 

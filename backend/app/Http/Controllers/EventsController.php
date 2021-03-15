@@ -17,7 +17,14 @@ class EventsController extends Controller
         //
         $user = auth()->user();
 
-        $all_events = $event->where('user_id', $user->id)->get()->all();
+        $all_events = $event->where('user_id', $user->id)->get();
+
+        return $all_events;
+    
+    }
+    public function userEvents($user_id)
+    {
+        $all_events = Event::where('user_id', $user_id)->get();
 
         return $all_events;
     }
@@ -39,6 +46,8 @@ class EventsController extends Controller
         $event->event_explanation = $request->input('eventExplanation');
 
         $event->save();
+
+        return response($event, 201);
     }
 
     /**
@@ -70,6 +79,8 @@ class EventsController extends Controller
         $event->event_explanation = $request->input('eventExplanation');
 
         $event->save();
+
+        return response('', 201);
     }
 
     /**
@@ -83,6 +94,6 @@ class EventsController extends Controller
         $user = auth()->user();
         $event->eventDestroy($user->id, $event->id);
 
-        return back();
+        return response('', 200);
     }
 }

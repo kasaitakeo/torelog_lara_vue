@@ -10,6 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
+        "@mdi/font": "^5.9.55",
         "axios": "^0.19",
         "bootstrap": "^4.0.0",
         "cross-env": "^7.0",
@@ -27,7 +28,8 @@
         "vuex": "^3.6.2"
     },
     "dependencies": {
+        "material-design-icons-iconfont": "^6.1.0",
         "vue-router": "^3.5.1",
-        "vuetify": "^2.4.3"
+        "vuetify": "^2.4.6"
     }
 }

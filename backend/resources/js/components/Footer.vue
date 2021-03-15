@@ -1,17 +1,17 @@
 <template>
-  <footer class="footer">
-    <div v-if="isLogin">
-      <button class="button button--link" @click="logout">
-        Logout
-      </button>
-      <RouterLink class="button button--link" to="/LogForm">
-        torelog
-      </RouterLink>
-    </div>
+  <v-footer
+    color="indigo"
+    app
+  >
+    <span class="white--text">&copy; {{ new Date().getFullYear() }}</span>
+    <v-spacer></v-spacer>
+    <span v-if="isLogin" class="button button--link" @click="logout">
+      Logout
+    </span>
     <RouterLink v-else class="button button--link" to="/login">
       Login / Register
     </RouterLink>
-  </footer>
+  </v-footer>
 </template> 
 
 <script>
