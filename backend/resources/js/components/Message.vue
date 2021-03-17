@@ -1,7 +1,14 @@
 <template>
-  <div class="message" v-show="message">
+  <v-card 
+    v-show="message"
+    raised
+    color="#B3E5FC"
+    class="mx-auto mt-15 mb-0 pb-0"
+    max-width="800"
+    height="60"
+  >
     {{ message }}
-  </div>
+  </v-card>
 </template>
 
 <script>

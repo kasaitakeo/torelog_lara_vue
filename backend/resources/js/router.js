@@ -45,7 +45,15 @@ const routes = [
   {
     path: '/logs/create',
     name: 'log.create',
-    component: LogCreate
+    component: LogCreate,
+    beforeRouteLeave (to, from, next) {
+      let answer = window.confirm("Data you've inputted won't be synced, OK?")
+      if (answer) {
+        next()
+      } else {
+        next(false)
+      }
+    }
   },
   {
     path: '/logs/:logId',

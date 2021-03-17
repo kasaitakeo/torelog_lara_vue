@@ -1,12 +1,14 @@
 <template>
   <div>
-      <Log
-        v-for="log in logs" 
-        :key="log.id"
-        :log="log"
-        @favoriteLog="favoriteLog"
-        @unFavoriteLog="unFavoriteLog"
-      />
+    <v-container class="my-10">
+          <Log
+            v-for="log in logs" 
+            :key="log.id"
+            :log="log"
+            @favoriteLog="favoriteLog"
+            @unFavoriteLog="unFavoriteLog"
+          />
+    </v-container>
   </div>
 </template>
 

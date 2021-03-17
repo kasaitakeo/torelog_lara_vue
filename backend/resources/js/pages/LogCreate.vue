@@ -5,25 +5,31 @@
         <li v-for="msg in errors.photo" :key="msg">{{ msg }}</li>
       </ul>
     </div>
-    <UserEvent
-    :events="events"
-    />
-    <EventLog
-      v-for="event_log in event_logs"
-      :key="event_log.id"
-      :item="event_log"
-      :ableDelete="true"
-      @deleteEventLog="deleteEventLog"
-    />
-    <v-card
-      class="mx-auto"
-      max-width="800"
-    >
-    <form @submit.prevent="updateLog">
-      <v-textarea v-model="logContent"></v-textarea>
-      <v-btn type="submit">ログ作成</v-btn>
-    </form>
-    </v-card>
+    <v-container  max-width="800" class="my-10">
+
+      <!-- <UserEvent
+      :user="user"
+      /> -->
+      <UserEvent
+      :events="events"
+      />
+      <EventLog
+        v-for="event_log in event_logs"
+        :key="event_log.id"
+        :item="event_log"
+        :ableDelete="true"
+        @deleteEventLog="deleteEventLog"
+      />
+      <v-card
+        class="mx-auto"
+        max-width="800"
+      >
+      <form @submit.prevent="updateLog">
+        <v-textarea v-model="logContent"></v-textarea>
+        <v-btn type="submit">ログ作成</v-btn>
+      </form>
+      </v-card>
+    </v-container>
   </div>
 </template>
 
@@ -45,8 +51,8 @@ export default {
       events: {},
       event_logs: {},
       logContent: '',
-      msg: '',
       errors: null,
+      setEventLogs: false
     }
   },
   computed: {
@@ -57,30 +63,6 @@ export default {
   methods: {
     activate (id) {
       this.active = id
-    },
-    async postEventLog ({ id, weight, rep, set }) {
-
-      const response = await axios.post('/api/event_logs', {
-        log_id: this.logId,
-        event_id: id,
-        weight: weight,
-        rep: rep,
-        set: set
-      })
-      if (response.status !== CREATED) {
-        this.$store.commit('error/setCode', response.status)
-        return false
-      }
-      this.$store.commit('message/setContent', {
-        content: '実施種目が追加されました！',
-        timeout: 3000
-      })
-
-      console.log(response)
-
-      this.getEventLogs()
-
-      this.msg = 'eventlogが追加されました'
     },
     async deleteEventLog ({ id }) {
       
@@ -169,6 +151,10 @@ export default {
         return false
       }
 
+      if (!this.setEventLogs) {
+        this.setEventLogs = true
+      }
+
       this.event_logs = response.data
     },
     confirmSave (event) {
@@ -181,7 +167,7 @@ export default {
       } 
     }
   },
-  mounted () {
+  created () {
     if (this.$store.getters['auth/check']) {
       this.postLog()
   
@@ -217,19 +203,33 @@ export default {
   destroyed () {
     window.removeEventListener("beforeunload", this.confirmSave);
   },
+  beforeRouteLeave (to, from, next) {
+    let answer = window.confirm("このままトレログの編集を終了してよろしいでしょうか?※種目追加されていないログは保存されません。")
+    if (answer) {
+      if (this.setEventLogs) {
+        next()
+      } else {
+        this.deleteLog()
+        next()
+      }
+    } else {
+      next(false)
+    }
+  },  
   // beforeRouteLeave (to, from, next) {
   //   // if (typeof this.logContent !== 'undefined') {
-  //   if (typeof this.event_logs !== 'undefined') {
-  //     this.deleteLog()
-
+  //     // if (typeof this.event_logs !== 'undefined') {
+  //   if (this.setEventLogs) {
+      
   //     next()
   //   // } else if (this.logContent === null) {
-  //   //   this.deleteLog()
+  //     //   this.deleteLog()
 
   //   //   this.deleteAllEventLog()
 
   //   //   next()
   //   } else {
+  //     this.deleteLog()
   //     next()
   //   }
   // },

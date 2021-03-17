@@ -1,29 +1,37 @@
 <template>
   <div>
     <v-card
-      class="mx-auto"
+      class="mx-auto mb-3"
       max-width="800">
       <v-tabs
-        background-color="deep-purple accent-4"
+        background-color="#039BE5"
         center-active
         dark
       >
-        <v-tab v-for="eventPart in eventParts" :key="eventPart.id">
-          <div @click="activate(eventPart.id)">{{ eventPart.name }}</div>
+        <v-tab v-for="eventPart in eventParts" :key="eventPart.id" @click="activate(eventPart.id)">
+          {{ eventPart.name }}
         </v-tab>
       </v-tabs>
-    </v-card>
+    <!-- </v-card>
+          <v-card 
+            class="mx-auto"
+            max-width="800"
+          > -->
+            <v-row>
     <div v-for="event in events" :key="event.id">
       <div v-for="part in eventParts" :key="part.id">
         <div v-if="event.part === part.name">
-          <div class="tab__content" v-show="active === part.id">
-            <Event
-              :event="event"
-            />
-          </div>
+              <v-col  class="ma-1">
+                <Event
+                  :event="event"
+                  v-show="active === part.id"
+                />
+              </v-col>
         </div>
       </div>
     </div>
+            </v-row>
+          </v-card>
   </div>
 </template>
 

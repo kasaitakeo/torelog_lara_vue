@@ -2025,10 +2025,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -2159,6 +2155,62 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2169,6 +2221,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   data: function data() {
     return {
+      dialog: false,
       weightItems: _toConsumableArray(Array(251).keys()),
       repItems: _toConsumableArray(Array(31).keys()),
       setItems: _toConsumableArray(Array(21).keys()),
@@ -2192,14 +2245,18 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                   rep: _this.rep,
                   set: _this.set
                 });
+                _this.dialog = false;
 
-              case 1:
+              case 2:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
+    },
+    close: function close() {
+      this.dialog = false;
     }
   }
 });
@@ -2223,6 +2280,12 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2549,11 +2612,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2654,6 +2712,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])({
@@ -2725,6 +2790,14 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Event_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Event.vue */ "./resources/js/components/Event.vue");
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2962,10 +3035,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      itemParts: ["胸", "背中", "肩", "脚", "上腕二頭筋", "上腕三頭筋", "腹筋", "その他"],
       eventPart: '',
       eventName: '',
       eventExplanation: '',
@@ -3312,6 +3411,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3328,8 +3433,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       events: {},
       event_logs: {},
       logContent: '',
-      msg: '',
-      errors: null
+      errors: null,
+      setEventLogs: false
     };
   },
   computed: {
@@ -3341,30 +3446,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     activate: function activate(id) {
       this.active = id;
     },
-    postEventLog: function postEventLog(_ref) {
+    deleteEventLog: function deleteEventLog(_ref) {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var id, weight, rep, set, response;
+        var id, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                id = _ref.id, weight = _ref.weight, rep = _ref.rep, set = _ref.set;
+                id = _ref.id;
                 _context.next = 3;
-                return axios.post('/api/event_logs', {
-                  log_id: _this.logId,
-                  event_id: id,
-                  weight: weight,
-                  rep: rep,
-                  set: set
-                });
+                return axios["delete"]("/api/event_logs/".concat(id));
 
               case 3:
                 response = _context.sent;
+                console.log(response);
 
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 7;
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context.next = 8;
                   break;
                 }
 
@@ -3372,19 +3472,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 7:
-                _this.$store.commit('message/setContent', {
-                  content: '実施種目が追加されました！',
-                  timeout: 3000
-                });
-
-                console.log(response);
-
+              case 8:
                 _this.getEventLogs();
 
-                _this.msg = 'eventlogが追加されました';
-
-              case 11:
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -3392,25 +3483,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    deleteEventLog: function deleteEventLog(_ref2) {
+    deleteAllEventLog: function deleteAllEventLog() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var id, response;
+        var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                id = _ref2.id;
-                _context2.next = 3;
-                return axios["delete"]("/api/event_logs/".concat(id));
+                _context2.next = 2;
+                return axios["delete"]("/api/".concat(_this2.logId, "/event_logs"));
 
-              case 3:
+              case 2:
                 response = _context2.sent;
                 console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context2.next = 8;
+                  _context2.next = 7;
                   break;
                 }
 
@@ -3418,10 +3508,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context2.abrupt("return", false);
 
-              case 8:
+              case 7:
                 _this2.getEventLogs();
 
-              case 9:
+              case 8:
               case "end":
                 return _context2.stop();
             }
@@ -3429,7 +3519,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    deleteAllEventLog: function deleteAllEventLog() {
+    postLog: function postLog() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
@@ -3439,25 +3529,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios["delete"]("/api/".concat(_this3.logId, "/event_logs"));
+                return axios.post('/api/logs');
 
               case 2:
                 response = _context3.sent;
                 console.log(response);
+                _this3.logId = response.data;
 
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context3.next = 7;
-                  break;
-                }
-
-                _this3.$store.commit('error/setCode', response.status);
-
-                return _context3.abrupt("return", false);
-
-              case 7:
-                _this3.getEventLogs();
-
-              case 8:
+              case 5:
               case "end":
                 return _context3.stop();
             }
@@ -3465,7 +3544,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
-    postLog: function postLog() {
+    updateLog: function updateLog() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
@@ -3475,14 +3554,42 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return axios.post('/api/logs');
+                return axios.put("/api/logs/".concat(_this4.logId), {
+                  text: _this4.logContent
+                });
 
               case 2:
                 response = _context4.sent;
-                console.log(response);
-                _this4.logId = response.data;
+                console.log(response.data);
 
-              case 5:
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
+                  _context4.next = 7;
+                  break;
+                }
+
+                _this4.errors = response.data.errors;
+                return _context4.abrupt("return", false);
+
+              case 7:
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
+                  _context4.next = 10;
+                  break;
+                }
+
+                _this4.$store.commit('error/setCode', response.status);
+
+                return _context4.abrupt("return", false);
+
+              case 10:
+                // メッセージ登録
+                _this4.$store.commit('message/setContent', {
+                  content: 'トレログが登録されました！',
+                  timeout: 6000
+                });
+
+                _this4.$router.push('/');
+
+              case 12:
               case "end":
                 return _context4.stop();
             }
@@ -3490,7 +3597,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     },
-    updateLog: function updateLog() {
+    deleteLog: function deleteLog() {
       var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
@@ -3500,25 +3607,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context5.prev = _context5.next) {
               case 0:
                 _context5.next = 2;
-                return axios.put("/api/logs/".concat(_this5.logId), {
-                  text: _this5.logContent
-                });
+                return axios["delete"]("/api/logs/".concat(_this5.logId));
 
               case 2:
                 response = _context5.sent;
-                console.log(response.data);
+                console.log(response);
 
-                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
                   _context5.next = 7;
-                  break;
-                }
-
-                _this5.errors = response.data.errors;
-                return _context5.abrupt("return", false);
-
-              case 7:
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context5.next = 10;
                   break;
                 }
 
@@ -3526,16 +3622,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context5.abrupt("return", false);
 
-              case 10:
-                // メッセージ登録
-                _this5.$store.commit('message/setContent', {
-                  content: 'トレログが登録されました！',
-                  timeout: 6000
-                });
-
-                _this5.$router.push('/');
-
-              case 12:
+              case 7:
               case "end":
                 return _context5.stop();
             }
@@ -3543,7 +3630,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee5);
       }))();
     },
-    deleteLog: function deleteLog() {
+    getEvents: function getEvents() {
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
@@ -3553,7 +3640,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context6.prev = _context6.next) {
               case 0:
                 _context6.next = 2;
-                return axios["delete"]("/api/logs/".concat(_this6.logId));
+                return axios.get('/api/events');
 
               case 2:
                 response = _context6.sent;
@@ -3569,6 +3656,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context6.abrupt("return", false);
 
               case 7:
+                _this6.events = response.data;
+
+              case 8:
               case "end":
                 return _context6.stop();
             }
@@ -3576,7 +3666,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee6);
       }))();
     },
-    getEvents: function getEvents() {
+    getEventLogs: function getEventLogs() {
       var _this7 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
@@ -3586,7 +3676,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context7.prev = _context7.next) {
               case 0:
                 _context7.next = 2;
-                return axios.get('/api/events');
+                return axios.get("/api/".concat(_this7.logId, "/event_logs"));
 
               case 2:
                 response = _context7.sent;
@@ -3602,50 +3692,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context7.abrupt("return", false);
 
               case 7:
-                _this7.events = response.data;
+                if (!_this7.setEventLogs) {
+                  _this7.setEventLogs = true;
+                }
 
-              case 8:
+                _this7.event_logs = response.data;
+
+              case 9:
               case "end":
                 return _context7.stop();
             }
           }
         }, _callee7);
-      }))();
-    },
-    getEventLogs: function getEventLogs() {
-      var _this8 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
-          while (1) {
-            switch (_context8.prev = _context8.next) {
-              case 0:
-                _context8.next = 2;
-                return axios.get("/api/".concat(_this8.logId, "/event_logs"));
-
-              case 2:
-                response = _context8.sent;
-                console.log(response);
-
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context8.next = 7;
-                  break;
-                }
-
-                _this8.$store.commit('error/setCode', response.status);
-
-                return _context8.abrupt("return", false);
-
-              case 7:
-                _this8.event_logs = response.data;
-
-              case 8:
-              case "end":
-                return _context8.stop();
-            }
-          }
-        }, _callee8);
       }))();
     },
     confirmSave: function confirmSave(event) {
@@ -3657,8 +3715,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
     }
   },
-  mounted: function mounted() {
-    var _this9 = this;
+  created: function created() {
+    var _this8 = this;
 
     if (this.$store.getters['auth/check']) {
       this.postLog();
@@ -3668,16 +3726,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
 
     _eventBus_js__WEBPACK_IMPORTED_MODULE_4__["default"].$on('eventPost', /*#__PURE__*/function () {
-      var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9(_ref3) {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(_ref2) {
         var id, weight, rep, set, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context9.prev = _context9.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
-                id = _ref3.id, weight = _ref3.weight, rep = _ref3.rep, set = _ref3.set;
-                _context9.next = 3;
+                id = _ref2.id, weight = _ref2.weight, rep = _ref2.rep, set = _ref2.set;
+                _context8.next = 3;
                 return axios.post('/api/event_logs', {
-                  log_id: _this9.logId,
+                  log_id: _this8.logId,
                   event_id: id,
                   weight: weight,
                   rep: rep,
@@ -3685,51 +3743,66 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
               case 3:
-                response = _context9.sent;
+                response = _context8.sent;
                 console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context9.next = 8;
+                  _context8.next = 8;
                   break;
                 }
 
-                _this9.$store.commit('error/setCode', response.status);
+                _this8.$store.commit('error/setCode', response.status);
 
-                return _context9.abrupt("return", false);
+                return _context8.abrupt("return", false);
 
               case 8:
-                _this9.$store.commit('message/setContent', {
+                _this8.$store.commit('message/setContent', {
                   content: '実施種目が追加されました！',
                   timeout: 3000
                 });
 
-                _this9.getEventLogs();
+                _this8.getEventLogs();
 
               case 10:
               case "end":
-                return _context9.stop();
+                return _context8.stop();
             }
           }
-        }, _callee9);
+        }, _callee8);
       }));
 
       return function (_x) {
-        return _ref4.apply(this, arguments);
+        return _ref3.apply(this, arguments);
       };
     }());
   },
   destroyed: function destroyed() {
     window.removeEventListener("beforeunload", this.confirmSave);
+  },
+  beforeRouteLeave: function beforeRouteLeave(to, from, next) {
+    var answer = window.confirm("このままトレログの編集を終了してよろしいでしょうか?※種目追加されていないログは保存されません。");
+
+    if (answer) {
+      if (this.setEventLogs) {
+        next();
+      } else {
+        this.deleteLog();
+        next();
+      }
+    } else {
+      next(false);
+    }
   } // beforeRouteLeave (to, from, next) {
   //   // if (typeof this.logContent !== 'undefined') {
-  //   if (typeof this.event_logs !== 'undefined') {
-  //     this.deleteLog()
+  //     // if (typeof this.event_logs !== 'undefined') {
+  //   if (this.setEventLogs) {
   //     next()
   //   // } else if (this.logContent === null) {
-  //   //   this.deleteLog()
+  //     //   this.deleteLog()
   //   //   this.deleteAllEventLog()
   //   //   next()
   //   } else {
+  //     this.deleteLog()
   //     next()
   //   }
   // },
@@ -4184,6 +4257,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
 //
 //
 //
@@ -5081,6 +5156,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
 //
 //
 //
@@ -7298,18 +7376,9 @@ var render = function() {
           _c("Header"),
           _vm._v(" "),
           _c(
-            "v-container",
-            [
-              _c(
-                "v-main",
-                [
-                  _c("Message"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "container" }, [_c("RouterView")], 1)
-                ],
-                1
-              )
-            ],
+            "v-main",
+            { staticClass: "pa-2 ma-2" },
+            [_c("Message"), _vm._v(" "), _c("RouterView")],
             1
           ),
           _vm._v(" "),
@@ -7346,133 +7415,204 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("v-card", { staticClass: "mx-auto", attrs: { "max-width": "800" } }, [
-        _c("p", [_vm._v(_vm._s(_vm.event.event_name))]),
-        _vm._v(" "),
-        this.$route.path === "/logs/create"
-          ? _c("div", [
-              _c(
-                "form",
-                {
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.eventPost($event)
-                    }
-                  }
-                },
-                [
+      _c(
+        "v-dialog",
+        {
+          scopedSlots: _vm._u([
+            {
+              key: "activator",
+              fn: function(ref) {
+                var on = ref.on
+                var attrs = ref.attrs
+                return [
                   _c(
-                    "v-row",
-                    { attrs: { align: "center", justify: "center" } },
-                    [
-                      _c(
-                        "v-card",
-                        {
-                          staticClass: "ma-2",
-                          attrs: { raised: "", width: "200" }
-                        },
-                        [
-                          _c("v-select", {
-                            attrs: {
-                              width: "60",
-                              items: _vm.weightItems,
-                              label: "重量",
-                              "data-vv-name": "select",
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.weight,
-                              callback: function($$v) {
-                                _vm.weight = $$v
-                              },
-                              expression: "weight"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-card",
-                        {
-                          staticClass: "ma-2",
-                          attrs: { raised: "", width: "200" }
-                        },
-                        [
-                          _c("v-select", {
-                            attrs: {
-                              items: _vm.repItems,
-                              label: "回数",
-                              "data-vv-name": "select",
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.rep,
-                              callback: function($$v) {
-                                _vm.rep = $$v
-                              },
-                              expression: "rep"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-card",
-                        {
-                          staticClass: "ma-2",
-                          attrs: { raised: "", width: "200" }
-                        },
-                        [
-                          _c("v-select", {
-                            attrs: {
-                              items: _vm.setItems,
-                              label: "セット数",
-                              "data-vv-name": "select",
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.set,
-                              callback: function($$v) {
-                                _vm.set = $$v
-                              },
-                              expression: "set"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
+                    "v-btn",
+                    _vm._g(
+                      _vm._b(
+                        { attrs: { color: "#B3E5FC" } },
                         "v-btn",
-                        {
-                          staticClass: "mx-2",
-                          attrs: {
-                            type: "submit",
-                            fab: "",
-                            dark: "",
-                            small: "",
-                            color: "indigo"
-                          }
-                        },
-                        [
-                          _c("v-icon", { attrs: { dark: "" } }, [
-                            _vm._v("\n            mdi-plus\n          ")
-                          ])
-                        ],
-                        1
+                        attrs,
+                        false
+                      ),
+                      on
+                    ),
+                    [
+                      _vm._v(
+                        "\n          " +
+                          _vm._s(_vm.event.event_name) +
+                          "\n        "
                       )
-                    ],
-                    1
+                    ]
                   )
-                ],
-                1
-              )
-            ])
-          : _vm._e()
-      ])
+                ]
+              }
+            }
+          ]),
+          model: {
+            value: _vm.dialog,
+            callback: function($$v) {
+              _vm.dialog = $$v
+            },
+            expression: "dialog"
+          }
+        },
+        [
+          _vm._v(" "),
+          _c(
+            "v-card",
+            { staticClass: "mx-auto" },
+            [
+              _c("v-card-title", { staticClass: "headline grey lighten-2" }, [
+                _vm._v(_vm._s(_vm.event.event_name))
+              ]),
+              _vm._v(" "),
+              this.$route.path === "/logs/create"
+                ? _c("div", [
+                    _c(
+                      "form",
+                      {
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            return _vm.eventPost($event)
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "v-card-text",
+                          [
+                            _c(
+                              "v-container",
+                              [
+                                _c(
+                                  "v-row",
+                                  [
+                                    _c(
+                                      "v-col",
+                                      {
+                                        attrs: { cols: "12", sm: "6", md: "4" }
+                                      },
+                                      [
+                                        _c("v-select", {
+                                          attrs: {
+                                            width: "60",
+                                            items: _vm.weightItems,
+                                            label: "重量",
+                                            "data-vv-name": "select",
+                                            required: ""
+                                          },
+                                          model: {
+                                            value: _vm.weight,
+                                            callback: function($$v) {
+                                              _vm.weight = $$v
+                                            },
+                                            expression: "weight"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-col",
+                                      {
+                                        attrs: { cols: "12", sm: "6", md: "4" }
+                                      },
+                                      [
+                                        _c("v-select", {
+                                          attrs: {
+                                            items: _vm.repItems,
+                                            label: "回数",
+                                            "data-vv-name": "select",
+                                            required: ""
+                                          },
+                                          model: {
+                                            value: _vm.rep,
+                                            callback: function($$v) {
+                                              _vm.rep = $$v
+                                            },
+                                            expression: "rep"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-col",
+                                      {
+                                        attrs: { cols: "12", sm: "6", md: "4" }
+                                      },
+                                      [
+                                        _c("v-select", {
+                                          attrs: {
+                                            items: _vm.setItems,
+                                            label: "セット数",
+                                            "data-vv-name": "select",
+                                            required: ""
+                                          },
+                                          model: {
+                                            value: _vm.set,
+                                            callback: function($$v) {
+                                              _vm.set = $$v
+                                            },
+                                            expression: "set"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-actions",
+                          [
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _c("v-btn", { on: { click: _vm.close } }, [
+                              _vm._v("Cancel")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  color: "blue darken-1",
+                                  type: "submit"
+                                }
+                              },
+                              [
+                                _c("v-icon", { attrs: { dark: "" } }, [
+                                  _vm._v(
+                                    "\n              mdi-plus\n            "
+                                  )
+                                ])
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ])
+                : _vm._e()
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )
@@ -7504,47 +7644,56 @@ var render = function() {
     [
       _c(
         "v-card",
-        { staticClass: "mx-auto", attrs: { raised: "", width: "400" } },
+        {
+          staticClass: "mx-auto my-2",
+          attrs: { raised: "", color: "#B3E5FC", "max-width": "800" }
+        },
         [
-          _c("span", [_vm._v(_vm._s(_vm.item.event.part))]),
+          _c("v-card-title", { staticClass: "px-2 py-1" }, [
+            _c("span", [_vm._v(_vm._s(_vm.item.event.part) + ":")]),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.item.event.event_name))])
+          ]),
           _vm._v(" "),
-          _c("span", [_vm._v(_vm._s(_vm.item.event.event_name))]),
-          _vm._v(" "),
-          _c("span", [_vm._v(_vm._s(_vm.item.weight) + "kg")]),
-          _vm._v(" "),
-          _c("span", [_vm._v(_vm._s(_vm.item.rep) + "rep")]),
-          _vm._v(" "),
-          _c("span", [_vm._v(_vm._s(_vm.item.set) + "set")]),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.ableDelete,
-                  expression: "ableDelete"
-                }
-              ],
-              staticClass: "tab__content"
-            },
-            [
-              _c(
-                "form",
-                {
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.deleteEventLog($event)
-                    }
+          _c("v-card-text", { staticClass: "px-2 pb-1" }, [
+            _c("span", [_vm._v(_vm._s(_vm.item.weight) + "kg")]),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.item.rep) + "rep")]),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.item.set) + "set")]),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.ableDelete,
+                    expression: "ableDelete"
                   }
-                },
-                [_c("button", { attrs: { type: "submit" } }, [_vm._v("削除")])]
-              )
-            ]
-          )
-        ]
+                ]
+              },
+              [
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { color: "blue darken-1", text: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.deleteEventLog($event)
+                      }
+                    }
+                  },
+                  [_vm._v("削除")]
+                )
+              ],
+              1
+            )
+          ])
+        ],
+        1
       )
     ],
     1
@@ -7822,86 +7971,194 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c(
-        "v-card",
-        {
-          staticClass: "mx-auto",
-          attrs: { color: "#26c6da", "max-width": "600" }
-        },
+  return _vm.log.event_logs.length > 0
+    ? _c(
+        "div",
         [
           _c(
-            "RouterLink",
-            {
-              staticClass: "button button--link",
-              attrs: { to: { name: "log.show", params: { logId: _vm.log.id } } }
-            },
-            [
-              _c("v-card-title"),
-              _vm._v(" "),
-              _c("v-card-subtitle"),
-              _vm._v(" "),
-              _c(
-                "v-row",
-                _vm._l(_vm.log.event_logs, function(event_log) {
-                  return _c("EventLog", {
-                    key: event_log.id,
-                    attrs: { item: event_log, ableDelete: false }
-                  })
-                }),
-                1
-              ),
-              _vm._v(" "),
-              _c("v-card-text", { staticClass: "headline font-weight-bold" }, [
-                _vm._v("\n        " + _vm._s(_vm.log.text) + "\n      ")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card-actions",
+            "v-col",
+            { staticClass: "ma-3", attrs: { cols: "12" } },
             [
               _c(
-                "v-list-item",
-                { staticClass: "grow" },
+                "v-card",
+                { attrs: { color: "#E3F2FD" } },
                 [
-                  _c(
-                    "v-list-item-avatar",
-                    { attrs: { color: "grey darken-3" } },
-                    [
-                      _c("v-img", {
-                        staticClass: "elevation-6",
-                        attrs: {
-                          alt: "",
-                          src:
-                            "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
                   _c(
                     "RouterLink",
                     {
                       staticClass: "button button--link",
                       attrs: {
-                        to: {
-                          name: "user.show",
-                          params: { userId: _vm.log.user.id }
-                        }
+                        to: { name: "log.show", params: { logId: _vm.log.id } }
                       }
                     },
                     [
                       _c(
-                        "v-list-item-content",
+                        "v-row",
+                        _vm._l(_vm.log.event_logs, function(event_log) {
+                          return _c("EventLog", {
+                            key: event_log.id,
+                            attrs: { item: event_log, ableDelete: false }
+                          })
+                        }),
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-card-text", { staticClass: "headline px-2" }, [
+                        _vm._v(
+                          "\n        コメント：" +
+                            _vm._s(_vm.log.text) +
+                            "\n      "
+                        )
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c(
+                        "v-list-item",
+                        { staticClass: "grow" },
                         [
-                          _c("v-list-item-title", [
-                            _vm._v(_vm._s(_vm.log.user.name))
-                          ])
+                          _c(
+                            "v-list-item-avatar",
+                            { attrs: { color: "grey darken-3" } },
+                            [
+                              _c("v-img", {
+                                staticClass: "elevation-6",
+                                attrs: {
+                                  alt: "",
+                                  src:
+                                    "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "RouterLink",
+                            {
+                              staticClass: "button button--link",
+                              attrs: {
+                                to: {
+                                  name: "user.show",
+                                  params: { userId: _vm.log.user.id }
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "v-list-item-content",
+                                [
+                                  _c("v-list-item-title", [
+                                    _vm._v(_vm._s(_vm.log.user.name))
+                                  ])
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            { attrs: { align: "center", justify: "end" } },
+                            [
+                              _vm.favoriteStatus(_vm.log.favorites)
+                                ? _c(
+                                    "v-icon",
+                                    {
+                                      staticClass: "mr-1",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.favoriteLog(_vm.log.id)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n            favorite_border\n          "
+                                      )
+                                    ]
+                                  )
+                                : _c(
+                                    "v-icon",
+                                    {
+                                      staticClass: "mr-1",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.unFavoriteLog(_vm.log.id)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n            favorite\n          "
+                                      )
+                                    ]
+                                  ),
+                              _vm._v(" "),
+                              _c("span", { staticClass: "subheading mr-2" }, [
+                                _vm._v(_vm._s(_vm.log.favorites.length))
+                              ]),
+                              _vm._v(" "),
+                              _c("span", { staticClass: "mr-1" }, [
+                                _vm._v("·")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "RouterLink",
+                                {
+                                  staticClass: "button button--link",
+                                  attrs: {
+                                    to: {
+                                      name: "comment.create",
+                                      params: { logId: _vm.log.id }
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("v-icon", { staticClass: "mr-1" }, [
+                                    _vm._v(
+                                      "\n              mdi-share-variant\n            "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "subheading" }, [
+                                    _vm._v(_vm._s(_vm.log.comments.length))
+                                  ])
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { icon: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.show = !_vm.show
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("v-icon", [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.show
+                                          ? "mdi-chevron-up"
+                                          : "mdi-chevron-down"
+                                      )
+                                    )
+                                  ])
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
                         ],
                         1
                       )
@@ -7910,137 +8167,51 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-row",
-                    { attrs: { align: "center", justify: "end" } },
-                    [
-                      _vm.favoriteStatus(_vm.log.favorites)
-                        ? _c(
-                            "v-icon",
-                            {
-                              staticClass: "mr-1",
-                              on: {
-                                click: function($event) {
-                                  return _vm.favoriteLog(_vm.log.id)
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n            favorite_border\n          "
-                              )
-                            ]
-                          )
-                        : _c(
-                            "v-icon",
-                            {
-                              staticClass: "mr-1",
-                              on: {
-                                click: function($event) {
-                                  return _vm.unFavoriteLog(_vm.log.id)
-                                }
-                              }
-                            },
-                            [_vm._v("\n            favorite\n          ")]
-                          ),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "subheading mr-2" }, [
-                        _vm._v(_vm._s(_vm.log.favorites.length))
-                      ]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "mr-1" }, [_vm._v("·")]),
-                      _vm._v(" "),
-                      _c(
-                        "RouterLink",
+                    "v-expand-transition",
+                    _vm._l(_vm.log.comments, function(comment) {
+                      return _c(
+                        "div",
                         {
-                          staticClass: "button button--link",
-                          attrs: {
-                            to: {
-                              name: "comment.create",
-                              params: { logId: _vm.log.id }
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.show,
+                              expression: "show"
                             }
-                          }
+                          ],
+                          key: comment.id
                         },
                         [
-                          _c("v-icon", { staticClass: "mr-1" }, [
-                            _vm._v(
-                              "\n              mdi-share-variant\n            "
-                            )
+                          _c("v-divider"),
+                          _vm._v(" "),
+                          _c("v-card-subtitle", [
+                            _vm._v(_vm._s(comment.user.name))
                           ]),
                           _vm._v(" "),
-                          _c("span", { staticClass: "subheading" }, [
-                            _vm._v(_vm._s(_vm.log.comments.length))
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { icon: "" },
-                          on: {
-                            click: function($event) {
-                              _vm.show = !_vm.show
-                            }
-                          }
-                        },
-                        [
-                          _c("v-icon", [
+                          _c("v-card-text", [
                             _vm._v(
-                              _vm._s(
-                                _vm.show ? "mdi-chevron-up" : "mdi-chevron-down"
-                              )
+                              "\n          " +
+                                _vm._s(comment.text) +
+                                "\n        "
                             )
                           ])
                         ],
                         1
                       )
-                    ],
-                    1
+                    }),
+                    0
                   )
                 ],
                 1
               )
             ],
             1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-expand-transition",
-            _vm._l(_vm.log.comments, function(comment) {
-              return _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.show,
-                      expression: "show"
-                    }
-                  ],
-                  key: comment.id
-                },
-                [
-                  _c("v-divider"),
-                  _vm._v(" "),
-                  _c("v-card-subtitle", [_vm._v(_vm._s(comment.user.name))]),
-                  _vm._v(" "),
-                  _c("v-card-text", [
-                    _vm._v("\n          " + _vm._s(comment.text) + "\n        ")
-                  ])
-                ],
-                1
-              )
-            }),
-            0
           )
         ],
         1
       )
-    ],
-    1
-  )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -8065,7 +8236,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
+    "v-card",
     {
       directives: [
         {
@@ -8075,7 +8246,8 @@ var render = function() {
           expression: "message"
         }
       ],
-      staticClass: "message"
+      staticClass: "mx-auto mt-15 mb-0 pb-0",
+      attrs: { raised: "", color: "#B3E5FC", "max-width": "800", height: "60" }
     },
     [_vm._v("\n  " + _vm._s(_vm.message) + "\n")]
   )
@@ -8189,71 +8361,80 @@ var render = function() {
     [
       _c(
         "v-card",
-        { staticClass: "mx-auto", attrs: { "max-width": "800" } },
+        { staticClass: "mx-auto mb-3", attrs: { "max-width": "800" } },
         [
           _c(
             "v-tabs",
             {
               attrs: {
-                "background-color": "deep-purple accent-4",
+                "background-color": "#039BE5",
                 "center-active": "",
                 dark: ""
               }
             },
             _vm._l(_vm.eventParts, function(eventPart) {
-              return _c("v-tab", { key: eventPart.id }, [
-                _c(
-                  "div",
-                  {
-                    on: {
-                      click: function($event) {
-                        return _vm.activate(eventPart.id)
-                      }
+              return _c(
+                "v-tab",
+                {
+                  key: eventPart.id,
+                  on: {
+                    click: function($event) {
+                      return _vm.activate(eventPart.id)
                     }
-                  },
-                  [_vm._v(_vm._s(eventPart.name))]
-                )
-              ])
+                  }
+                },
+                [_vm._v("\n        " + _vm._s(eventPart.name) + "\n      ")]
+              )
             }),
             1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-row",
+            _vm._l(_vm.events, function(event) {
+              return _c(
+                "div",
+                { key: event.id },
+                _vm._l(_vm.eventParts, function(part) {
+                  return _c("div", { key: part.id }, [
+                    event.part === part.name
+                      ? _c(
+                          "div",
+                          [
+                            _c(
+                              "v-col",
+                              { staticClass: "ma-1" },
+                              [
+                                _c("Event", {
+                                  directives: [
+                                    {
+                                      name: "show",
+                                      rawName: "v-show",
+                                      value: _vm.active === part.id,
+                                      expression: "active === part.id"
+                                    }
+                                  ],
+                                  attrs: { event: event }
+                                })
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      : _vm._e()
+                  ])
+                }),
+                0
+              )
+            }),
+            0
           )
         ],
         1
-      ),
-      _vm._v(" "),
-      _vm._l(_vm.events, function(event) {
-        return _c(
-          "div",
-          { key: event.id },
-          _vm._l(_vm.eventParts, function(part) {
-            return _c("div", { key: part.id }, [
-              event.part === part.name
-                ? _c("div", [
-                    _c(
-                      "div",
-                      {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: _vm.active === part.id,
-                            expression: "active === part.id"
-                          }
-                        ],
-                        staticClass: "tab__content"
-                      },
-                      [_c("Event", { attrs: { event: event } })],
-                      1
-                    )
-                  ])
-                : _vm._e()
-            ])
-          }),
-          0
-        )
-      })
+      )
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -8346,123 +8527,72 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("form", { on: { submit: _vm.eventCreate } }, [
-      _c("span", [_vm._v("種目部位選択: " + _vm._s(_vm.eventPart))]),
-      _vm._v(" "),
-      _c(
-        "select",
-        {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.eventPart,
-              expression: "eventPart"
-            }
+  return _c(
+    "v-card",
+    { staticClass: "pt-15 mt-15" },
+    [
+      _c("v-col", { attrs: { cols: "12" } }, [
+        _c(
+          "form",
+          { on: { submit: _vm.eventCreate } },
+          [
+            _c("v-select", {
+              attrs: {
+                items: _vm.itemParts,
+                label: "部位",
+                "data-vv-name": "select",
+                required: ""
+              },
+              model: {
+                value: _vm.eventPart,
+                callback: function($$v) {
+                  _vm.eventPart = $$v
+                },
+                expression: "eventPart"
+              }
+            }),
+            _vm._v(" "),
+            _c("v-text-field", {
+              attrs: {
+                counter: 10,
+                rules: _vm.nameRules,
+                label: "種目名",
+                placeholder: "インクラインベンチプレス",
+                required: ""
+              },
+              model: {
+                value: _vm.eventName,
+                callback: function($$v) {
+                  _vm.eventName = $$v
+                },
+                expression: "eventName"
+              }
+            }),
+            _vm._v(" "),
+            _c("v-textarea", {
+              attrs: {
+                clearable: "",
+                "clear-icon": "mdi-close-circle",
+                label: "種目解説",
+                placeholder: "大胸筋上部、コンパウンド種目、高重量狙い"
+              },
+              model: {
+                value: _vm.eventExplanation,
+                callback: function($$v) {
+                  _vm.eventExplanation = $$v
+                },
+                expression: "eventExplanation"
+              }
+            }),
+            _vm._v(" "),
+            _c("v-btn", { attrs: { type: "submit" } }, [_vm._v("種目追加")])
           ],
-          on: {
-            change: function($event) {
-              var $$selectedVal = Array.prototype.filter
-                .call($event.target.options, function(o) {
-                  return o.selected
-                })
-                .map(function(o) {
-                  var val = "_value" in o ? o._value : o.value
-                  return val
-                })
-              _vm.eventPart = $event.target.multiple
-                ? $$selectedVal
-                : $$selectedVal[0]
-            }
-          }
-        },
-        [
-          _c("option", { attrs: { disabled: "", value: "" } }, [
-            _vm._v("種目部位を選択してください")
-          ]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "胸" } }, [_vm._v("胸")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "背中" } }, [_vm._v("背中")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "肩" } }, [_vm._v("肩")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "脚" } }, [_vm._v("脚")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "上腕二頭筋" } }, [
-            _vm._v("上腕二頭筋")
-          ]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "上腕三頭筋" } }, [
-            _vm._v("上腕三頭筋")
-          ]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "腹筋" } }, [_vm._v("腹筋")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "その他" } }, [_vm._v("その他")])
-        ]
-      ),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("span", [_vm._v("種目:" + _vm._s(_vm.eventName))]),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.eventName,
-            expression: "eventName"
-          }
-        ],
-        attrs: { placeholder: "種目名を入力してください" },
-        domProps: { value: _vm.eventName },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.eventName = $event.target.value
-          }
-        }
-      }),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("span", [_vm._v("種目解説:" + _vm._s(_vm.eventExplanation))]),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("textarea", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.eventExplanation,
-            expression: "eventExplanation"
-          }
-        ],
-        attrs: { placeholder: "種目の解説を入力してください" },
-        domProps: { value: _vm.eventExplanation },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.eventExplanation = $event.target.value
-          }
-        }
-      }),
-      _vm._v(" "),
-      _c("button", { attrs: { type: "submit" } }, [_vm._v("種目追加")])
-    ]),
-    _vm._v(" "),
-    _c("p", [_vm._v(_vm._s(_vm.msg))])
-  ])
+          1
+        )
+      ])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -8652,45 +8782,58 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _c("UserEvent", { attrs: { events: _vm.events } }),
-      _vm._v(" "),
-      _vm._l(_vm.event_logs, function(event_log) {
-        return _c("EventLog", {
-          key: event_log.id,
-          attrs: { item: event_log, ableDelete: true },
-          on: { deleteEventLog: _vm.deleteEventLog }
-        })
-      }),
-      _vm._v(" "),
-      _c("v-card", { staticClass: "mx-auto", attrs: { "max-width": "800" } }, [
-        _c(
-          "form",
-          {
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.updateLog($event)
-              }
-            }
-          },
-          [
-            _c("v-textarea", {
-              model: {
-                value: _vm.logContent,
-                callback: function($$v) {
-                  _vm.logContent = $$v
+      _c(
+        "v-container",
+        { staticClass: "my-10", attrs: { "max-width": "800" } },
+        [
+          _c("UserEvent", { attrs: { events: _vm.events } }),
+          _vm._v(" "),
+          _vm._l(_vm.event_logs, function(event_log) {
+            return _c("EventLog", {
+              key: event_log.id,
+              attrs: { item: event_log, ableDelete: true },
+              on: { deleteEventLog: _vm.deleteEventLog }
+            })
+          }),
+          _vm._v(" "),
+          _c(
+            "v-card",
+            { staticClass: "mx-auto", attrs: { "max-width": "800" } },
+            [
+              _c(
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.updateLog($event)
+                    }
+                  }
                 },
-                expression: "logContent"
-              }
-            }),
-            _vm._v(" "),
-            _c("v-btn", { attrs: { type: "submit" } }, [_vm._v("ログ作成")])
-          ],
-          1
-        )
-      ])
+                [
+                  _c("v-textarea", {
+                    model: {
+                      value: _vm.logContent,
+                      callback: function($$v) {
+                        _vm.logContent = $$v
+                      },
+                      expression: "logContent"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("v-btn", { attrs: { type: "submit" } }, [
+                    _vm._v("ログ作成")
+                  ])
+                ],
+                1
+              )
+            ]
+          )
+        ],
+        2
+      )
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -8850,13 +8993,23 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    _vm._l(_vm.logs, function(log) {
-      return _c("Log", {
-        key: log.id,
-        attrs: { log: log },
-        on: { favoriteLog: _vm.favoriteLog, unFavoriteLog: _vm.unFavoriteLog }
-      })
-    }),
+    [
+      _c(
+        "v-container",
+        { staticClass: "my-10" },
+        _vm._l(_vm.logs, function(log) {
+          return _c("Log", {
+            key: log.id,
+            attrs: { log: log },
+            on: {
+              favoriteLog: _vm.favoriteLog,
+              unFavoriteLog: _vm.unFavoriteLog
+            }
+          })
+        }),
+        1
+      )
+    ],
     1
   )
 }
@@ -72660,7 +72813,16 @@ var routes = [{
 }, {
   path: '/logs/create',
   name: 'log.create',
-  component: _pages_LogCreate_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+  component: _pages_LogCreate_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+  beforeRouteLeave: function beforeRouteLeave(to, from, next) {
+    var answer = window.confirm("Data you've inputted won't be synced, OK?");
+
+    if (answer) {
+      next();
+    } else {
+      next(false);
+    }
+  }
 }, {
   path: '/logs/:logId',
   name: 'log.show',

@@ -5,9 +5,12 @@
     <!-- <RouterLink :to="{ name: 'user.event', params: { userId: user.id }}">
       <button>種目リスト</button>
     </RouterLink> -->
+    <!-- <UserEvent
+    :userId="user.id"
+    /> -->
     <UserEvent
-    :events="events"
-    />
+      :events="events"
+      />
     <p v-if="user.id === loginUserId">
       <RouterLink :to="{ name: 'user.edit', params: { userId: user.id }}">
         <button>edit</button>

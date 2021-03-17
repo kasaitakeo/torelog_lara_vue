@@ -1,26 +1,20 @@
 <template>
-  <div>
+  <div v-if="log.event_logs.length > 0">
+    <v-col cols="12" class="ma-3">
     <v-card
-      class="mx-auto"
-      color="#26c6da"
-      max-width="600"
+      color="#E3F2FD"
     >
       <RouterLink class="button button--link" :to="{name: 'log.show', params: {logId: log.id}}">
-        <v-card-title></v-card-title>
-        <v-card-subtitle>
-
-        </v-card-subtitle>
         <v-row>
-        <EventLog
-          v-for="event_log in log.event_logs" 
-          :key="event_log.id"
-          :item="event_log"
-          :ableDelete="false"
-        />
-
+          <EventLog
+            v-for="event_log in log.event_logs" 
+            :key="event_log.id"
+            :item="event_log"
+            :ableDelete="false"
+          />
         </v-row>
-        <v-card-text class="headline font-weight-bold">
-          {{ log.text }}
+        <v-card-text class="headline px-2">
+          コメント：{{ log.text }}
         </v-card-text>
       </RouterLink>
       <v-card-actions>
@@ -75,6 +69,7 @@
         </div>
       </v-expand-transition>
     </v-card>
+    </v-col>
   </div>
 </template>
 <script>

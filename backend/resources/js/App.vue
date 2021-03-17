@@ -3,14 +3,10 @@
     <v-app id="inspire">
     <Header/>
       <!-- <Navbar /> -->
-    <v-container>
-      <v-main>
+      <v-main class="pa-2 ma-2">
         <Message />
-        <div class="container">
-          <RouterView />
-        </div>
+        <RouterView />
       </v-main>
-    </v-container>
     <Footer />
 
     </v-app>

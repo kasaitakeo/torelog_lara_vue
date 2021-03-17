@@ -1,7 +1,35 @@
 <template>
-  <div>
-    <form @submit="eventCreate">
-      <span>種目部位選択: {{ eventPart }}</span>
+    <v-card class="pt-15 mt-15">
+      <v-col cols="12">
+        <form @submit="eventCreate">
+          <v-select
+            v-model="eventPart"
+            :items="itemParts" 
+            label="部位" 
+            data-vv-name="select" 
+            required 
+          >
+          </v-select>
+          <v-text-field
+            v-model="eventName"
+            :counter="10"
+            :rules="nameRules"
+            label="種目名"
+            placeholder="インクラインベンチプレス"
+            required
+          ></v-text-field>
+          <v-textarea
+            v-model="eventExplanation"
+            clearable
+            clear-icon="mdi-close-circle"
+            label="種目解説"
+            placeholder="大胸筋上部、コンパウンド種目、高重量狙い"
+          ></v-textarea>
+          <v-btn type="submit">種目追加</v-btn>
+        </form>
+      </v-col>
+    </v-card>
+      <!-- <span>種目部位選択: {{ eventPart }}</span>
       <select v-model="eventPart">
         <option disabled value="">種目部位を選択してください</option>
         <option value="胸">胸</option>
@@ -21,10 +49,7 @@
       <span>種目解説:{{ eventExplanation }}</span>
       <br>
       <textarea v-model="eventExplanation" placeholder="種目の解説を入力してください"></textarea>
-      <button type="submit">種目追加</button>
-    </form>
-    <p>{{ msg }}</p>
-  </div>
+    <p>{{ msg }}</p> -->
 </template>
 
 <script>
@@ -33,6 +58,7 @@ import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
 export default {
   data() {
     return {
+      itemParts: ["胸", "背中", "肩", "脚", "上腕二頭筋", "上腕三頭筋", "腹筋", "その他"],
       eventPart: '',
       eventName: '',
       eventExplanation: '',
