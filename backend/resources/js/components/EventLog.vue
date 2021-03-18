@@ -1,14 +1,13 @@
 <template>
   <div>
+    <v-col>
       <v-card raised
         color="#B3E5FC"
-        class="mx-auto my-2"
-        max-width="800"
+        class="my-2"
       >
         <v-card-title class="px-2 py-1">
           <span>{{ item.event.part }}:</span>  
           <span>{{ item.event.event_name }}</span>  
-
         </v-card-title>
 
         <v-card-text class="px-2 pb-1">
@@ -20,6 +19,7 @@
           </span>
         </v-card-text>
       </v-card>
+    </v-col>
   </div>
 </template>
 

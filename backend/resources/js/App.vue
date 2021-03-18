@@ -3,9 +3,11 @@
     <v-app id="inspire">
     <Header/>
       <!-- <Navbar /> -->
-      <v-main class="pa-2 ma-2">
+      <v-main class="pa-2 mt-15">
         <Message />
-        <RouterView />
+        <v-container>
+          <RouterView />
+        </v-container>
       </v-main>
     <Footer />
 

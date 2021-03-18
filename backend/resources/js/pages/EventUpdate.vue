@@ -3,7 +3,8 @@
     <v-col cols="12">
       <v-card>
         <EventEdit
-          @event-edit="eventCreate" 
+          @event-edit="eventUpdate" 
+          :event="event"
         />
       </v-card>
     </v-col>
@@ -12,21 +13,36 @@
 
 <script>
 import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
-import EventEdit from '../components/EventEdit'
+import { OK } from '../util'
+import EventEdit from '../components/EventEdit.vue'
 
 export default {
   components: {
     EventEdit
   },
+  data() {
+    return {
+      event: {},
+    }
+  },
   methods: {
-    async eventCreate (e) {
-      const response = await axios.post('/api/events', {
+    async getEvent () {
+      const response = await axios.get(`/api/events/${this.$route.params.eventId}`)
+  
+      // if (response.status !== OK) {
+      //   this.$store.commit('error/setCode', response.status)
+      //   return false
+      // }
+  
+      console.log(response.data)
+      this.event = response.data
+    },
+    async eventUpdate (e) {
+      const response = await axios.put(`/api/events/${this.event.id}`, {
         eventPart: e.eventPart,
         eventName: e.eventName,
         eventExplanation: e.eventExplanation
       })
-
-      console.log(response)
 
       if (response.status !== UNPROCESSABLE_ENTITY) {
         this.errors = response.data.errors
@@ -39,19 +55,16 @@ export default {
       }
 
       this.$store.commit('message/setContent', {
-        content: '種目が追加されました！',
+        content: '種目が更新されました！',
         timeout: 6000
       })
 
-      this.$router.push('/')
+      this.$router.push({name: 'event'})
     }
   },
-  mounted () {
+  created () {
+    this.getEvent()
 
   },
 }
 </script>
-
-<style>
-
-</style>

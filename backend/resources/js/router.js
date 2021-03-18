@@ -10,7 +10,7 @@ import LogShow from './pages/LogShow.vue'
 import LogEdit from './pages/LogEdit.vue'
 import EventCreate from './pages/EventCreate.vue'
 import EventShow from './pages/EventShow.vue'
-import EventEdit from './pages/EventEdit.vue'
+import EventUpdate from './pages/EventUpdate.vue'
 import UserList from './pages/UserList.vue'
 import UserShow from './pages/UserShow.vue'
 import UserEdit from './pages/UserEdit.vue'
@@ -46,12 +46,11 @@ const routes = [
     path: '/logs/create',
     name: 'log.create',
     component: LogCreate,
-    beforeRouteLeave (to, from, next) {
-      let answer = window.confirm("Data you've inputted won't be synced, OK?")
-      if (answer) {
+    beforeEnter (to, form, next) {
+      if (store.getters['auth/check']) {
         next()
       } else {
-        next(false)
+        next('/')
       }
     }
   },
@@ -65,12 +64,26 @@ const routes = [
     path: '/logs/:logId/edit',
     name: 'log.edit',
     component: LogEdit,
-    props: true
+    props: true,
+    beforeEnter (to, form, next) {
+      if (store.getters['auth/check']) {
+        next()
+      } else {
+        next('/')
+      }
+    }  
   },
   {
     path: '/events/create',
     name: 'event.create',
-    component: EventCreate
+    component: EventCreate,
+    beforeEnter (to, form, next) {
+      if (store.getters['auth/check']) {
+        next()
+      } else {
+        next('/')
+      }
+    }
   },
   {
     path: '/events/:eventId',
@@ -79,10 +92,17 @@ const routes = [
     props: true
   },
   {
-    path: '/events/:eventId/edit',
-    name: 'event.edit',
-    component: EventEdit,
-    props: true
+    path: '/events/:eventId/update',
+    name: 'event.update',
+    component: EventUpdate,
+    props: true,
+    beforeEnter (to, form, next) {
+      if (store.getters['auth/check']) {
+        next()
+      } else {
+        next('/')
+      }
+    }
   },
   {
     path: '/users',
@@ -105,13 +125,27 @@ const routes = [
     path: '/users/:userId/edit',
     name: 'user.edit',
     component: UserEdit,
-    props: true
+    props: true,
+    beforeEnter (to, form, next) {
+      if (store.getters['auth/check']) {
+        next()
+      } else {
+        next('/')
+      }
+    }
   },
   {
     path: '/comments/:logId/create',
     name: 'comment.create',
     component: CommentCreate,
-    props: true
+    props: true,
+    beforeEnter (to, form, next) {
+      if (store.getters['auth/check']) {
+        next()
+      } else {
+        next('/')
+      }
+    }
   },
   {
     path: '/500',

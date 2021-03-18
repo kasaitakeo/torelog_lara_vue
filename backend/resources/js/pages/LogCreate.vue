@@ -5,31 +5,44 @@
         <li v-for="msg in errors.photo" :key="msg">{{ msg }}</li>
       </ul>
     </div>
-    <v-container  max-width="800" class="my-10">
+    <v-row>
+      <v-col>
+        <v-card
+          class="mx-auto mb-3"
+          max-width="800"
+        >
+          <v-row>
+            <v-col>
+              <UserEvent
+              :events="events"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <EventLog
+                v-for="event_log in event_logs"
+                :key="event_log.id"
+                :item="event_log"
+                :ableDelete="true"
+                @deleteEventLog="deleteEventLog"
+              />
+            </v-col>
+          </v-row>
+          <v-card
+            class="mx-auto"
+            max-width="800"
+          >
+          <form @submit.prevent="updateLog">
+            <v-textarea v-model="logContent"></v-textarea>
+            <v-btn type="submit">ログ作成</v-btn>
+          </form>
+          </v-card>
 
-      <!-- <UserEvent
-      :user="user"
-      /> -->
-      <UserEvent
-      :events="events"
-      />
-      <EventLog
-        v-for="event_log in event_logs"
-        :key="event_log.id"
-        :item="event_log"
-        :ableDelete="true"
-        @deleteEventLog="deleteEventLog"
-      />
-      <v-card
-        class="mx-auto"
-        max-width="800"
-      >
-      <form @submit.prevent="updateLog">
-        <v-textarea v-model="logContent"></v-textarea>
-        <v-btn type="submit">ログ作成</v-btn>
-      </form>
-      </v-card>
-    </v-container>
+        </v-card>
+      </v-col>
+    </v-row>
+
   </div>
 </template>
 
@@ -167,7 +180,7 @@ export default {
       } 
     }
   },
-  created () {
+  mounted () {
     if (this.$store.getters['auth/check']) {
       this.postLog()
   

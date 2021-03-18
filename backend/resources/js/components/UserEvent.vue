@@ -1,8 +1,6 @@
 <template>
   <div>
-    <v-card
-      class="mx-auto mb-3"
-      max-width="800">
+    <v-card >
       <v-tabs
         background-color="#039BE5"
         center-active
@@ -12,26 +10,21 @@
           {{ eventPart.name }}
         </v-tab>
       </v-tabs>
-    <!-- </v-card>
-          <v-card 
-            class="mx-auto"
-            max-width="800"
-          > -->
-            <v-row>
-    <div v-for="event in events" :key="event.id">
-      <div v-for="part in eventParts" :key="part.id">
-        <div v-if="event.part === part.name">
-              <v-col  class="ma-1">
-                <Event
-                  :event="event"
-                  v-show="active === part.id"
-                />
-              </v-col>
+      <v-row>
+        <div v-for="event in events" :key="event.id">
+          <div v-for="part in eventParts" :key="part.id">
+            <div v-if="event.part === part.name">
+                  <v-col  class="ma-1">
+                    <Event
+                      :event="event"
+                      v-show="active === part.id"
+                    />
+                  </v-col>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-            </v-row>
-          </v-card>
+      </v-row>
+    </v-card>
   </div>
 </template>
 
