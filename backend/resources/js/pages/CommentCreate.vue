@@ -44,8 +44,6 @@ export default {
         return false
       }
 
-      this.msg = 'commentが投稿されました'
-
       this.$router.push('/')
     }
   },

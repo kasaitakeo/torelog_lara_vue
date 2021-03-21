@@ -2295,7 +2295,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {// event: Object
+  props: {
+    event: Object
   },
   data: function data() {
     return {
@@ -2973,7 +2974,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     events: {
-      type: Object,
+      type: Array,
       required: true
     }
   },
@@ -5303,7 +5304,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       user: {},
-      events: {}
+      events: []
     };
   },
   methods: {
@@ -7476,9 +7477,12 @@ var render = function() {
             "v-main",
             { staticClass: "pa-2 mt-15" },
             [
-              _c("Message"),
-              _vm._v(" "),
-              _c("v-container", [_c("RouterView")], 1)
+              _c(
+                "v-container",
+                { attrs: { fluid: "" } },
+                [_c("Message"), _vm._v(" "), _c("RouterView")],
+                1
+              )
             ],
             1
           ),
@@ -9864,50 +9868,43 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("p", [_vm._v(_vm._s(_vm.user.id))]),
-      _vm._v(" "),
-      _c("p", [_vm._v(_vm._s(_vm.user.name))]),
-      _vm._v(" "),
-      _c("UserEvent", { attrs: { events: _vm.events } }),
-      _vm._v(" "),
-      _vm.user.id === _vm.loginUserId
-        ? _c(
-            "p",
-            [
-              _c(
-                "RouterLink",
-                {
-                  attrs: {
-                    to: { name: "user.edit", params: { userId: _vm.user.id } }
-                  }
-                },
-                [_c("button", [_vm._v("edit")])]
-              )
-            ],
-            1
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c(
-        "div",
-        _vm._l(_vm.user.logs, function(log) {
-          return _c("Log", {
-            key: log.id,
-            attrs: { log: log },
-            on: {
-              favoriteLog: _vm.favoriteLog,
-              unFavoriteLog: _vm.unFavoriteLog
-            }
-          })
-        }),
-        1
-      )
-    ],
-    1
-  )
+  return _c("div", [
+    _c("p", [_vm._v(_vm._s(_vm.user.id))]),
+    _vm._v(" "),
+    _c("p", [_vm._v(_vm._s(_vm.user.name))]),
+    _vm._v(" "),
+    _vm.user.id === _vm.loginUserId
+      ? _c(
+          "p",
+          [
+            _c(
+              "RouterLink",
+              {
+                attrs: {
+                  to: { name: "user.edit", params: { userId: _vm.user.id } }
+                }
+              },
+              [_c("button", [_vm._v("edit")])]
+            ),
+            _vm._v(" "),
+            _c("UserEvent", { attrs: { events: _vm.events } })
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _c(
+      "div",
+      _vm._l(_vm.user.logs, function(log) {
+        return _c("Log", {
+          key: log.id,
+          attrs: { log: log },
+          on: { favoriteLog: _vm.favoriteLog, unFavoriteLog: _vm.unFavoriteLog }
+        })
+      }),
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

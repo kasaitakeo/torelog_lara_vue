@@ -2,6 +2,10 @@
   <div>
     <p>{{ user.id }}</p>
     <p>{{ user.name }}</p>
+    <p v-if="user.id === loginUserId">
+      <RouterLink :to="{ name: 'user.edit', params: { userId: user.id }}">
+        <button>edit</button>
+      </RouterLink>
     <!-- <RouterLink :to="{ name: 'user.event', params: { userId: user.id }}">
       <button>種目リスト</button>
     </RouterLink> -->
@@ -11,10 +15,6 @@
     <UserEvent
       :events="events"
       />
-    <p v-if="user.id === loginUserId">
-      <RouterLink :to="{ name: 'user.edit', params: { userId: user.id }}">
-        <button>edit</button>
-      </RouterLink>
     </p>
     <div >
       <Log
@@ -50,7 +50,7 @@ export default {
   data () {
     return {
       user: {},
-      events: {},
+      events: [],
     }
   },
   methods: {

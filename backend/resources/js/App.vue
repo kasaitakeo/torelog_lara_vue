@@ -4,8 +4,8 @@
     <Header/>
       <!-- <Navbar /> -->
       <v-main class="pa-2 mt-15">
-        <Message />
-        <v-container>
+        <v-container fluid>
+          <Message />
           <RouterView />
         </v-container>
       </v-main>

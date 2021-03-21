@@ -38,7 +38,7 @@ import { OK } from '../util'
 
 export default {
   props: {
-    // event: Object
+    event: Object
   },
   data() {
     return {
