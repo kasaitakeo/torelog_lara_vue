@@ -9,7 +9,8 @@
           <RouterView />
         </v-container>
       </v-main>
-    <Footer />
+    <!-- <Footer /> -->
+    <BottomNav/>
 
     </v-app>
   </div>
@@ -20,6 +21,7 @@ import Navbar from './components/Navbar.vue'
 import Header from './components/Header.vue'
 import Message from './components/Message.vue'
 import Footer from './components/Footer.vue'
+import BottomNav from './components/BottomNav.vue'
 
 import { INTERNAL_SERVER_ERROR } from './util'
 
@@ -28,7 +30,8 @@ export default {
     Navbar,
     Header,
     Message,
-    Footer
+    Footer,
+    BottomNav
   },
   computed: {
     errorCode () {

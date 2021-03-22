@@ -73,8 +73,9 @@ class EventsController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $event = EventForm::find($id);
+        $event = Event::find($id);
 
+        $event->part = $request->input('eventPart');
         $event->event_name = $request->input('eventName');
         $event->event_explanation = $request->input('eventExplanation');
 

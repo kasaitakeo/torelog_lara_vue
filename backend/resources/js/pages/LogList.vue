@@ -6,7 +6,7 @@
       :log="log"
       @favoriteLog="favoriteLog"
       @unFavoriteLog="unFavoriteLog"
-          />
+    />
   </div>
 </template>
 

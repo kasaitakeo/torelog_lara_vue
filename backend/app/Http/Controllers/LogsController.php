@@ -18,7 +18,9 @@ class LogsController extends Controller
      */
     public function index(Log $log)
     {
-        $logs = $log->with(['user', 'favorites', 'comments', 'event_logs' => function($query){
+        $logs = $log->with(['user', 'favorites', 'comments' => function($query){
+            $query->with('user');
+        }, 'event_logs' => function($query){
             $query->with('event');
         }])->orderBy(Log::CREATED_AT, 'desc')
         ->paginate();

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-col>
+    <v-col cols="12">
       <v-card raised
         color="#B3E5FC"
         class="my-2"

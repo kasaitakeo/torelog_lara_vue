@@ -1,8 +1,31 @@
 <template>
-  <v-footer
-    color="indigo"
-    app
+  <v-footer app>
+  <v-bottom-navigation
+    v-model="value"
+    :background-color="color"
+    
+    dark
+    shift
   >
+    <RouterLink class="button button--link" :to="{name: 'log.create'}">
+      <v-btn>
+        <span>トレログ</span>
+        <v-icon>fitness_center</v-icon>
+      </v-btn>
+    </RouterLink>
+    <RouterLink class="button button--link" :to="{name: '/'}">
+      <v-btn>
+        <span>ホーム</span>
+        <v-icon>house</v-icon>
+      </v-btn>
+    </RouterLink>
+    <RouterLink class="button button--link" :to="{name: 'user.show', params: {userId: userId}}">
+      <v-btn>
+        <span>マイページ</span>
+        <v-icon>account_circle</v-icon>
+      </v-btn>
+    </RouterLink>   
+  </v-bottom-navigation>
     <span class="white--text">&copy; {{ new Date().getFullYear() }}</span>
     <v-spacer></v-spacer>
     <span v-if="isLogin" class="button button--link" @click="logout">

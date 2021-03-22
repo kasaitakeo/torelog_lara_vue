@@ -27,7 +27,7 @@ class User extends Authenticatable
 
     // ユーザーは複数人のユーザをフォローするため多対多のリレーションになる。→中間テーブルとしてfollowersテーブルにユーザ間の関係をまとめる
 
-    // 第二引数： 結合テーブル名 第三引数： リレーションを定義しているモデルの外部キー名 第四引数： 結合するモデルの外部キー名
+    // 第二引数： 結合テーブル名 第三引数： リレーションを定義している（自身の）モデルの外部キー名 第四引数： 結合するモデル（相手）の外部キー名
 
     // 第一引数で参照するテーブルを指定するが、今回は同一テーブルなので自身のテーブルになる。第二引数には中間テーブルとなるfolloersテーブルを指定。
 
@@ -72,7 +72,7 @@ class User extends Authenticatable
     // フォロー解除する
     public function unfollow(Int $user_id)
     {
-        // ユーザーから役割を削除する必要がある場合もあるでしょう。多対多リレーションのレコードを削除するにはdetachメソッドを使用。detachメソッドは中間テーブルから対応するレコードを削除。しかし両方のモデルはデータベースに残る
+        // ユーザーから役割を削除する必要がある場合,多対多リレーションのレコードを削除するにはdetachメソッドを使用。detachメソッドは中間テーブルから対応するレコードを削除。しかし両方のモデルはデータベースに残る
         return $this->follows()->detach($user_id);
     }
     
@@ -98,26 +98,26 @@ class User extends Authenticatable
     }
     
     //  プロフィール編集
-    public function updateProfile(Array $params)
+    public function updateProfile(Array $data)
     {
-        // $paramsの中に画像があれば処理を分けています
-        if (isset($params['profile_image'])) {
-            // $file_name = $params['profile_image']->store('public/profile_image/');こうすることで画像ファイルが/storage/app/public/profile_image/に保存されます。
-            $file_name = $params['profile_image']->store('public/profile_image/');
+        // $dataの中に画像があれば処理を分けています
+        if (isset($data['profile_image'])) {
+            // $file_name = $data['profile_image']->store('public/profile_image/');こうすることで画像ファイルが/storage/app/public/profile_image/に保存されます。
+            $file_name = $data['profile_image']->store('public/profile_image/');
             
             $this::where('id', $this->id)
             ->update([
-                'screen_name'   => $params['screen_name'],
-                'name'          => $params['name'],
+                'screen_name'   => $data['screen_name'],
+                'name'          => $data['name'],
                     'profile_image' => basename($file_name),
-                    'email'         => $params['email'],
+                    'email'         => $data['email'],
                 ]);
         } else {
             $this::where('id', $this->id)
                 ->update([
-                    'screen_name'   => $params['screen_name'],
-                    'name'          => $params['name'],
-                    'email'         => $params['email'],
+                    'screen_name'   => $data['screen_name'],
+                    'name'          => $data['name'],
+                    'email'         => $data['email'],
                 ]); 
         }
 

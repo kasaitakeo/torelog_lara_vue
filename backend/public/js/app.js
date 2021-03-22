@@ -2009,7 +2009,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Header_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Header.vue */ "./resources/js/components/Header.vue");
 /* harmony import */ var _components_Message_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Message.vue */ "./resources/js/components/Message.vue");
 /* harmony import */ var _components_Footer_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Footer.vue */ "./resources/js/components/Footer.vue");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util */ "./resources/js/util.js");
+/* harmony import */ var _components_BottomNav_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/BottomNav.vue */ "./resources/js/components/BottomNav.vue");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./util */ "./resources/js/util.js");
 //
 //
 //
@@ -2027,6 +2028,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 
 
 
@@ -2037,7 +2040,8 @@ __webpack_require__.r(__webpack_exports__);
     Navbar: _components_Navbar_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     Header: _components_Header_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     Message: _components_Message_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    Footer: _components_Footer_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+    Footer: _components_Footer_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    BottomNav: _components_BottomNav_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   computed: {
     errorCode: function errorCode() {
@@ -2048,7 +2052,7 @@ __webpack_require__.r(__webpack_exports__);
     // $store.state.error.codeを算出プロパティで参照しwatchで監視
     errorCode: {
       handler: function handler(val) {
-        if (val === _util__WEBPACK_IMPORTED_MODULE_4__["INTERNAL_SERVER_ERROR"]) {
+        if (val === _util__WEBPACK_IMPORTED_MODULE_5__["INTERNAL_SERVER_ERROR"]) {
           this.$router.push('/500');
         }
       },
@@ -2057,6 +2061,74 @@ __webpack_require__.r(__webpack_exports__);
     },
     $route: function $route() {
       this.$store.commit('error/setCode', null);
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/BottomNav.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/BottomNav.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      value: 1
+    };
+  },
+  computed: {
+    color: function color() {
+      switch (this.value) {
+        case 0:
+          return 'blue-grey';
+
+        case 1:
+          return 'teal';
+
+        case 2:
+          return 'indigo';
+
+        default:
+          return 'blue-grey';
+      }
+    },
+    userId: function userId() {
+      return this.$store.getters['auth/userId'];
     }
   }
 });
@@ -2194,6 +2266,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     event: {
       type: Object,
       required: true
+    },
+    userId: Number
+  },
+  computed: {
+    loginUserId: function loginUserId() {
+      return this.$store.getters['auth/userId'];
     }
   },
   data: function data() {
@@ -2292,11 +2370,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    event: Object
+    event: {
+      type: Object,
+      "default": function _default() {
+        return {
+          part: '',
+          event_name: '',
+          event_explanation: ''
+        };
+      }
+    }
   },
   data: function data() {
     return {
@@ -2305,8 +2393,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       eventName: '',
       eventExplanation: '',
       msg: '',
-      errora: null,
-      event: {}
+      errora: null
     };
   },
   methods: {
@@ -2362,21 +2449,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     }
   },
-  created: function created() {
-    this.getEvent();
+  created: function created() {// this.getEvent()
   },
-  mounted: function mounted() {
-    var _this3 = this;
-
-    // this.getEvent()
-    this.$nextTick(function () {
-      _this3.eventPart = _this3.event.part;
-      _this3.eventPart = _this3.event.event_name;
-      _this3.eventPart = _this3.event.event_explanation;
-      console.log(_this3.event);
-    });
+  mounted: function mounted() {// this.getEvent()
+    // this.$nextTick(()=>{
+    //   this.eventPart = this.event.part
+    //   this.eventPart = this.event.event_name
+    //   this.eventPart = this.event.event_explanation
+    //     // console.log(this.event)
+    // })
   },
-  // beforeRouteEnter (to, from, next) {
+  // computed: {
+  //   // totalPrice(){
+  //   //   return this.number * this.price
+  //   // }
+  //     totalPrice: app => app.number * app.price
+  // },
+  watch: {
+    event: {
+      immediate: true,
+      handler: function handler() {
+        this.eventPart = this.event.part;
+        this.eventName = this.event.event_name;
+        this.eventExplanation = this.event.event_explanation;
+      }
+    }
+  } // beforeRouteEnter (to, from, next) {
   //   next(vm => {
   //     // `vm` を通じてコンポーネントインスタンスにアクセス
   //       if(typeof vm.event !== 'undefined'){
@@ -2390,19 +2488,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   //       console.log(vm.event)
   //   })
   // }
-  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    next(function (vm) {
-      console.log(vm.event); // `vm` を通じてコンポーネントインスタンスにアクセス
+  // beforeRouteEnter (to, from, next) {
+  //   next(vm => {
+  //     console.log(vm.event)
+  //     // `vm` を通じてコンポーネントインスタンスにアクセス
+  //     vm.$nextTick(()=>{
+  //       if(vm.event){
+  //         vm.eventPart = vm.event.part
+  //         vm.eventPart = vm.event.event_name
+  //         vm.eventPart = vm.event.event_explanation
+  //       }
+  //     })
+  //   })
+  // }
 
-      vm.$nextTick(function () {
-        if (vm.event) {
-          vm.eventPart = vm.event.part;
-          vm.eventPart = vm.event.event_name;
-          vm.eventPart = vm.event.event_explanation;
-        }
-      });
-    });
-  }
 });
 
 /***/ }),
@@ -2531,6 +2630,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
@@ -2579,6 +2701,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2659,6 +2795,32 @@ __webpack_require__.r(__webpack_exports__);
     userId: function userId() {
       return this.$store.getters['auth/userId'];
     }
+  },
+  methods: {
+    logout: function logout() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _this.$store.dispatch('auth/logout');
+
+              case 2:
+                if (_this.apiStatus) {
+                  _this.$router.push('/login');
+                }
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
   }
 });
 
@@ -2682,6 +2844,29 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2826,6 +3011,42 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return true;
+    },
+    deleteLog: function deleteLog(id) {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios["delete"]('/api/logs/' + id);
+
+              case 2:
+                response = _context3.sent;
+                console.log(response);
+
+                if (!(response.status !== OK)) {
+                  _context3.next = 7;
+                  break;
+                }
+
+                _this3.$store.commit('error/setCode', response.status);
+
+                return _context3.abrupt("return", false);
+
+              case 7:
+                _this3.getLog();
+
+              case 8:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
     }
   },
   computed: {
@@ -2967,6 +3188,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2976,7 +3202,8 @@ __webpack_require__.r(__webpack_exports__);
     events: {
       type: Array,
       required: true
-    }
+    },
+    userId: Number
   },
   data: function data() {
     return {
@@ -3055,6 +3282,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -3085,32 +3319,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context.sent;
-                console.log(response);
-
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
-                  _context.next = 7;
-                  break;
-                }
-
-                _this.errors = response.data.errors;
-                return _context.abrupt("return", false);
-
-              case 7:
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 10;
-                  break;
-                }
-
-                _this.$store.commit('error/setCode', response.status);
-
-                return _context.abrupt("return", false);
-
-              case 10:
-                _this.msg = 'commentが投稿されました';
+                console.log(response); // if (response.status !== UNPROCESSABLE_ENTITY) {
+                //   this.errors = response.data.errors
+                //   return false
+                // }
+                // if (response.status !== CREATED) {
+                //   this.$store.commit('error/setCode', response.status)
+                //   return false
+                // }
 
                 _this.$router.push('/');
 
-              case 12:
+              case 5:
               case "end":
                 return _context.stop();
             }
@@ -3184,27 +3404,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context.sent;
-                console.log(response);
+                console.log(response); // if (response.status !== UNPROCESSABLE_ENTITY) {
+                //   this.errors = response.data.errors
+                //   return false
+                // }
+                // if (response.status !== CREATED) {
+                //   this.$store.commit('error/setCode', response.status)
+                //   return false
+                // }
 
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
-                  _context.next = 7;
-                  break;
-                }
-
-                _this.errors = response.data.errors;
-                return _context.abrupt("return", false);
-
-              case 7:
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context.next = 10;
-                  break;
-                }
-
-                _this.$store.commit('error/setCode', response.status);
-
-                return _context.abrupt("return", false);
-
-              case 10:
                 _this.$store.commit('message/setContent', {
                   content: '種目が追加されました！',
                   timeout: 6000
@@ -3212,7 +3420,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.$router.push('/');
 
-              case 12:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -3403,36 +3611,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context2.sent;
+                console.log(response.data); // if (response.status !== UNPROCESSABLE_ENTITY) {
+                //   this.errors = response.data.errors
+                //   return false
+                // }
+                // if (response.status !== CREATED) {
+                //   this.$store.commit('error/setCode', response.status)
+                //   return false
+                // }
 
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
-                  _context2.next = 6;
-                  break;
-                }
-
-                _this2.errors = response.data.errors;
-                return _context2.abrupt("return", false);
-
-              case 6:
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context2.next = 9;
-                  break;
-                }
-
-                _this2.$store.commit('error/setCode', response.status);
-
-                return _context2.abrupt("return", false);
-
-              case 9:
                 _this2.$store.commit('message/setContent', {
                   content: '種目が更新されました！',
                   timeout: 6000
-                });
+                }); // this.$router.push('/')
 
-                _this2.$router.push({
-                  name: 'event'
-                });
 
-              case 11:
+              case 5:
               case "end":
                 return _context2.stop();
             }
@@ -4557,10 +4751,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -5285,6 +5475,67 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5304,7 +5555,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       user: {},
-      events: []
+      events: [],
+      logCount: '',
+      following: '',
+      followed: '',
+      follow_count: '',
+      follower_count: ''
     };
   },
   methods: {
@@ -5334,10 +5590,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 7:
-                console.log(response.data);
-                _this.user = response.data;
+                _this.user = response.data.user_data;
+                _this.logCount = response.data.log_count;
+                _this.following = response.data.is_following;
+                _this.followed = response.data.is_followed;
+                _this.follow_count = response.data.follow_count;
+                _this.follower_count = response.data.follower_count;
 
-              case 9:
+              case 13:
               case "end":
                 return _context.stop();
             }
@@ -7487,7 +7747,102 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("Footer")
+          _c("BottomNav")
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/BottomNav.vue?vue&type=template&id=49b1511d&":
+/*!************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/BottomNav.vue?vue&type=template&id=49b1511d& ***!
+  \************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-bottom-navigation",
+    {
+      attrs: { app: "", "background-color": _vm.color, dark: "", shift: "" },
+      model: {
+        value: _vm.value,
+        callback: function($$v) {
+          _vm.value = $$v
+        },
+        expression: "value"
+      }
+    },
+    [
+      _c(
+        "RouterLink",
+        {
+          staticClass: "button button--link",
+          attrs: { to: { name: "log.create" } }
+        },
+        [
+          _c(
+            "v-btn",
+            [
+              _c("v-icon", [_vm._v("fitness_center")]),
+              _vm._v(" "),
+              _c("span", { staticClass: "pt-5" }, [_vm._v("トレログ")])
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "RouterLink",
+        { staticClass: "button button--link", attrs: { to: { name: "/" } } },
+        [
+          _c(
+            "v-btn",
+            [
+              _c("v-icon", [_vm._v("house")]),
+              _vm._v(" "),
+              _c("span", { staticClass: "pt-5" }, [_vm._v("ホーム")])
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "RouterLink",
+        {
+          staticClass: "button button--link",
+          attrs: { to: { name: "user.show", params: { userId: _vm.userId } } }
+        },
+        [
+          _c(
+            "v-btn",
+            [
+              _c("v-icon", [_vm._v("account_circle")]),
+              _vm._v(" "),
+              _c("span", { staticClass: "pt-5" }, [_vm._v("マイページ")])
+            ],
+            1
+          )
         ],
         1
       )
@@ -7751,32 +8106,34 @@ var render = function() {
                             _vm._v("Cancel")
                           ]),
                           _vm._v(" "),
-                          _c(
-                            "RouterLink",
-                            {
-                              attrs: {
-                                to: {
-                                  name: "event.update",
-                                  params: { eventId: _vm.event.id }
-                                }
-                              }
-                            },
-                            [
-                              _c(
-                                "v-btn",
-                                { attrs: { color: "blue darken-1" } },
+                          _vm.userId === _vm.loginUserId
+                            ? _c(
+                                "RouterLink",
+                                {
+                                  attrs: {
+                                    to: {
+                                      name: "event.update",
+                                      params: { eventId: _vm.event.id }
+                                    }
+                                  }
+                                },
                                 [
-                                  _c("v-icon", { attrs: { dark: "" } }, [
-                                    _vm._v(
-                                      "\n                mdi-plus\n              "
-                                    )
-                                  ])
+                                  _c(
+                                    "v-btn",
+                                    { attrs: { color: "blue darken-1" } },
+                                    [
+                                      _c("v-icon", { attrs: { dark: "" } }, [
+                                        _vm._v(
+                                          "\n                mdi-pencil\n              "
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  )
                                 ],
                                 1
                               )
-                            ],
-                            1
-                          )
+                            : _vm._e()
                         ],
                         1
                       )
@@ -7825,7 +8182,14 @@ var render = function() {
           _c("v-card", [
             _c(
               "form",
-              { on: { submit: _vm.eventEdit } },
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.eventEdit($event)
+                  }
+                }
+              },
               [
                 _c("v-select", {
                   attrs: {
@@ -7875,7 +8239,13 @@ var render = function() {
                   }
                 }),
                 _vm._v(" "),
-                _c("v-btn", { attrs: { type: "submit" } }, [_vm._v("種目追加")])
+                this.$route.path === "/events/create"
+                  ? _c("v-btn", { attrs: { type: "submit" } }, [
+                      _vm._v("種目追加")
+                    ])
+                  : _c("v-btn", { attrs: { type: "submit" } }, [
+                      _vm._v("種目更新")
+                    ])
               ],
               1
             )
@@ -7914,6 +8284,7 @@ var render = function() {
     [
       _c(
         "v-col",
+        { attrs: { cols: "12" } },
         [
           _c(
             "v-card",
@@ -7996,8 +8367,86 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-footer",
-    { attrs: { color: "indigo", app: "" } },
+    { attrs: { app: "" } },
     [
+      _c(
+        "v-bottom-navigation",
+        {
+          attrs: { "background-color": _vm.color, dark: "", shift: "" },
+          model: {
+            value: _vm.value,
+            callback: function($$v) {
+              _vm.value = $$v
+            },
+            expression: "value"
+          }
+        },
+        [
+          _c(
+            "RouterLink",
+            {
+              staticClass: "button button--link",
+              attrs: { to: { name: "log.create" } }
+            },
+            [
+              _c(
+                "v-btn",
+                [
+                  _c("span", [_vm._v("トレログ")]),
+                  _vm._v(" "),
+                  _c("v-icon", [_vm._v("fitness_center")])
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "RouterLink",
+            {
+              staticClass: "button button--link",
+              attrs: { to: { name: "/" } }
+            },
+            [
+              _c(
+                "v-btn",
+                [
+                  _c("span", [_vm._v("ホーム")]),
+                  _vm._v(" "),
+                  _c("v-icon", [_vm._v("house")])
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "RouterLink",
+            {
+              staticClass: "button button--link",
+              attrs: {
+                to: { name: "user.show", params: { userId: _vm.userId } }
+              }
+            },
+            [
+              _c(
+                "v-btn",
+                [
+                  _c("span", [_vm._v("マイページ")]),
+                  _vm._v(" "),
+                  _c("v-icon", [_vm._v("account_circle")])
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
       _c("span", { staticClass: "white--text" }, [
         _vm._v("© " + _vm._s(new Date().getFullYear()))
       ]),
@@ -8182,27 +8631,42 @@ var render = function() {
           _c("v-spacer"),
           _vm._v(" "),
           _vm.isLogin
-            ? _c(
-                "span",
-                [
-                  _c(
-                    "RouterLink",
-                    {
-                      staticClass: "button button--link",
-                      attrs: {
-                        to: {
-                          name: "user.show",
-                          params: { userId: _vm.userId }
+            ? _c("div", [
+                _c(
+                  "span",
+                  [
+                    _c(
+                      "RouterLink",
+                      {
+                        staticClass: "button button--link",
+                        attrs: {
+                          to: {
+                            name: "user.show",
+                            params: { userId: _vm.userId }
+                          }
                         }
-                      }
-                    },
-                    [_vm._v("\n        " + _vm._s(_vm.userName) + "\n      ")]
-                  )
-                ],
-                1
-              )
+                      },
+                      [
+                        _vm._v(
+                          "\n          " + _vm._s(_vm.userName) + " \n        "
+                        )
+                      ]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v("/\n      "),
+                _c(
+                  "span",
+                  {
+                    staticClass: "button button--link",
+                    on: { click: _vm.logout }
+                  },
+                  [_vm._v("\n        Logout\n      ")]
+                )
+              ])
             : _c(
-                "span",
+                "div",
                 [
                   _c(
                     "RouterLink",
@@ -8244,203 +8708,296 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.log.event_logs.length > 0
-    ? _c(
-        "div",
+  return _c(
+    "v-row",
+    [
+      _c(
+        "v-col",
+        { staticClass: "ma-3", attrs: { cols: "12" } },
         [
           _c(
-            "v-row",
+            "v-card",
+            { attrs: { color: "#E3F2FD" } },
             [
               _c(
-                "v-col",
-                { staticClass: "ma-3", attrs: { cols: "12" } },
+                "v-row",
+                _vm._l(_vm.log.event_logs, function(event_log) {
+                  return _c("EventLog", {
+                    key: event_log.id,
+                    attrs: { item: event_log, ableDelete: false }
+                  })
+                }),
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
                 [
                   _c(
-                    "v-card",
-                    { attrs: { color: "#E3F2FD" } },
+                    "v-col",
+                    { attrs: { cols: "12" } },
                     [
+                      _c("v-card-text", { staticClass: "headline px-2" }, [
+                        _vm._v(
+                          "\n                コメント：" +
+                            _vm._s(_vm.log.text) +
+                            "\n              "
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c(
+                    "v-list-item",
+                    { staticClass: "grow" },
+                    [
+                      _c(
+                        "v-list-item-avatar",
+                        { attrs: { color: "grey darken-3" } },
+                        [
+                          _c("v-img", {
+                            staticClass: "elevation-6",
+                            attrs: { alt: "", src: _vm.log.user.profile_image }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "RouterLink",
                         {
                           staticClass: "button button--link",
                           attrs: {
                             to: {
-                              name: "log.show",
-                              params: { logId: _vm.log.id }
+                              name: "user.show",
+                              params: { userId: _vm.log.user.id }
                             }
                           }
                         },
                         [
                           _c(
-                            "v-row",
-                            _vm._l(_vm.log.event_logs, function(event_log) {
-                              return _c("EventLog", {
-                                key: event_log.id,
-                                attrs: { item: event_log, ableDelete: false }
-                              })
-                            }),
+                            "v-list-item-content",
+                            [
+                              _c("v-list-item-title", [
+                                _vm._v(_vm._s(_vm.log.user.name))
+                              ])
+                            ],
                             1
-                          ),
-                          _vm._v(" "),
-                          _c("v-card-text", { staticClass: "headline px-2" }, [
-                            _vm._v(
-                              "\n            コメント：" +
-                                _vm._s(_vm.log.text) +
-                                "\n          "
-                            )
-                          ])
+                          )
                         ],
                         1
                       ),
                       _vm._v(" "),
-                      _c(
-                        "v-card-actions",
-                        [
-                          _c(
-                            "v-list-item",
-                            { staticClass: "grow" },
+                      this.$route.name === "log.show"
+                        ? _c("v-list-item-content", [
+                            _vm.log.user.id === _vm.userId
+                              ? _c(
+                                  "div",
+                                  [
+                                    _c(
+                                      "RouterLink",
+                                      {
+                                        staticClass: "button button--link",
+                                        attrs: {
+                                          to: {
+                                            name: "log.edit",
+                                            params: { logId: _vm.log.id }
+                                          }
+                                        }
+                                      },
+                                      [_c("v-btn", [_vm._v("edit")])],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.deleteLog(_vm.log.id)
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("delete")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              : _vm._e()
+                          ])
+                        : _c(
+                            "v-list-item-content",
                             [
-                              _c(
-                                "v-list-item-avatar",
-                                { attrs: { color: "grey darken-3" } },
-                                [
-                                  _c("v-img", {
-                                    staticClass: "elevation-6",
-                                    attrs: {
-                                      alt: "",
-                                      src:
-                                        "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
                               _c(
                                 "RouterLink",
                                 {
                                   staticClass: "button button--link",
                                   attrs: {
                                     to: {
-                                      name: "user.show",
-                                      params: { userId: _vm.log.user.id }
+                                      name: "log.show",
+                                      params: { logId: _vm.log.id }
+                                    }
+                                  }
+                                },
+                                [_c("v-list-item-title", [_vm._v("ログ詳細")])],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        { attrs: { align: "center", justify: "end" } },
+                        [
+                          _vm.favoriteStatus(_vm.log.favorites)
+                            ? _c(
+                                "v-icon",
+                                {
+                                  staticClass: "mr-1",
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.favoriteLog(_vm.log.id)
                                     }
                                   }
                                 },
                                 [
+                                  _vm._v(
+                                    "\n                favorite_border\n              "
+                                  )
+                                ]
+                              )
+                            : _c(
+                                "v-icon",
+                                {
+                                  staticClass: "mr-1",
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.unFavoriteLog(_vm.log.id)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                favorite\n              "
+                                  )
+                                ]
+                              ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "subheading mr-2" }, [
+                            _vm._v(_vm._s(_vm.log.favorites.length))
+                          ]),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "mr-1" }, [_vm._v("·")]),
+                          _vm._v(" "),
+                          _c(
+                            "RouterLink",
+                            {
+                              staticClass: "button button--link",
+                              attrs: {
+                                to: {
+                                  name: "comment.create",
+                                  params: { logId: _vm.log.id }
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { staticClass: "mr-1" }, [
+                                _vm._v(
+                                  "\n                  mdi-share-variant\n                "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("span", { staticClass: "subheading" }, [
+                                _vm._v(_vm._s(_vm.log.comments.length))
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { icon: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.show = !_vm.show
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.show
+                                      ? "mdi-chevron-up"
+                                      : "mdi-chevron-down"
+                                  )
+                                )
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-expand-transition",
+                [
+                  _c(
+                    "v-card",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.show,
+                          expression: "show"
+                        }
+                      ]
+                    },
+                    [
+                      _c(
+                        "v-list",
+                        { attrs: { "two-line": "" } },
+                        [
+                          _vm._l(_vm.log.comments.slice(0, 6), function(
+                            comment
+                          ) {
+                            return [
+                              _c(
+                                "v-list-item",
+                                { key: comment.id },
+                                [
+                                  _c("v-list-item-avatar", [
+                                    _c("img", {
+                                      attrs: { src: comment.user.profile_image }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
                                   _c(
                                     "v-list-item-content",
                                     [
                                       _c("v-list-item-title", [
-                                        _vm._v(_vm._s(_vm.log.user.name))
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                { attrs: { align: "center", justify: "end" } },
-                                [
-                                  _vm.favoriteStatus(_vm.log.favorites)
-                                    ? _c(
-                                        "v-icon",
-                                        {
-                                          staticClass: "mr-1",
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.favoriteLog(_vm.log.id)
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                favorite_border\n              "
-                                          )
-                                        ]
-                                      )
-                                    : _c(
-                                        "v-icon",
-                                        {
-                                          staticClass: "mr-1",
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.unFavoriteLog(
-                                                _vm.log.id
-                                              )
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                favorite\n              "
-                                          )
-                                        ]
-                                      ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "span",
-                                    { staticClass: "subheading mr-2" },
-                                    [_vm._v(_vm._s(_vm.log.favorites.length))]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("span", { staticClass: "mr-1" }, [
-                                    _vm._v("·")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "RouterLink",
-                                    {
-                                      staticClass: "button button--link",
-                                      attrs: {
-                                        to: {
-                                          name: "comment.create",
-                                          params: { logId: _vm.log.id }
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c("v-icon", { staticClass: "mr-1" }, [
-                                        _vm._v(
-                                          "\n                  mdi-share-variant\n                "
-                                        )
+                                        _vm._v(_vm._s(comment.user.name))
                                       ]),
                                       _vm._v(" "),
-                                      _c(
-                                        "span",
-                                        { staticClass: "subheading" },
-                                        [
-                                          _vm._v(
-                                            _vm._s(_vm.log.comments.length)
-                                          )
-                                        ]
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-btn",
-                                    {
-                                      attrs: { icon: "" },
-                                      on: {
-                                        click: function($event) {
-                                          _vm.show = !_vm.show
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c("v-icon", [
-                                        _vm._v(
-                                          _vm._s(
-                                            _vm.show
-                                              ? "mdi-chevron-up"
-                                              : "mdi-chevron-down"
-                                          )
-                                        )
+                                      _c("v-list-item-subtitle", [
+                                        _vm._v(_vm._s(comment.text))
                                       ])
                                     ],
                                     1
@@ -8448,48 +9005,10 @@ var render = function() {
                                 ],
                                 1
                               )
-                            ],
-                            1
-                          )
+                            ]
+                          })
                         ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-expand-transition",
-                        _vm._l(_vm.log.comments, function(comment) {
-                          return _c(
-                            "div",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.show,
-                                  expression: "show"
-                                }
-                              ],
-                              key: comment.id
-                            },
-                            [
-                              _c("v-divider"),
-                              _vm._v(" "),
-                              _c("v-card-subtitle", [
-                                _vm._v(_vm._s(comment.user.name))
-                              ]),
-                              _vm._v(" "),
-                              _c("v-card-text", [
-                                _vm._v(
-                                  "\n              " +
-                                    _vm._s(comment.text) +
-                                    "\n            "
-                                )
-                              ])
-                            ],
-                            1
-                          )
-                        }),
-                        0
+                        2
                       )
                     ],
                     1
@@ -8503,7 +9022,9 @@ var render = function() {
         ],
         1
       )
-    : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -8538,7 +9059,7 @@ var render = function() {
           expression: "message"
         }
       ],
-      staticClass: "mx-auto mt-15 mb-0 pb-0",
+      staticClass: "mx-auto",
       attrs: { raised: "", color: "#B3E5FC", "max-width": "800", height: "60" }
     },
     [_vm._v("\n  " + _vm._s(_vm.message) + "\n")]
@@ -8652,74 +9173,96 @@ var render = function() {
     "div",
     [
       _c(
-        "v-card",
+        "v-row",
         [
           _c(
-            "v-tabs",
-            {
-              attrs: {
-                "background-color": "#039BE5",
-                "center-active": "",
-                dark: ""
-              }
-            },
-            _vm._l(_vm.eventParts, function(eventPart) {
-              return _c(
-                "v-tab",
-                {
-                  key: eventPart.id,
-                  on: {
-                    click: function($event) {
-                      return _vm.activate(eventPart.id)
-                    }
-                  }
-                },
-                [_vm._v("\n        " + _vm._s(eventPart.name) + "\n      ")]
-              )
-            }),
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-row",
-            _vm._l(_vm.events, function(event) {
-              return _c(
-                "div",
-                { key: event.id },
-                _vm._l(_vm.eventParts, function(part) {
-                  return _c("div", { key: part.id }, [
-                    event.part === part.name
-                      ? _c(
-                          "div",
-                          [
-                            _c(
-                              "v-col",
-                              { staticClass: "ma-1" },
-                              [
-                                _c("Event", {
-                                  directives: [
-                                    {
-                                      name: "show",
-                                      rawName: "v-show",
-                                      value: _vm.active === part.id,
-                                      expression: "active === part.id"
-                                    }
+            "v-col",
+            { staticClass: "ma-3", attrs: { cols: "12" } },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-tabs",
+                    {
+                      attrs: {
+                        "background-color": "#039BE5",
+                        "center-active": "",
+                        dark: ""
+                      }
+                    },
+                    _vm._l(_vm.eventParts, function(eventPart) {
+                      return _c(
+                        "v-tab",
+                        {
+                          key: eventPart.id,
+                          on: {
+                            click: function($event) {
+                              return _vm.activate(eventPart.id)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n            " +
+                              _vm._s(eventPart.name) +
+                              "\n          "
+                          )
+                        ]
+                      )
+                    }),
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    _vm._l(_vm.events, function(event) {
+                      return _c(
+                        "div",
+                        { key: event.id },
+                        _vm._l(_vm.eventParts, function(part) {
+                          return _c("div", { key: part.id }, [
+                            event.part === part.name
+                              ? _c(
+                                  "div",
+                                  [
+                                    _c(
+                                      "v-col",
+                                      { staticClass: "ma-1" },
+                                      [
+                                        _c("Event", {
+                                          directives: [
+                                            {
+                                              name: "show",
+                                              rawName: "v-show",
+                                              value: _vm.active === part.id,
+                                              expression: "active === part.id"
+                                            }
+                                          ],
+                                          attrs: {
+                                            event: event,
+                                            userId: _vm.userId
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
                                   ],
-                                  attrs: { event: event }
-                                })
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      : _vm._e()
-                  ])
-                }),
-                0
+                                  1
+                                )
+                              : _vm._e()
+                          ])
+                        }),
+                        0
+                      )
+                    }),
+                    0
+                  )
+                ],
+                1
               )
-            }),
-            0
+            ],
+            1
           )
         ],
         1
@@ -8750,51 +9293,54 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "form",
-      {
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.postComment($event)
-          }
-        }
-      },
-      [
-        _c("textarea", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.commentContent,
-              expression: "commentContent"
-            }
-          ],
-          domProps: { value: _vm.commentContent },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.commentContent = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("input", {
-          attrs: { type: "hidden" },
-          domProps: { value: _vm.logId }
-        }),
-        _vm._v(" "),
-        _c("button", { attrs: { type: "submit" } }, [_vm._v("addcomment")])
-      ]
-    ),
-    _vm._v(" "),
-    _c("p", [_vm._v(_vm._s(_vm.commentContent))]),
-    _vm._v(" "),
-    _c("p", [_vm._v(_vm._s(_vm.msg))])
-  ])
+  return _c(
+    "v-row",
+    [
+      _c(
+        "v-col",
+        { attrs: { cols: "12" } },
+        [
+          _c("v-card", [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.postComment($event)
+                  }
+                }
+              },
+              [
+                _c("v-textarea", {
+                  attrs: {
+                    name: "input-7-1",
+                    filled: "",
+                    label: "コメント",
+                    "auto-grow": ""
+                  },
+                  model: {
+                    value: _vm.commentContent,
+                    callback: function($$v) {
+                      _vm.commentContent = $$v
+                    },
+                    expression: "commentContent"
+                  }
+                }),
+                _vm._v(" "),
+                _c("v-btn", { attrs: { type: "submit" } }, [
+                  _vm._v("コメント追加")
+                ])
+              ],
+              1
+            )
+          ])
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -9256,16 +9802,6 @@ var render = function() {
           on: { favoriteLog: _vm.favoriteLog, unFavoriteLog: _vm.unFavoriteLog }
         }),
         _vm._v(" "),
-        _vm._l(_vm.log.comments, function(comment) {
-          return _c("div", { key: comment.id }, [
-            _c("p", [
-              _vm._v("コメントユーザー名: " + _vm._s(comment.user.name))
-            ]),
-            _vm._v(" "),
-            _c("p", [_vm._v("コメント: " + _vm._s(comment.text))])
-          ])
-        }),
-        _vm._v(" "),
         _vm.user.id === _vm.loginUserId
           ? _c(
               "div",
@@ -9297,7 +9833,7 @@ var render = function() {
             )
           : _vm._e()
       ],
-      2
+      1
     )
   ])
 }
@@ -9868,43 +10404,206 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("p", [_vm._v(_vm._s(_vm.user.id))]),
-    _vm._v(" "),
-    _c("p", [_vm._v(_vm._s(_vm.user.name))]),
-    _vm._v(" "),
-    _vm.user.id === _vm.loginUserId
-      ? _c(
-          "p",
-          [
-            _c(
-              "RouterLink",
-              {
-                attrs: {
-                  to: { name: "user.edit", params: { userId: _vm.user.id } }
-                }
-              },
-              [_c("button", [_vm._v("edit")])]
-            ),
-            _vm._v(" "),
-            _c("UserEvent", { attrs: { events: _vm.events } })
-          ],
-          1
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _c(
-      "div",
+  return _c(
+    "v-row",
+    [
+      _c(
+        "v-col",
+        { staticClass: "mb-3", attrs: { cols: "12" } },
+        [
+          _c(
+            "v-card",
+            [
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "4" } },
+                    [
+                      _c(
+                        "v-list-item",
+                        { attrs: { "three-line": "" } },
+                        [
+                          _c("v-list-item-avatar", {
+                            attrs: { tile: "", size: "80", color: "grey" }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item-content",
+                        [
+                          _c("div", { staticClass: "overline mb-4" }, [
+                            _vm._v("\n            OVERLINE\n          ")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-title",
+                            { staticClass: "headline mb-1" },
+                            [_vm._v("\n            Headline 5\n          ")]
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-item-subtitle", [
+                            _vm._v(
+                              "Greyhound divisely hello coldly fonwderfully"
+                            )
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "8" } },
+                    [
+                      _c(
+                        "v-list-item-content",
+                        [
+                          _c("div", { staticClass: "overline mb-4" }, [
+                            _vm._v(
+                              "\n              フォローしています\n            "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-title",
+                            { staticClass: "headline mb-1" },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "d-flex flex-row mb-3 align-items-center"
+                                },
+                                [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "d-flex flex-column mb-3 align-items-center"
+                                    },
+                                    [
+                                      _c(
+                                        "p",
+                                        { staticClass: "font-weight-bold" },
+                                        [_vm._v("ログ数")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("span", [_vm._v(_vm._s(_vm.logCount))])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "d-flex flex-column mb-3 align-items-center"
+                                    },
+                                    [
+                                      _c(
+                                        "p",
+                                        { staticClass: "font-weight-bold" },
+                                        [_vm._v("フォロー数")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("span", [
+                                        _vm._v(_vm._s(_vm.follow_count))
+                                      ])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "d-flex flex-column mb-3 align-items-center"
+                                    },
+                                    [
+                                      _c(
+                                        "p",
+                                        { staticClass: "font-weight-bold" },
+                                        [_vm._v("フォロワー数")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("span", [
+                                        _vm._v(_vm._s(_vm.follower_count))
+                                      ])
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-item-subtitle", [
+                            _vm._v(
+                              "Greyhound divisely hello coldly fonwderfully"
+                            )
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _vm.user.id === _vm.loginUserId
+                    ? _c(
+                        "RouterLink",
+                        {
+                          staticClass: "button button--link",
+                          attrs: {
+                            to: {
+                              name: "user.edit",
+                              params: { userId: _vm.user.id }
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "v-btn",
+                            { attrs: { outlined: "", rounded: "", text: "" } },
+                            [_vm._v("\n          プロフィール編集\n        ")]
+                          )
+                        ],
+                        1
+                      )
+                    : _vm._e()
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("p", [_vm._v(_vm._s(_vm.user.name))]),
+      _vm._v(" "),
+      _c("UserEvent", { attrs: { events: _vm.events, userId: _vm.user.id } }),
+      _vm._v(" "),
       _vm._l(_vm.user.logs, function(log) {
         return _c("Log", {
           key: log.id,
           attrs: { log: log },
           on: { favoriteLog: _vm.favoriteLog, unFavoriteLog: _vm.unFavoriteLog }
         })
-      }),
-      1
-    )
-  ])
+      })
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -71499,6 +72198,75 @@ window.axios.interceptors.response.use(function (response) {
 }, function (error) {
   return error.response || error;
 });
+
+/***/ }),
+
+/***/ "./resources/js/components/BottomNav.vue":
+/*!***********************************************!*\
+  !*** ./resources/js/components/BottomNav.vue ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _BottomNav_vue_vue_type_template_id_49b1511d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BottomNav.vue?vue&type=template&id=49b1511d& */ "./resources/js/components/BottomNav.vue?vue&type=template&id=49b1511d&");
+/* harmony import */ var _BottomNav_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BottomNav.vue?vue&type=script&lang=js& */ "./resources/js/components/BottomNav.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _BottomNav_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _BottomNav_vue_vue_type_template_id_49b1511d___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _BottomNav_vue_vue_type_template_id_49b1511d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/BottomNav.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/BottomNav.vue?vue&type=script&lang=js&":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/BottomNav.vue?vue&type=script&lang=js& ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BottomNav_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./BottomNav.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/BottomNav.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BottomNav_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/BottomNav.vue?vue&type=template&id=49b1511d&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/BottomNav.vue?vue&type=template&id=49b1511d& ***!
+  \******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BottomNav_vue_vue_type_template_id_49b1511d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./BottomNav.vue?vue&type=template&id=49b1511d& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/BottomNav.vue?vue&type=template&id=49b1511d&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BottomNav_vue_vue_type_template_id_49b1511d___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BottomNav_vue_vue_type_template_id_49b1511d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 

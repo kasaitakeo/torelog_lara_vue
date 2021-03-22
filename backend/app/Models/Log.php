@@ -69,7 +69,7 @@ class Log extends Model
      * @param Int $user_id
      * @return
      */
-    public function getLogCount(Int $user_id)
+    public function getLogCount($user_id)
     {
         return $this->where('user_id', $user_id)->count();
     }

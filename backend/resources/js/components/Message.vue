@@ -3,7 +3,7 @@
     v-show="message"
     raised
     color="#B3E5FC"
-    class="mx-auto mt-15 mb-0 pb-0"
+    class="mx-auto"
     max-width="800"
     height="60"
   >

@@ -38,28 +38,30 @@ export default {
       this.event = response.data
     },
     async eventUpdate (e) {
+
       const response = await axios.put(`/api/events/${this.event.id}`, {
         eventPart: e.eventPart,
         eventName: e.eventName,
         eventExplanation: e.eventExplanation
       })
 
-      if (response.status !== UNPROCESSABLE_ENTITY) {
-        this.errors = response.data.errors
-        return false
-      }
+      console.log(response.data)
+      // if (response.status !== UNPROCESSABLE_ENTITY) {
+      //   this.errors = response.data.errors
+      //   return false
+      // }
 
-      if (response.status !== CREATED) {
-        this.$store.commit('error/setCode', response.status)
-        return false
-      }
+      // if (response.status !== CREATED) {
+      //   this.$store.commit('error/setCode', response.status)
+      //   return false
+      // }
 
       this.$store.commit('message/setContent', {
         content: '種目が更新されました！',
         timeout: 6000
       })
 
-      this.$router.push({name: 'event'})
+      // this.$router.push('/')
     }
   },
   created () {

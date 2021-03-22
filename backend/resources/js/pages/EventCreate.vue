@@ -28,15 +28,15 @@ export default {
 
       console.log(response)
 
-      if (response.status !== UNPROCESSABLE_ENTITY) {
-        this.errors = response.data.errors
-        return false
-      }
+      // if (response.status !== UNPROCESSABLE_ENTITY) {
+      //   this.errors = response.data.errors
+      //   return false
+      // }
 
-      if (response.status !== CREATED) {
-        this.$store.commit('error/setCode', response.status)
-        return false
-      }
+      // if (response.status !== CREATED) {
+      //   this.$store.commit('error/setCode', response.status)
+      //   return false
+      // }
 
       this.$store.commit('message/setContent', {
         content: '種目が追加されました！',

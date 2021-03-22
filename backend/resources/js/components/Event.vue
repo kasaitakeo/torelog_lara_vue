@@ -79,10 +79,10 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn  @click="close">Cancel</v-btn>
-            <RouterLink :to="{name: 'event.update', params: {eventId: event.id}}">
+            <RouterLink v-if="userId === loginUserId" :to="{name: 'event.update', params: {eventId: event.id}}">
               <v-btn color="blue darken-1">
                 <v-icon dark>
-                  mdi-plus
+                  mdi-pencil
                 </v-icon>
               </v-btn>
             </RouterLink>
@@ -102,7 +102,13 @@ export default {
       type: Object,
       required: true
     },
+    userId: Number
   },
+  computed: {
+    loginUserId () {
+      return this.$store.getters['auth/userId']
+    },
+  },  
   data () {
     return {
       dialog: false,

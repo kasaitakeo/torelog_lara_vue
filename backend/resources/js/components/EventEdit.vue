@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <v-card>
-        <form @submit="eventEdit">
+        <form @submit.prevent="eventEdit">
           <v-select
             v-model="eventPart"
             :items="itemParts" 
@@ -25,7 +25,8 @@
             label="種目解説"
             placeholder="大胸筋上部、コンパウンド種目、高重量狙い"
           ></v-textarea>
-          <v-btn type="submit">種目追加</v-btn>
+          <v-btn v-if="this.$route.path === '/events/create'" type="submit">種目追加</v-btn>
+          <v-btn v-else type="submit">種目更新</v-btn>
         </form>
       </v-card>
     </v-col>
@@ -38,7 +39,14 @@ import { OK } from '../util'
 
 export default {
   props: {
-    event: Object
+    event: {
+      type: Object,
+      default: () => ({
+        part: '',
+        event_name: '',
+        event_explanation: ''
+      })
+    }
   },
   data() {
     return {
@@ -48,7 +56,6 @@ export default {
       eventExplanation: '',
       msg: '',
       errora: null,
-      event: {},
     }
   },
   methods: {
@@ -72,20 +79,36 @@ export default {
     }
   },
   created () {
-    this.getEvent()
+    // this.getEvent()
 
   },
   mounted () {
     // this.getEvent()
 
-    this.$nextTick(()=>{
-      this.eventPart = this.event.part
-      this.eventPart = this.event.event_name
-      this.eventPart = this.event.event_explanation
+    // this.$nextTick(()=>{
+    //   this.eventPart = this.event.part
+    //   this.eventPart = this.event.event_name
+    //   this.eventPart = this.event.event_explanation
     
-        console.log(this.event)
-    })
+    //     // console.log(this.event)
+    // })
   },
+  // computed: {
+  //   // totalPrice(){
+  //   //   return this.number * this.price
+  //   // }
+  //     totalPrice: app => app.number * app.price
+  // },
+  watch: {
+    event: {
+      immediate: true,
+      handler() {
+        this.eventPart = this.event.part
+        this.eventName = this.event.event_name
+        this.eventExplanation = this.event.event_explanation
+      }
+    }
+  }
   // beforeRouteEnter (to, from, next) {
   //   next(vm => {
   //     // `vm` を通じてコンポーネントインスタンスにアクセス
@@ -102,19 +125,19 @@ export default {
   //       console.log(vm.event)
   //   })
   // }
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      console.log(vm.event)
-      // `vm` を通じてコンポーネントインスタンスにアクセス
-      vm.$nextTick(()=>{
-        if(vm.event){
-          vm.eventPart = vm.event.part
-          vm.eventPart = vm.event.event_name
-          vm.eventPart = vm.event.event_explanation
-        }
-      })
-    })
-  }
+  // beforeRouteEnter (to, from, next) {
+  //   next(vm => {
+  //     console.log(vm.event)
+  //     // `vm` を通じてコンポーネントインスタンスにアクセス
+  //     vm.$nextTick(()=>{
+  //       if(vm.event){
+  //         vm.eventPart = vm.event.part
+  //         vm.eventPart = vm.event.event_name
+  //         vm.eventPart = vm.event.event_explanation
+  //       }
+  //     })
+  //   })
+  // }
 }
 </script>
 

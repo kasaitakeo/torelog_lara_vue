@@ -6,10 +6,6 @@
         @favoriteLog="favoriteLog"
         @unFavoriteLog="unFavoriteLog"
       />
-      <div v-for="comment in log.comments" :key="comment.id">
-        <p>コメントユーザー名: {{ comment.user.name }}</p>
-        <p>コメント: {{ comment.text }}</p>
-      </div>
       <div v-if="user.id === loginUserId">
         <RouterLink v-bind:to="{name: 'log.edit', params: {logId: log.id}}">
           <button>edit</button> 

@@ -1,13 +1,20 @@
 <template>
-  <div>
-    <form @submit.prevent="postComment">
-      <textarea v-model="commentContent"></textarea>
-      <input type="hidden" :value="logId">
-      <button type="submit">addcomment</button>
-    </form>
-    <p>{{ commentContent }}</p>
-    <p>{{ msg }}</p>
-  </div>
+  <v-row>
+    <v-col cols="12">
+      <v-card>
+        <form @submit.prevent="postComment">
+          <v-textarea
+            name="input-7-1"
+            filled
+            label="コメント"
+            auto-grow
+            v-model="commentContent"
+          ></v-textarea>
+          <v-btn type="submit">コメント追加</v-btn>
+        </form>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -34,15 +41,15 @@ export default {
 
       console.log(response)
 
-      if (response.status !== UNPROCESSABLE_ENTITY) {
-        this.errors = response.data.errors
-        return false
-      }
+      // if (response.status !== UNPROCESSABLE_ENTITY) {
+      //   this.errors = response.data.errors
+      //   return false
+      // }
 
-      if (response.status !== CREATED) {
-        this.$store.commit('error/setCode', response.status)
-        return false
-      }
+      // if (response.status !== CREATED) {
+      //   this.$store.commit('error/setCode', response.status)
+      //   return false
+      // }
 
       this.$router.push('/')
     }

@@ -49,16 +49,22 @@
         </RouterLink>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <span v-if="isLogin">
-        <RouterLink class="button button--link" :to="{name: 'user.show', params: {userId: userId}}">
-          {{ userName }}
-        </RouterLink>
-      </span>
-      <span v-else>
+      <div v-if="isLogin">  
+        <span>
+          <RouterLink class="button button--link" :to="{name: 'user.show', params: {userId: userId}}">
+            {{ userName }} 
+          </RouterLink>
+        </span>/
+        <span class="button button--link" @click="logout">
+          Logout
+        </span>
+
+      </div>
+      <div v-else>
         <RouterLink class="button button--link" to="/login">
           Login / Register
         </RouterLink>
-      </span>
+      </div>
     </v-app-bar>
   </div>
 </template>
@@ -78,6 +84,15 @@ export default {
     },
     userId () {
       return this.$store.getters['auth/userId']
+    }
+  },
+  methods: {
+    async logout () {
+      await this.$store.dispatch('auth/logout')
+
+      if (this.apiStatus) {
+        this.$router.push('/login')
+      }
     }
   }
 }

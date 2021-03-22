@@ -1,11 +1,10 @@
 <template>
-  <div v-if="log.event_logs.length > 0">
+  <!-- <div v-if="log.event_logs.length > 0"> -->
     <v-row>
       <v-col cols="12" class="ma-3">
         <v-card
           color="#E3F2FD"
         >
-          <RouterLink class="button button--link" :to="{name: 'log.show', params: {logId: log.id}}">
             <v-row>
               <EventLog
                 v-for="event_log in log.event_logs" 
@@ -14,10 +13,13 @@
                 :ableDelete="false"
               />
             </v-row>
-            <v-card-text class="headline px-2">
-              コメント：{{ log.text }}
-            </v-card-text>
-          </RouterLink>
+            <v-row>
+              <v-col cols="12">
+                <v-card-text class="headline px-2">
+                  コメント：{{ log.text }}
+                </v-card-text>
+              </v-col>
+            </v-row>
           
           <v-card-actions>
             <v-list-item class="grow">
@@ -25,7 +27,7 @@
                 <v-img
                   class="elevation-6"
                   alt=""
-                  src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                  :src="log.user.profile_image"
                 ></v-img>
               </v-list-item-avatar>
 
@@ -34,6 +36,19 @@
                   <v-list-item-title>{{ log.user.name }}</v-list-item-title>
                 </v-list-item-content>
               </RouterLink>
+                <v-list-item-content v-if="this.$route.name === 'log.show'">
+                  <div v-if="log.user.id === userId">
+                    <RouterLink class="button button--link" v-bind:to="{name: 'log.edit', params: {logId: log.id}}">
+                      <v-btn>edit</v-btn> 
+                    </RouterLink>
+                    <v-btn @click="deleteLog(log.id)">delete</v-btn>
+                  </div>
+                </v-list-item-content>
+                <v-list-item-content v-else>
+                  <RouterLink class="button button--link" :to="{name: 'log.show', params: {logId: log.id}}">
+                    <v-list-item-title>ログ詳細</v-list-item-title>
+                  </RouterLink>
+                </v-list-item-content>
               <v-row
                 align="center"
                 justify="end"
@@ -62,18 +77,26 @@
             </v-list-item>
           </v-card-actions>
           <v-expand-transition>
-            <div v-show="show" v-for="comment in log.comments" :key="comment.id">
-              <v-divider></v-divider>
-              <v-card-subtitle>{{ comment.user.name }}</v-card-subtitle>
-              <v-card-text>
-                {{ comment.text }}
-              </v-card-text>
-            </div>
+            <v-card v-show="show">
+              <v-list two-line>
+                <template v-for="comment in log.comments.slice(0, 6)" >
+                  <v-list-item :key="comment.id">
+                    <v-list-item-avatar>
+                      <img :src="comment.user.profile_image">
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ comment.user.name }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ comment.text }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </template>
+              </v-list>
+            </v-card> 
+            
           </v-expand-transition>
         </v-card>
       </v-col>
     </v-row>
-  </div>
 </template>
 <script>
 import EventLog from '../components/EventLog.vue'
@@ -114,7 +137,19 @@ export default {
         } 
       }
       return true
-    }
+    },
+    async deleteLog (id) {
+      const response = await axios.delete('/api/logs/' + id)
+
+      console.log(response)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false  
+      }
+
+      this.getLog()
+    },
   },
   computed: {
     userId () {

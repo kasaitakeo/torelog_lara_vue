@@ -1,30 +1,35 @@
 <template>
   <div>
-    <v-card >
-      <v-tabs
-        background-color="#039BE5"
-        center-active
-        dark
-      >
-        <v-tab v-for="eventPart in eventParts" :key="eventPart.id" @click="activate(eventPart.id)">
-          {{ eventPart.name }}
-        </v-tab>
-      </v-tabs>
-      <v-row>
-        <div v-for="event in events" :key="event.id">
-          <div v-for="part in eventParts" :key="part.id">
-            <div v-if="event.part === part.name">
-                  <v-col  class="ma-1">
-                    <Event
-                      :event="event"
-                      v-show="active === part.id"
-                    />
-                  </v-col>
+    <v-row>
+      <v-col cols="12" class="ma-3">
+        <v-card >
+          <v-tabs
+            background-color="#039BE5"
+            center-active
+            dark
+          >
+            <v-tab v-for="eventPart in eventParts" :key="eventPart.id" @click="activate(eventPart.id)">
+              {{ eventPart.name }}
+            </v-tab>
+          </v-tabs>
+          <v-row>
+            <div v-for="event in events" :key="event.id">
+              <div v-for="part in eventParts" :key="part.id">
+                <div v-if="event.part === part.name">
+                      <v-col  class="ma-1">
+                        <Event
+                          :event="event"
+                          v-show="active === part.id"
+                          :userId="userId"
+                        />
+                      </v-col>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </v-row>
-    </v-card>
+          </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -40,6 +45,7 @@ export default {
       type: Array,
       required: true
     },
+    userId: Number
   },
   data () {
     return {
