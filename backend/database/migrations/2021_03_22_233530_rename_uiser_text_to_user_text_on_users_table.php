@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ModifyLogsTable extends Migration
+class RenameUiserTextToUserTextOnUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class ModifyLogsTable extends Migration
      */
     public function up()
     {
-        Schema::table('logs', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
-            $table->string('text')->nullable()->change();
+            $table->renameColumn('uiser_text', 'user_text');
         });
     }
 
@@ -26,9 +26,9 @@ class ModifyLogsTable extends Migration
      */
     public function down()
     {
-        Schema::table('logs', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
-            $table->string('text')->nullable()->change();
+            $table->renameColumn('uiser_text', 'user_text');
         });
     }
 }

@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <v-row>
-      <v-col cols="12" class="ma-3">
         <v-card >
+          <RouterLink class=" d-flex justify-center button button--link " :to="{name: 'event.create'}">
+            種目追加
+          </RouterLink>
           <v-tabs
             background-color="#039BE5"
             center-active
@@ -28,9 +28,6 @@
             </div>
           </v-row>
         </v-card>
-      </v-col>
-    </v-row>
-  </div>
 </template>
 
 <script>

@@ -43,7 +43,7 @@ export default {
         timeout: 6000
       })
 
-      this.$router.push('/')
+      this.$router.go(-1)
     }
   },
   mounted () {

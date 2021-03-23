@@ -2944,6 +2944,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3158,9 +3167,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Event_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Event.vue */ "./resources/js/components/Event.vue");
-//
-//
-//
 //
 //
 //
@@ -3418,7 +3424,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   timeout: 6000
                 });
 
-                _this.$router.push('/');
+                _this.$router.go(-1);
 
               case 6:
               case "end":
@@ -3877,7 +3883,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 10:
                 // メッセージ登録
                 _this4.$store.commit('message/setContent', {
-                  content: 'トレログが登録されました！',
+                  content: 'トレログが保存されました！',
                   timeout: 6000
                 });
 
@@ -4070,37 +4076,47 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       };
     }());
   },
+  created: function created() {
+    window.addEventListener("beforeunload", this.confirmSave);
+  },
   destroyed: function destroyed() {
     window.removeEventListener("beforeunload", this.confirmSave);
   },
   beforeRouteLeave: function beforeRouteLeave(to, from, next) {
-    var answer = window.confirm("このままトレログの編集を終了してよろしいでしょうか?※種目追加されていないログは保存されません。");
-
-    if (answer) {
-      if (this.setEventLogs) {
-        next();
-      } else {
-        this.deleteLog();
-        next();
-      }
+    if (to.name === 'event.create') {
+      next();
     } else {
-      next(false);
-    }
-  } // beforeRouteLeave (to, from, next) {
-  //   // if (typeof this.logContent !== 'undefined') {
-  //     // if (typeof this.event_logs !== 'undefined') {
-  //   if (this.setEventLogs) {
-  //     next()
-  //   // } else if (this.logContent === null) {
-  //     //   this.deleteLog()
-  //   //   this.deleteAllEventLog()
-  //   //   next()
-  //   } else {
-  //     this.deleteLog()
-  //     next()
-  //   }
-  // },
+      if (this.setEventLogs) {
+        var answer = window.confirm("コメント未入力のままトレログを保存してもよろしいでしょうか");
 
+        if (answer) {
+          this.deleteLog();
+          this.$store.commit('message/setContent', {
+            content: 'トレログが保存されました。',
+            timeout: 6000
+          });
+          next();
+        } else {
+          this.deleteLog();
+          this.deleteAllEventLog();
+          next();
+        }
+      } else {
+        var _answer = window.confirm("種目が未入力のままトレログの編集を終了してしまうとログは保存されません。このまま編集を終了してもよろしいでしょうか");
+
+        if (_answer) {
+          this.deleteLog();
+          this.$store.commit('message/setContent', {
+            content: 'トレログ保存できませんでした。',
+            timeout: 6000
+          });
+          next();
+        } else {
+          next(false);
+        }
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -4551,6 +4567,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
 //
 //
 //
@@ -5141,10 +5159,58 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
 
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5171,7 +5237,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      user: {}
+      user: {},
+      screenName: '',
+      name: '',
+      email: '',
+      image: null,
+      // preview: null,
+      valid: false,
+      nameRules: [function (v) {
+        return !!v || 'Name is required';
+      }, function (v) {
+        return v && v.length <= 10 || 'Name must be less than 10 characters';
+      }],
+      emailRules: [function (v) {
+        return !!v || 'E-mail is required';
+      }, function (v) {
+        return /.+@.+\..+/.test(v) || 'E-mail must be valid';
+      }]
     };
   },
   methods: {
@@ -5189,9 +5271,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context.sent;
+                console.log(response.data);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context.next = 6;
+                  _context.next = 7;
                   break;
                 }
 
@@ -5199,10 +5282,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 6:
-                _this.user = response.data;
-
               case 7:
+                _this.screenName = response.data.user_data.screen_name;
+                _this.name = response.data.user_data.name;
+                _this.email = response.data.user_data.email;
+
+                if (response.data.user_data.profile_image !== null) {
+                  _this.image = response.data.user_data.profile_image;
+                }
+
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -5214,19 +5303,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var response;
+        var _console;
+
+        var formData, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return axios.put('/api/users/' + _this2.user.id, _this2.user);
+                formData = new FormData();
+                formData.append('name', _this2.name);
+                formData.append('screen_name', _this2.screenName);
+                formData.append('email', _this2.email);
+                formData.append('profile_image', _this2.image);
+                console.log(formData.get('name'));
 
-              case 2:
+                (_console = console).log.apply(_console, _toConsumableArray(formData.entries()));
+
+                _context2.next = 9;
+                return axios.post('/api/users/', formData, {
+                  headers: {
+                    'X-HTTP-Method-Override': 'PUT',
+                    'Content-Type': 'multipart/form-data'
+                  }
+                });
+
+              case 9:
                 response = _context2.sent;
+                console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context2.next = 6;
+                  _context2.next = 14;
                   break;
                 }
 
@@ -5234,18 +5340,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context2.abrupt("return", false);
 
-              case 6:
+              case 14:
                 _this2.$router.push({
                   name: 'user'
                 });
 
-              case 7:
+              case 15:
               case "end":
                 return _context2.stop();
             }
           }
         }, _callee2);
       }))();
+    },
+    // フォームでファイルが選択されたら実行される
+    // onUpload (event) {
+    //   this.preview = event.target.files[0]
+    //   this.image = event.target.files[0]
+    // },
+    onUpload: function onUpload(event) {
+      // event(=e)から画像データを取得する
+      var image = event.target.files[0];
+      this.createImage(image);
+    },
+    createImage: function createImage(image) {
+      var _this3 = this;
+
+      var reader = new FileReader(); // imageをreaderにDataURLとしてattachする
+
+      reader.readAsDataURL(image); // readAdDataURLが完了したあと実行される処理
+
+      reader.onload = function () {
+        _this3.image = reader.result;
+      };
     }
   },
   mounted: function mounted() {
@@ -5444,15 +5571,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -8709,131 +8827,54 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-row",
+    "v-card",
+    { staticClass: "mb-4", attrs: { color: "#E3F2FD" } },
     [
       _c(
-        "v-col",
-        { staticClass: "ma-3", attrs: { cols: "12" } },
+        "v-row",
+        _vm._l(_vm.log.event_logs, function(event_log) {
+          return _c("EventLog", {
+            key: event_log.id,
+            attrs: { item: event_log, ableDelete: false }
+          })
+        }),
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-row",
         [
           _c(
-            "v-card",
-            { attrs: { color: "#E3F2FD" } },
+            "v-col",
+            { attrs: { cols: "12" } },
             [
-              _c(
-                "v-row",
-                _vm._l(_vm.log.event_logs, function(event_log) {
-                  return _c("EventLog", {
-                    key: event_log.id,
-                    attrs: { item: event_log, ableDelete: false }
-                  })
-                }),
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-row",
-                [
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12" } },
-                    [
-                      _c("v-card-text", { staticClass: "headline px-2" }, [
-                        _vm._v(
-                          "\n                コメント：" +
-                            _vm._s(_vm.log.text) +
-                            "\n              "
-                        )
-                      ])
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c(
-                    "v-list-item",
-                    { staticClass: "grow" },
-                    [
-                      _c(
-                        "v-list-item-avatar",
-                        { attrs: { color: "grey darken-3" } },
-                        [
-                          _c("v-img", {
-                            staticClass: "elevation-6",
-                            attrs: { alt: "", src: _vm.log.user.profile_image }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "RouterLink",
-                        {
-                          staticClass: "button button--link",
-                          attrs: {
-                            to: {
-                              name: "user.show",
-                              params: { userId: _vm.log.user.id }
-                            }
-                          }
-                        },
-                        [
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c("v-list-item-title", [
-                                _vm._v(_vm._s(_vm.log.user.name))
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      this.$route.name === "log.show"
-                        ? _c("v-list-item-content", [
-                            _vm.log.user.id === _vm.userId
-                              ? _c(
-                                  "div",
-                                  [
-                                    _c(
-                                      "RouterLink",
-                                      {
-                                        staticClass: "button button--link",
-                                        attrs: {
-                                          to: {
-                                            name: "log.edit",
-                                            params: { logId: _vm.log.id }
-                                          }
-                                        }
-                                      },
-                                      [_c("v-btn", [_vm._v("edit")])],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-btn",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.deleteLog(_vm.log.id)
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("delete")]
-                                    )
-                                  ],
-                                  1
-                                )
-                              : _vm._e()
-                          ])
-                        : _c(
-                            "v-list-item-content",
+              _c("v-card-text", { staticClass: "headline px-2" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.log.text) +
+                    "\n              "
+                )
+              ])
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-row",
+        [
+          _c(
+            "v-col",
+            { attrs: { cols: "12" } },
+            [
+              _c("v-card-text", { attrs: { align: "end", justify: "end" } }, [
+                this.$route.name === "log.show"
+                  ? _c("div", [
+                      _vm.log.user.id === _vm.userId
+                        ? _c(
+                            "div",
                             [
                               _c(
                                 "RouterLink",
@@ -8841,106 +8882,239 @@ var render = function() {
                                   staticClass: "button button--link",
                                   attrs: {
                                     to: {
-                                      name: "log.show",
+                                      name: "log.edit",
                                       params: { logId: _vm.log.id }
                                     }
                                   }
                                 },
-                                [_c("v-list-item-title", [_vm._v("ログ詳細")])],
-                                1
+                                [_c("div", [_vm._v("edit")])]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.deleteLog(_vm.log.id)
+                                    }
+                                  }
+                                },
+                                [_vm._v("delete")]
                               )
                             ],
                             1
-                          ),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        { attrs: { align: "center", justify: "end" } },
+                          )
+                        : _vm._e()
+                    ])
+                  : _c(
+                      "div",
+                      [
+                        _c(
+                          "RouterLink",
+                          {
+                            staticClass: "button button--link",
+                            attrs: {
+                              to: {
+                                name: "log.show",
+                                params: { logId: _vm.log.id }
+                              }
+                            }
+                          },
+                          [_c("div", [_vm._v("ログ詳細")])]
+                        )
+                      ],
+                      1
+                    )
+              ])
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-card-actions",
+        [
+          _c(
+            "v-list-item",
+            { staticClass: "grow" },
+            [
+              _c(
+                "v-list-item-avatar",
+                { attrs: { color: "grey darken-3" } },
+                [
+                  _c("v-img", {
+                    staticClass: "elevation-6",
+                    attrs: { alt: "", src: _vm.log.user.profile_image }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item-content",
+                [
+                  _c(
+                    "RouterLink",
+                    {
+                      staticClass: "button button--link",
+                      attrs: {
+                        to: {
+                          name: "user.show",
+                          params: { userId: _vm.log.user.id }
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.log.user.name) +
+                          "\n              "
+                      )
+                    ]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                { attrs: { align: "center", justify: "end" } },
+                [
+                  _vm.favoriteStatus(_vm.log.favorites)
+                    ? _c(
+                        "v-icon",
+                        {
+                          staticClass: "mr-1",
+                          on: {
+                            click: function($event) {
+                              return _vm.favoriteLog(_vm.log.id)
+                            }
+                          }
+                        },
                         [
-                          _vm.favoriteStatus(_vm.log.favorites)
-                            ? _c(
-                                "v-icon",
-                                {
-                                  staticClass: "mr-1",
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.favoriteLog(_vm.log.id)
-                                    }
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                favorite_border\n              "
-                                  )
-                                ]
-                              )
-                            : _c(
-                                "v-icon",
-                                {
-                                  staticClass: "mr-1",
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.unFavoriteLog(_vm.log.id)
-                                    }
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                favorite\n              "
-                                  )
-                                ]
-                              ),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "subheading mr-2" }, [
-                            _vm._v(_vm._s(_vm.log.favorites.length))
+                          _vm._v(
+                            "\n                favorite_border\n              "
+                          )
+                        ]
+                      )
+                    : _c(
+                        "v-icon",
+                        {
+                          staticClass: "mr-1",
+                          on: {
+                            click: function($event) {
+                              return _vm.unFavoriteLog(_vm.log.id)
+                            }
+                          }
+                        },
+                        [_vm._v("\n                favorite\n              ")]
+                      ),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "subheading mr-2" }, [
+                    _vm._v(_vm._s(_vm.log.favorites.length))
+                  ]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "mr-1" }, [_vm._v("·")]),
+                  _vm._v(" "),
+                  _c(
+                    "RouterLink",
+                    {
+                      staticClass: "button button--link",
+                      attrs: {
+                        to: {
+                          name: "comment.create",
+                          params: { logId: _vm.log.id }
+                        }
+                      }
+                    },
+                    [
+                      _c("v-icon", { staticClass: "mr-1" }, [
+                        _vm._v(
+                          "\n                  mdi-share-variant\n                "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "subheading" }, [
+                        _vm._v(_vm._s(_vm.log.comments.length))
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.show = !_vm.show
+                        }
+                      }
+                    },
+                    [
+                      _c("v-icon", [
+                        _vm._v(
+                          _vm._s(
+                            _vm.show ? "mdi-chevron-up" : "mdi-chevron-down"
+                          )
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-expand-transition",
+        [
+          _c(
+            "v-card",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.show,
+                  expression: "show"
+                }
+              ]
+            },
+            [
+              _c(
+                "v-list",
+                { attrs: { "two-line": "" } },
+                [
+                  _vm._l(_vm.log.comments.slice(0, 6), function(comment) {
+                    return [
+                      _c(
+                        "v-list-item",
+                        { key: comment.id },
+                        [
+                          _c("v-list-item-avatar", [
+                            _c("img", {
+                              attrs: { src: comment.user.profile_image }
+                            })
                           ]),
                           _vm._v(" "),
-                          _c("span", { staticClass: "mr-1" }, [_vm._v("·")]),
-                          _vm._v(" "),
                           _c(
-                            "RouterLink",
-                            {
-                              staticClass: "button button--link",
-                              attrs: {
-                                to: {
-                                  name: "comment.create",
-                                  params: { logId: _vm.log.id }
-                                }
-                              }
-                            },
+                            "v-list-item-content",
                             [
-                              _c("v-icon", { staticClass: "mr-1" }, [
-                                _vm._v(
-                                  "\n                  mdi-share-variant\n                "
-                                )
+                              _c("v-list-item-title", [
+                                _vm._v(_vm._s(comment.user.name))
                               ]),
                               _vm._v(" "),
-                              _c("span", { staticClass: "subheading" }, [
-                                _vm._v(_vm._s(_vm.log.comments.length))
-                              ])
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { icon: "" },
-                              on: {
-                                click: function($event) {
-                                  _vm.show = !_vm.show
-                                }
-                              }
-                            },
-                            [
-                              _c("v-icon", [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.show
-                                      ? "mdi-chevron-up"
-                                      : "mdi-chevron-down"
-                                  )
-                                )
+                              _c("v-list-item-subtitle", [
+                                _vm._v(_vm._s(comment.text))
                               ])
                             ],
                             1
@@ -8948,73 +9122,10 @@ var render = function() {
                         ],
                         1
                       )
-                    ],
-                    1
-                  )
+                    ]
+                  })
                 ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-expand-transition",
-                [
-                  _c(
-                    "v-card",
-                    {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.show,
-                          expression: "show"
-                        }
-                      ]
-                    },
-                    [
-                      _c(
-                        "v-list",
-                        { attrs: { "two-line": "" } },
-                        [
-                          _vm._l(_vm.log.comments.slice(0, 6), function(
-                            comment
-                          ) {
-                            return [
-                              _c(
-                                "v-list-item",
-                                { key: comment.id },
-                                [
-                                  _c("v-list-item-avatar", [
-                                    _c("img", {
-                                      attrs: { src: comment.user.profile_image }
-                                    })
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-list-item-content",
-                                    [
-                                      _c("v-list-item-title", [
-                                        _vm._v(_vm._s(comment.user.name))
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("v-list-item-subtitle", [
-                                        _vm._v(_vm._s(comment.text))
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ]
-                          })
-                        ],
-                        2
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
+                2
               )
             ],
             1
@@ -9170,102 +9281,83 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
+    "v-card",
     [
       _c(
-        "v-row",
-        [
-          _c(
-            "v-col",
-            { staticClass: "ma-3", attrs: { cols: "12" } },
-            [
-              _c(
-                "v-card",
-                [
-                  _c(
-                    "v-tabs",
-                    {
-                      attrs: {
-                        "background-color": "#039BE5",
-                        "center-active": "",
-                        dark: ""
-                      }
-                    },
-                    _vm._l(_vm.eventParts, function(eventPart) {
-                      return _c(
-                        "v-tab",
-                        {
-                          key: eventPart.id,
-                          on: {
-                            click: function($event) {
-                              return _vm.activate(eventPart.id)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n            " +
-                              _vm._s(eventPart.name) +
-                              "\n          "
-                          )
-                        ]
-                      )
-                    }),
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    _vm._l(_vm.events, function(event) {
-                      return _c(
-                        "div",
-                        { key: event.id },
-                        _vm._l(_vm.eventParts, function(part) {
-                          return _c("div", { key: part.id }, [
-                            event.part === part.name
-                              ? _c(
-                                  "div",
-                                  [
-                                    _c(
-                                      "v-col",
-                                      { staticClass: "ma-1" },
-                                      [
-                                        _c("Event", {
-                                          directives: [
-                                            {
-                                              name: "show",
-                                              rawName: "v-show",
-                                              value: _vm.active === part.id,
-                                              expression: "active === part.id"
-                                            }
-                                          ],
-                                          attrs: {
-                                            event: event,
-                                            userId: _vm.userId
-                                          }
-                                        })
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
-                              : _vm._e()
-                          ])
-                        }),
-                        0
-                      )
-                    }),
-                    0
-                  )
-                ],
-                1
-              )
-            ],
-            1
+        "RouterLink",
+        {
+          staticClass: " d-flex justify-center button button--link ",
+          attrs: { to: { name: "event.create" } }
+        },
+        [_vm._v("\n    種目追加\n  ")]
+      ),
+      _vm._v(" "),
+      _c(
+        "v-tabs",
+        {
+          attrs: {
+            "background-color": "#039BE5",
+            "center-active": "",
+            dark: ""
+          }
+        },
+        _vm._l(_vm.eventParts, function(eventPart) {
+          return _c(
+            "v-tab",
+            {
+              key: eventPart.id,
+              on: {
+                click: function($event) {
+                  return _vm.activate(eventPart.id)
+                }
+              }
+            },
+            [_vm._v("\n      " + _vm._s(eventPart.name) + "\n    ")]
           )
-        ],
+        }),
         1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-row",
+        _vm._l(_vm.events, function(event) {
+          return _c(
+            "div",
+            { key: event.id },
+            _vm._l(_vm.eventParts, function(part) {
+              return _c("div", { key: part.id }, [
+                event.part === part.name
+                  ? _c(
+                      "div",
+                      [
+                        _c(
+                          "v-col",
+                          { staticClass: "ma-1" },
+                          [
+                            _c("Event", {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.active === part.id,
+                                  expression: "active === part.id"
+                                }
+                              ],
+                              attrs: { event: event, userId: _vm.userId }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  : _vm._e()
+              ])
+            }),
+            0
+          )
+        }),
+        0
       )
     ],
     1
@@ -9760,14 +9852,24 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
-    _vm._l(_vm.logs, function(log) {
-      return _c("Log", {
-        key: log.id,
-        attrs: { log: log },
-        on: { favoriteLog: _vm.favoriteLog, unFavoriteLog: _vm.unFavoriteLog }
-      })
-    }),
+    "v-row",
+    [
+      _c(
+        "v-col",
+        { attrs: { cols: "12" } },
+        _vm._l(_vm.logs, function(log) {
+          return _c("Log", {
+            key: log.id,
+            attrs: { log: log },
+            on: {
+              favoriteLog: _vm.favoriteLog,
+              unFavoriteLog: _vm.unFavoriteLog
+            }
+          })
+        }),
+        1
+      )
+    ],
     1
   )
 }
@@ -9964,7 +10066,7 @@ var render = function() {
               }
             }),
             _vm._v(" "),
-            _c("label", { attrs: { for: "logi-password" } }, [
+            _c("label", { attrs: { for: "login-password" } }, [
               _vm._v("Password")
             ]),
             _vm._v(" "),
@@ -10212,93 +10314,88 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "form",
-      {
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.submit($event)
-          }
+  return _c(
+    "v-form",
+    {
+      attrs: { "lazy-validation": "", enctype: "multipart/form-data" },
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          return _vm.submit($event)
         }
       },
-      [
-        _c("div", { staticClass: "form-group row" }, [
-          _c(
-            "label",
-            { staticClass: "col-sm-3 col-form-label", attrs: { for: "id" } },
-            [_vm._v("ID")]
-          ),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.user.id,
-                expression: "user.id"
-              }
-            ],
-            staticClass: "col-sm-9 form-control-plaintext",
-            attrs: { type: "text", readonly: "", id: "id" },
-            domProps: { value: _vm.user.id },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.user, "id", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group row" }, [
-          _c(
-            "label",
-            {
-              staticClass: "col-sm-3 col-form-label",
-              attrs: { for: "content" }
-            },
-            [_vm._v("Content")]
-          ),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.user.name,
-                expression: "user.name"
-              }
-            ],
-            staticClass: "col-sm-9 form-control",
-            attrs: { type: "text", id: "content" },
-            domProps: { value: _vm.user.name },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.user, "name", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-          [_vm._v("Submit")]
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c("p", [_vm._v(_vm._s(_vm.user.id))]),
-    _vm._v(" "),
-    _c("p", [_vm._v(_vm._s(_vm.user.name))])
-  ])
+      model: {
+        value: _vm.valid,
+        callback: function($$v) {
+          _vm.valid = $$v
+        },
+        expression: "valid"
+      }
+    },
+    [
+      _c("v-text-field", {
+        attrs: {
+          counter: 20,
+          rules: _vm.nameRules,
+          label: "名前",
+          required: ""
+        },
+        model: {
+          value: _vm.name,
+          callback: function($$v) {
+            _vm.name = $$v
+          },
+          expression: "name"
+        }
+      }),
+      _vm._v(" "),
+      _c("v-text-field", {
+        attrs: {
+          counter: 20,
+          rules: _vm.nameRules,
+          label: "アカウント名",
+          required: ""
+        },
+        model: {
+          value: _vm.screenName,
+          callback: function($$v) {
+            _vm.screenName = $$v
+          },
+          expression: "screenName"
+        }
+      }),
+      _vm._v(" "),
+      _c("v-text-field", {
+        attrs: { rules: _vm.emailRules, label: "E-mail", required: "" },
+        model: {
+          value: _vm.email,
+          callback: function($$v) {
+            _vm.email = $$v
+          },
+          expression: "email"
+        }
+      }),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form__item",
+        attrs: { type: "file" },
+        on: { change: _vm.onUpload }
+      }),
+      _vm._v(" "),
+      _vm.image
+        ? _c("output", { staticClass: "form-output" }, [
+            _c("img", { attrs: { src: _vm.image, alt: "" } })
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "v-btn",
+        { staticClass: "mr-4", attrs: { type: "submit", color: "success" } },
+        [_vm._v("\n    更新\n  ")]
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -10409,7 +10506,7 @@ var render = function() {
     [
       _c(
         "v-col",
-        { staticClass: "mb-3", attrs: { cols: "12" } },
+        { staticClass: "mb-1", attrs: { cols: "12" } },
         [
           _c(
             "v-card",
@@ -10421,38 +10518,28 @@ var render = function() {
                     "v-col",
                     { attrs: { cols: "4" } },
                     [
-                      _c(
-                        "v-list-item",
-                        { attrs: { "three-line": "" } },
-                        [
-                          _c("v-list-item-avatar", {
-                            attrs: { tile: "", size: "80", color: "grey" }
-                          })
-                        ],
-                        1
-                      ),
+                      _c("v-img", {
+                        attrs: {
+                          size: "60",
+                          color: "grey",
+                          src:
+                            "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                        }
+                      }),
                       _vm._v(" "),
-                      _c(
-                        "v-list-item-content",
-                        [
-                          _c("div", { staticClass: "overline mb-4" }, [
-                            _vm._v("\n            OVERLINE\n          ")
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item-title",
-                            { staticClass: "headline mb-1" },
-                            [_vm._v("\n            Headline 5\n          ")]
-                          ),
-                          _vm._v(" "),
-                          _c("v-list-item-subtitle", [
-                            _vm._v(
-                              "Greyhound divisely hello coldly fonwderfully"
-                            )
-                          ])
-                        ],
-                        1
-                      )
+                      _c("div", { staticClass: "overline ml-1 mb-1" }, [
+                        _vm.user.screen_name !== null
+                          ? _c("span", [_vm._v(_vm._s(_vm.user.screen_name))])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "font-weight-bold ml-1 mb-1" }, [
+                        _vm._v(
+                          "\n            " +
+                            _vm._s(_vm.user.name) +
+                            "\n          "
+                        )
+                      ])
                     ],
                     1
                   ),
@@ -10461,90 +10548,67 @@ var render = function() {
                     "v-col",
                     { attrs: { cols: "8" } },
                     [
-                      _c(
-                        "v-list-item-content",
-                        [
-                          _c("div", { staticClass: "overline mb-4" }, [
-                            _vm._v(
-                              "\n              フォローしています\n            "
-                            )
+                      _c("div", { staticClass: "d-flex flex-row mb-3" }, [
+                        _c("div", { staticClass: "d-flex flex-column mb-3" }, [
+                          _c("p", { staticClass: "font-weight-medium" }, [
+                            _vm._v("ログ数")
                           ]),
                           _vm._v(" "),
-                          _c(
-                            "v-list-item-title",
-                            { staticClass: "headline mb-1" },
-                            [
-                              _c(
-                                "div",
+                          _c("span", [_vm._v(_vm._s(_vm.logCount))])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "d-flex flex-column mb-3" }, [
+                          _c("p", { staticClass: "font-weight-medium" }, [
+                            _vm._v("フォロー数")
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v(_vm._s(_vm.follow_count))])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "d-flex flex-column mb-3" }, [
+                          _c("p", { staticClass: "font-weight-medium" }, [
+                            _vm._v("フォロワー数")
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v(_vm._s(_vm.follower_count))])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _vm.user.id === _vm.loginUserId
+                            ? _c(
+                                "RouterLink",
                                 {
-                                  staticClass:
-                                    "d-flex flex-row mb-3 align-items-center"
+                                  staticClass: "button button--link",
+                                  attrs: {
+                                    to: {
+                                      name: "user.edit",
+                                      params: { userId: _vm.user.id }
+                                    }
+                                  }
                                 },
                                 [
                                   _c(
-                                    "div",
+                                    "v-btn",
                                     {
-                                      staticClass:
-                                        "d-flex flex-column mb-3 align-items-center"
+                                      attrs: {
+                                        outlined: "",
+                                        rounded: "",
+                                        text: ""
+                                      }
                                     },
                                     [
-                                      _c(
-                                        "p",
-                                        { staticClass: "font-weight-bold" },
-                                        [_vm._v("ログ数")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c("span", [_vm._v(_vm._s(_vm.logCount))])
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass:
-                                        "d-flex flex-column mb-3 align-items-center"
-                                    },
-                                    [
-                                      _c(
-                                        "p",
-                                        { staticClass: "font-weight-bold" },
-                                        [_vm._v("フォロー数")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c("span", [
-                                        _vm._v(_vm._s(_vm.follow_count))
-                                      ])
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass:
-                                        "d-flex flex-column mb-3 align-items-center"
-                                    },
-                                    [
-                                      _c(
-                                        "p",
-                                        { staticClass: "font-weight-bold" },
-                                        [_vm._v("フォロワー数")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c("span", [
-                                        _vm._v(_vm._s(_vm.follower_count))
-                                      ])
+                                      _vm._v(
+                                        "\n                プロフィール編集\n              "
+                                      )
                                     ]
                                   )
-                                ]
+                                ],
+                                1
                               )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("v-list-item-subtitle", [
-                            _vm._v(
-                              "Greyhound divisely hello coldly fonwderfully"
-                            )
-                          ])
+                            : _vm._e()
                         ],
                         1
                       )
@@ -10556,30 +10620,52 @@ var render = function() {
               ),
               _vm._v(" "),
               _c(
-                "v-card-actions",
+                "v-row",
                 [
-                  _vm.user.id === _vm.loginUserId
-                    ? _c(
-                        "RouterLink",
-                        {
-                          staticClass: "button button--link",
-                          attrs: {
-                            to: {
-                              name: "user.edit",
-                              params: { userId: _vm.user.id }
-                            }
-                          }
-                        },
-                        [
-                          _c(
-                            "v-btn",
-                            { attrs: { outlined: "", rounded: "", text: "" } },
-                            [_vm._v("\n          プロフィール編集\n        ")]
-                          )
-                        ],
-                        1
-                      )
-                    : _vm._e()
+                  _c("v-col", { attrs: { cols: "12" } }, [
+                    _vm.user.user_text !== null
+                      ? _c("p", [_vm._v(_vm._s(_vm.user.user_text))])
+                      : _c("p", [_vm._v("よろしくお願いします！")])
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    { staticClass: "mb-4", attrs: { cols: "12" } },
+                    [
+                      _c("UserEvent", {
+                        attrs: { events: _vm.events, userId: _vm.user.id }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12" } },
+                    _vm._l(_vm.user.logs, function(log) {
+                      return _c("Log", {
+                        key: log.id,
+                        attrs: { log: log },
+                        on: {
+                          favoriteLog: _vm.favoriteLog,
+                          unFavoriteLog: _vm.unFavoriteLog
+                        }
+                      })
+                    }),
+                    1
+                  )
                 ],
                 1
               )
@@ -10588,21 +10674,9 @@ var render = function() {
           )
         ],
         1
-      ),
-      _vm._v(" "),
-      _c("p", [_vm._v(_vm._s(_vm.user.name))]),
-      _vm._v(" "),
-      _c("UserEvent", { attrs: { events: _vm.events, userId: _vm.user.id } }),
-      _vm._v(" "),
-      _vm._l(_vm.user.logs, function(log) {
-        return _c("Log", {
-          key: log.id,
-          attrs: { log: log },
-          on: { favoriteLog: _vm.favoriteLog, unFavoriteLog: _vm.unFavoriteLog }
-        })
-      })
+      )
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -73188,14 +73262,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!******************************************!*\
   !*** ./resources/js/pages/LogCreate.vue ***!
   \******************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LogCreate_vue_vue_type_template_id_e39753b2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LogCreate.vue?vue&type=template&id=e39753b2& */ "./resources/js/pages/LogCreate.vue?vue&type=template&id=e39753b2&");
 /* harmony import */ var _LogCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LogCreate.vue?vue&type=script&lang=js& */ "./resources/js/pages/LogCreate.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _LogCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _LogCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -73225,7 +73300,7 @@ component.options.__file = "resources/js/pages/LogCreate.vue"
 /*!*******************************************************************!*\
   !*** ./resources/js/pages/LogCreate.vue?vue&type=script&lang=js& ***!
   \*******************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

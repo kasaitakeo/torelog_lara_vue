@@ -54,8 +54,9 @@ class UsersController extends Controller
 
         $data = $request->all();
 
-        // Rule::unique('users')->ignore($user->id)の部分はユニークに設定しているemailを自身のIDの時だけ無効にするという設定
+        // Rule::unique('users')->ignore($user->id)の部分はユニークに設定しているscreen_name,emailを自身のIDの時だけユニーク無効にするという設定
         $validator = Validator::make($data, [
+            'screen_name'   => ['required', 'string', 'max:50', Rule::unique('users')->ignore($user->id)],
             'name'          => ['required', 'string', 'max:255'],
             'profile_image' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'email'         => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($login_user->id)]

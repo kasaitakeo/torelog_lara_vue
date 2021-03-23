@@ -55,7 +55,7 @@ Route::group(['prefix' => 'users'], function () {
     Route::get('/{user}', 'UsersController@show')->name('user.show');
 
     // ユーザー更新
-    Route::put('/{user}', 'UsersController@update')->name('user.update');
+    Route::put('', 'UsersController@update')->name('user.update');
     
     // フォロー
     Route::post('/follow/{user}', 'UsersController@follow')->name('user.follow');

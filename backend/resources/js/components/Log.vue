@@ -1,9 +1,10 @@
 <template>
   <!-- <div v-if="log.event_logs.length > 0"> -->
-    <v-row>
-      <v-col cols="12" class="ma-3">
+    <!-- <v-row>
+      <v-col cols="12" class="ma-3"> -->
         <v-card
           color="#E3F2FD"
+          class="mb-4"
         >
             <v-row>
               <EventLog
@@ -16,7 +17,29 @@
             <v-row>
               <v-col cols="12">
                 <v-card-text class="headline px-2">
-                  コメント：{{ log.text }}
+                  {{ log.text }}
+                </v-card-text>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-card-text 
+                  align="end"
+                  justify="end"
+                >
+                  <div v-if="this.$route.name === 'log.show'">
+                  <div v-if="log.user.id === userId">
+                    <RouterLink class="button button--link" v-bind:to="{name: 'log.edit', params: {logId: log.id}}">
+                      <div>edit</div> 
+                    </RouterLink>
+                    <div @click="deleteLog(log.id)">delete</div>
+                  </div>
+                </div>
+                <div v-else>
+                  <RouterLink class="button button--link" :to="{name: 'log.show', params: {logId: log.id}}">
+                    <div>ログ詳細</div>
+                  </RouterLink>
+                </div>
                 </v-card-text>
               </v-col>
             </v-row>
@@ -30,25 +53,11 @@
                   :src="log.user.profile_image"
                 ></v-img>
               </v-list-item-avatar>
-
-              <RouterLink class="button button--link" :to="{name: 'user.show', params: {userId: log.user.id}}">
-                <v-list-item-content>
-                  <v-list-item-title>{{ log.user.name }}</v-list-item-title>
-                </v-list-item-content>
-              </RouterLink>
-                <v-list-item-content v-if="this.$route.name === 'log.show'">
-                  <div v-if="log.user.id === userId">
-                    <RouterLink class="button button--link" v-bind:to="{name: 'log.edit', params: {logId: log.id}}">
-                      <v-btn>edit</v-btn> 
-                    </RouterLink>
-                    <v-btn @click="deleteLog(log.id)">delete</v-btn>
-                  </div>
-                </v-list-item-content>
-                <v-list-item-content v-else>
-                  <RouterLink class="button button--link" :to="{name: 'log.show', params: {logId: log.id}}">
-                    <v-list-item-title>ログ詳細</v-list-item-title>
-                  </RouterLink>
-                </v-list-item-content>
+              <v-list-item-content>
+                <RouterLink class="button button--link" :to="{name: 'user.show', params: {userId: log.user.id}}">
+                  {{ log.user.name }}
+                </RouterLink>
+              </v-list-item-content>
               <v-row
                 align="center"
                 justify="end"
@@ -95,8 +104,8 @@
             
           </v-expand-transition>
         </v-card>
-      </v-col>
-    </v-row>
+      <!-- </v-col>
+    </v-row> -->
 </template>
 <script>
 import EventLog from '../components/EventLog.vue'

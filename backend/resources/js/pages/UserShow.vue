@@ -1,91 +1,82 @@
 <template>
   <v-row>
-    <v-col cols="12" class="mb-3">
-      
+    <v-col cols="12" class="mb-1">
       <v-card>
         <v-row>
           <v-col cols="4">
-          <v-list-item three-line>
-            <v-list-item-avatar
-              tile
-              size="80"
+            <v-img
+              size="60"
               color="grey"
-            ></v-list-item-avatar>
-          </v-list-item>
-          <v-list-item-content>
-            <div class="overline mb-4">
-              OVERLINE
+              src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+            ></v-img>
+            <div class="overline ml-1 mb-1">
+              <span v-if="user.screen_name !== null">{{ user.screen_name }}</span>
             </div>
-            <v-list-item-title class="headline mb-1">
-              Headline 5
-            </v-list-item-title>
-            <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
-          </v-list-item-content>
+            <div class="font-weight-bold ml-1 mb-1">
+              {{ user.name }}
+            </div>
           </v-col>
           <v-col cols="8">
-            <v-list-item-content>
-              <div class="overline mb-4">
-                フォローしています
+            <div class="d-flex flex-row mb-3">
+              <div class="d-flex flex-column mb-3">
+                <p class="font-weight-medium">ログ数</p>
+                <span>{{ logCount }}</span>
               </div>
-              <v-list-item-title class="headline mb-1">
-                <div class="d-flex flex-row mb-3 align-items-center">
-                  <div class="d-flex flex-column mb-3 align-items-center">
-                    <p class="font-weight-bold">ログ数</p>
-                    <span>{{ logCount }}</span>
-                  </div>
-                  <div class="d-flex flex-column mb-3 align-items-center">
-                    <p class="font-weight-bold">フォロー数</p>
-                    <span>{{ follow_count }}</span>
-                  </div>
-                  <div class="d-flex flex-column mb-3 align-items-center">
-                    <p class="font-weight-bold">フォロワー数</p>
-                    <span>{{ follower_count }}</span>
-                  </div>
-
-                </div>
-            </v-list-item-title>
-
-            <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
-          </v-list-item-content>
-
+              <div class="d-flex flex-column mb-3">
+                <p class="font-weight-medium">フォロー数</p>
+                <span>{{ follow_count }}</span>
+              </div>
+              <div class="d-flex flex-column mb-3">
+                <p class="font-weight-medium">フォロワー数</p>
+                <span>{{ follower_count }}</span>
+              </div>
+            </div>
+            <v-card-actions>
+              <RouterLink v-if="user.id === loginUserId" class="button button--link" :to="{ name: 'user.edit', params: { userId: user.id }}">
+                <v-btn
+                  outlined
+                  rounded
+                  text
+                >
+                  プロフィール編集
+                </v-btn>
+              </RouterLink>
+            </v-card-actions>
           </v-col>
-
-
         </v-row>
-
-
-        <v-card-actions>
-      <RouterLink v-if="user.id === loginUserId" class="button button--link" :to="{ name: 'user.edit', params: { userId: user.id }}">
-        <v-btn
-            outlined
-            rounded
-            text
-          >
-            プロフィール編集
-          </v-btn>
-      </RouterLink>
-          
-        </v-card-actions>
-      </v-card>
-    </v-col>
-    <p>{{ user.name }}</p>
-    <UserEvent
-      :events="events"
-      :userId="user.id"
-      />
+        <v-row>
+          <v-col cols="12">
+            <p v-if="user.user_text !== null">{{ user.user_text }}</p>
+            <p v-else>よろしくお願いします！</p>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" class="mb-4">
+            <UserEvent
+              :events="events"
+              :userId="user.id"
+              />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12">
+            <Log
+              v-for="log in user.logs"
+              :key="log.id"
+              :log="log"
+              @favoriteLog="favoriteLog"
+              @unFavoriteLog="unFavoriteLog"
+            />
+          </v-col>
+        </v-row>
     <!-- <RouterLink :to="{ name: 'user.event', params: { userId: user.id }}">
       <button>種目リスト</button>
     </RouterLink> -->
     <!-- <UserEvent
     :userId="user.id"
     /> -->
-    <Log
-      v-for="log in user.logs"
-      :key="log.id"
-      :log="log"
-      @favoriteLog="favoriteLog"
-      @unFavoriteLog="unFavoriteLog"
-    />
+      </v-card>
+    </v-col>
   </v-row>
 
 </template>

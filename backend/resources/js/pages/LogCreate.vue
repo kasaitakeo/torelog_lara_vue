@@ -126,7 +126,7 @@ export default {
 
       // メッセージ登録
       this.$store.commit('message/setContent', {
-        content: 'トレログが登録されました！',
+        content: 'トレログが保存されました！',
         timeout: 6000
       })
 
@@ -213,38 +213,45 @@ export default {
         this.getEventLogs()
       })
   },
+  created () {
+    window.addEventListener("beforeunload", this.confirmSave)
+  },
   destroyed () {
     window.removeEventListener("beforeunload", this.confirmSave);
   },
   beforeRouteLeave (to, from, next) {
-    let answer = window.confirm("このままトレログの編集を終了してよろしいでしょうか?※種目追加されていないログは保存されません。")
-    if (answer) {
-      if (this.setEventLogs) {
-        next()
-      } else {
-        this.deleteLog()
-        next()
-      }
+    if (to.name === 'event.create') {
+      next()
     } else {
-      next(false)
+      if (this.setEventLogs) {
+        let answer = window.confirm("コメント未入力のままトレログを保存してもよろしいでしょうか")
+        if (answer) {
+          this.deleteLog()
+          this.$store.commit('message/setContent', {
+            content: 'トレログが保存されました。',
+            timeout: 6000
+          })
+          next()
+        } else {
+          this.deleteLog()
+          this.deleteAllEventLog()
+          next()
+        }
+        
+      } else {
+        let answer = window.confirm("種目が未入力のままトレログの編集を終了してしまうとログは保存されません。このまま編集を終了してもよろしいでしょうか")
+        if (answer) {
+          this.deleteLog()
+          this.$store.commit('message/setContent', {
+            content: 'トレログ保存できませんでした。',
+            timeout: 6000
+          })
+          next()
+        } else {
+          next(false)
+        }
+      }
     }
   },  
-  // beforeRouteLeave (to, from, next) {
-  //   // if (typeof this.logContent !== 'undefined') {
-  //     // if (typeof this.event_logs !== 'undefined') {
-  //   if (this.setEventLogs) {
-      
-  //     next()
-  //   // } else if (this.logContent === null) {
-  //     //   this.deleteLog()
-
-  //   //   this.deleteAllEventLog()
-
-  //   //   next()
-  //   } else {
-  //     this.deleteLog()
-  //     next()
-  //   }
-  // },
 }
 </script>
