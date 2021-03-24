@@ -2546,8 +2546,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     item: {
@@ -2953,6 +2951,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3167,6 +3168,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Event_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Event.vue */ "./resources/js/components/Event.vue");
+//
 //
 //
 //
@@ -4086,7 +4088,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     if (to.name === 'event.create') {
       next();
     } else {
-      if (this.setEventLogs) {
+      if (this.setEventLogs && this.logContent === '') {
         var answer = window.confirm("コメント未入力のままトレログを保存してもよろしいでしょうか");
 
         if (answer) {
@@ -5230,6 +5232,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -5241,8 +5261,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       screenName: '',
       name: '',
       email: '',
+      userText: '',
       image: null,
-      // preview: null,
+      confirmedImage: '',
       valid: false,
       nameRules: [function (v) {
         return !!v || 'Name is required';
@@ -5286,10 +5307,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.screenName = response.data.user_data.screen_name;
                 _this.name = response.data.user_data.name;
                 _this.email = response.data.user_data.email;
-
-                if (response.data.user_data.profile_image !== null) {
-                  _this.image = response.data.user_data.profile_image;
-                }
+                _this.userText = response.data.user_data.user_text; // if (response.data.user_data.profile_image !== null) {
+                //   this.confirmedImage = response.data.user_data.profile_image
+                // }
 
               case 11:
               case "end":
@@ -5299,7 +5319,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    submit: function submit() {
+    update: function update() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
@@ -5314,12 +5334,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 formData.append('name', _this2.name);
                 formData.append('screen_name', _this2.screenName);
                 formData.append('email', _this2.email);
+                formData.append('user_text', _this2.userText);
                 formData.append('profile_image', _this2.image);
                 console.log(formData.get('name'));
 
                 (_console = console).log.apply(_console, _toConsumableArray(formData.entries()));
 
-                _context2.next = 9;
+                _context2.next = 10;
                 return axios.post('/api/users/', formData, {
                   headers: {
                     'X-HTTP-Method-Override': 'PUT',
@@ -5327,12 +5348,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 });
 
-              case 9:
+              case 10:
                 response = _context2.sent;
                 console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context2.next = 14;
+                  _context2.next = 15;
                   break;
                 }
 
@@ -5340,12 +5361,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context2.abrupt("return", false);
 
-              case 14:
+              case 15:
                 _this2.$router.push({
                   name: 'user'
                 });
 
-              case 15:
+              case 16:
               case "end":
                 return _context2.stop();
             }
@@ -5360,18 +5381,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     // },
     onUpload: function onUpload(event) {
       // event(=e)から画像データを取得する
-      var image = event.target.files[0];
-      this.createImage(image);
+      this.image = event.target.files[0];
+      this.createImage(this.image);
     },
     createImage: function createImage(image) {
       var _this3 = this;
 
-      var reader = new FileReader(); // imageをreaderにDataURLとしてattachする
+      // FileReaderのインスタンスを作成しfileを読み込む
+      var reader = new FileReader(); // 画像の場合はreadAsDataURLを利用し読み込む
+      // imageをreaderにDataURLとしてattachする
 
       reader.readAsDataURL(image); // readAdDataURLが完了したあと実行される処理
 
-      reader.onload = function () {
-        _this3.image = reader.result;
+      reader.onload = function (e) {
+        _this3.confirmedImage = e.target.result;
       };
     }
   },
@@ -5426,11 +5449,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      users: []
+      users: {}
     };
   },
   methods: {
@@ -5444,13 +5473,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.get('/api/users');
+                return axios.get("/api/users");
 
               case 2:
                 response = _context.sent;
+                console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context.next = 6;
+                  _context.next = 7;
                   break;
                 }
 
@@ -5458,89 +5488,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 6:
+              case 7:
                 _this.users = response.data;
 
-              case 7:
+              case 8:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
-      }))();
-    },
-    follow: function follow(id) {
-      var _this2 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.post('/api/follow', {
-                  user_id: id
-                });
-
-              case 2:
-                response = _context2.sent;
-                console.log(response);
-
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context2.next = 7;
-                  break;
-                }
-
-                _this2.$store.commit('error/setCode', response.status);
-
-                return _context2.abrupt("return", false);
-
-              case 7:
-                _this2.getUsers();
-
-              case 8:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
-    },
-    unfollow: function unfollow(id) {
-      var _this3 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.post('/api/unfollow/' + id);
-
-              case 2:
-                response = _context3.sent;
-                console.log(response);
-
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context3.next = 7;
-                  break;
-                }
-
-                _this3.$store.commit('error/setCode', response.status);
-
-                return _context3.abrupt("return", false);
-
-              case 7:
-                _this3.getLogs();
-
-              case 8:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
       }))();
     }
   },
@@ -5571,6 +5527,22 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5798,25 +5770,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
-    unFavoriteLog: function unFavoriteLog(_ref2) {
+    unFavoriteLog: function unFavoriteLog(id) {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        var id, response;
+        var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                id = _ref2.id;
-                _context4.next = 3;
+                _context4.next = 2;
                 return axios.post('/api/favorites/' + id);
 
-              case 3:
+              case 2:
                 response = _context4.sent;
                 console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context4.next = 8;
+                  _context4.next = 7;
                   break;
                 }
 
@@ -5824,15 +5795,87 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context4.abrupt("return", false);
 
-              case 8:
+              case 7:
                 _this4.getUser();
 
-              case 9:
+              case 8:
               case "end":
                 return _context4.stop();
             }
           }
         }, _callee4);
+      }))();
+    },
+    follow: function follow(id) {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return axios.post("/api/users/follow/".concat(id));
+
+              case 2:
+                response = _context5.sent;
+                console.log(response);
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context5.next = 7;
+                  break;
+                }
+
+                _this5.$store.commit('error/setCode', response.status);
+
+                return _context5.abrupt("return", false);
+
+              case 7:
+                _this5.getUser();
+
+              case 8:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    },
+    unFollow: function unFollow(id) {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return axios.post("/api/users/unfollow/".concat(id));
+
+              case 2:
+                response = _context6.sent;
+                console.log(response);
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context6.next = 7;
+                  break;
+                }
+
+                _this6.$store.commit('error/setCode', response.status);
+
+                return _context6.abrupt("return", false);
+
+              case 7:
+                _this6.getUser();
+
+              case 8:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
       }))();
     }
   },
@@ -8327,7 +8370,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("v-text-field", {
                   attrs: {
-                    counter: 10,
+                    counter: 30,
                     label: "種目名",
                     placeholder: "インクラインベンチプレス",
                     required: ""
@@ -8398,62 +8441,56 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
+    "v-col",
+    { attrs: { cols: "12" } },
     [
       _c(
-        "v-col",
-        { attrs: { cols: "12" } },
+        "v-card",
+        { staticClass: "mt-1", attrs: { color: "#B3E5FC" } },
         [
-          _c(
-            "v-card",
-            { staticClass: "my-2", attrs: { raised: "", color: "#B3E5FC" } },
-            [
-              _c("v-card-title", { staticClass: "px-2 py-1" }, [
-                _c("span", [_vm._v(_vm._s(_vm.item.event.part) + ":")]),
-                _vm._v(" "),
-                _c("span", [_vm._v(_vm._s(_vm.item.event.event_name))])
-              ]),
-              _vm._v(" "),
-              _c("v-card-text", { staticClass: "px-2 pb-1" }, [
-                _c("span", [_vm._v(_vm._s(_vm.item.weight) + "kg")]),
-                _vm._v(" "),
-                _c("span", [_vm._v(_vm._s(_vm.item.rep) + "rep")]),
-                _vm._v(" "),
-                _c("span", [_vm._v(_vm._s(_vm.item.set) + "set")]),
-                _vm._v(" "),
-                _c(
-                  "span",
+          _c("v-card-title", { staticClass: "px-2 py-1" }, [
+            _c("span", [_vm._v(_vm._s(_vm.item.event.part) + ":")]),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.item.event.event_name))])
+          ]),
+          _vm._v(" "),
+          _c("v-card-text", { staticClass: "px-2 pb-1" }, [
+            _c("span", [_vm._v(_vm._s(_vm.item.weight) + "kg")]),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.item.rep) + "rep")]),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.item.set) + "set")]),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                directives: [
                   {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.ableDelete,
-                        expression: "ableDelete"
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.ableDelete,
+                    expression: "ableDelete"
+                  }
+                ]
+              },
+              [
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { color: "blue darken-1", text: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.deleteEventLog($event)
                       }
-                    ]
+                    }
                   },
-                  [
-                    _c(
-                      "v-btn",
-                      {
-                        attrs: { color: "blue darken-1", text: "" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.deleteEventLog($event)
-                          }
-                        }
-                      },
-                      [_vm._v("削除")]
-                    )
-                  ],
-                  1
+                  [_vm._v("削除")]
                 )
-              ])
-            ],
-            1
-          )
+              ],
+              1
+            )
+          ])
         ],
         1
       )
@@ -8828,7 +8865,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-card",
-    { staticClass: "mb-4", attrs: { color: "#E3F2FD" } },
+    { staticClass: "ma-1 pa-2", attrs: { color: "#E3F2FD", elevation: "10" } },
     [
       _c(
         "v-row",
@@ -8850,9 +8887,7 @@ var render = function() {
             [
               _c("v-card-text", { staticClass: "headline px-2" }, [
                 _vm._v(
-                  "\n                " +
-                    _vm._s(_vm.log.text) +
-                    "\n              "
+                  "\n              " + _vm._s(_vm.log.text) + "\n            "
                 )
               ])
             ],
@@ -8937,24 +8972,24 @@ var render = function() {
         "v-card-actions",
         [
           _c(
-            "v-list-item",
-            { staticClass: "grow" },
+            "v-row",
             [
               _c(
-                "v-list-item-avatar",
-                { attrs: { color: "grey darken-3" } },
+                "v-col",
+                { attrs: { cols: "4", align: "start", justify: "start" } },
                 [
-                  _c("v-img", {
-                    staticClass: "elevation-6",
-                    attrs: { alt: "", src: _vm.log.user.profile_image }
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item-content",
-                [
+                  _c(
+                    "v-avatar",
+                    { attrs: { color: "grey darken-3" } },
+                    [
+                      _c("v-img", {
+                        staticClass: "elevation-6",
+                        attrs: { alt: "", src: _vm.log.user.profile_image }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
                   _c(
                     "RouterLink",
                     {
@@ -8968,9 +9003,9 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        "\n                " +
+                        "\n              " +
                           _vm._s(_vm.log.user.name) +
-                          "\n              "
+                          "\n            "
                       )
                     ]
                   )
@@ -8979,14 +9014,14 @@ var render = function() {
               ),
               _vm._v(" "),
               _c(
-                "v-row",
-                { attrs: { align: "center", justify: "end" } },
+                "v-col",
+                { attrs: { cols: "8", align: "end", justify: "end" } },
                 [
                   _vm.favoriteStatus(_vm.log.favorites)
                     ? _c(
                         "v-icon",
                         {
-                          staticClass: "mr-1",
+                          staticClass: "mr-0",
                           on: {
                             click: function($event) {
                               return _vm.favoriteLog(_vm.log.id)
@@ -8995,28 +9030,28 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                favorite_border\n              "
+                            "\n              favorite_border\n            "
                           )
                         ]
                       )
                     : _c(
                         "v-icon",
                         {
-                          staticClass: "mr-1",
+                          staticClass: "mr-0",
                           on: {
                             click: function($event) {
                               return _vm.unFavoriteLog(_vm.log.id)
                             }
                           }
                         },
-                        [_vm._v("\n                favorite\n              ")]
+                        [_vm._v("\n              favorite\n            ")]
                       ),
                   _vm._v(" "),
                   _c("span", { staticClass: "subheading mr-2" }, [
                     _vm._v(_vm._s(_vm.log.favorites.length))
                   ]),
                   _vm._v(" "),
-                  _c("span", { staticClass: "mr-1" }, [_vm._v("·")]),
+                  _c("span", { staticClass: "mr-0" }, [_vm._v("·")]),
                   _vm._v(" "),
                   _c(
                     "RouterLink",
@@ -9032,7 +9067,7 @@ var render = function() {
                     [
                       _c("v-icon", { staticClass: "mr-1" }, [
                         _vm._v(
-                          "\n                  mdi-share-variant\n                "
+                          "\n                mdi-share-variant\n              "
                         )
                       ]),
                       _vm._v(" "),
@@ -9282,11 +9317,12 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-card",
+    { staticClass: "ma-1 pa-2", attrs: { elevation: "10" } },
     [
       _c(
         "RouterLink",
         {
-          staticClass: " d-flex justify-center button button--link ",
+          staticClass: "d-flex justify-center button button--link",
           attrs: { to: { name: "event.create" } }
         },
         [_vm._v("\n    種目追加\n  ")]
@@ -9295,27 +9331,27 @@ var render = function() {
       _c(
         "v-tabs",
         {
-          attrs: {
-            "background-color": "#039BE5",
-            "center-active": "",
-            dark: ""
-          }
+          attrs: { "background-color": "#039BE5", dark: "", "show-arrows": "" }
         },
-        _vm._l(_vm.eventParts, function(eventPart) {
-          return _c(
-            "v-tab",
-            {
-              key: eventPart.id,
-              on: {
-                click: function($event) {
-                  return _vm.activate(eventPart.id)
+        [
+          _c("v-tabs-slider", { attrs: { color: "teal lighten-3" } }),
+          _vm._v(" "),
+          _vm._l(_vm.eventParts, function(eventPart) {
+            return _c(
+              "v-tab",
+              {
+                key: eventPart.id,
+                on: {
+                  click: function($event) {
+                    return _vm.activate(eventPart.id)
+                  }
                 }
-              }
-            },
-            [_vm._v("\n      " + _vm._s(eventPart.name) + "\n    ")]
-          )
-        }),
-        1
+              },
+              [_vm._v("\n      " + _vm._s(eventPart.name) + "\n    ")]
+            )
+          })
+        ],
+        2
       ),
       _vm._v(" "),
       _c(
@@ -10317,13 +10353,7 @@ var render = function() {
   return _c(
     "v-form",
     {
-      attrs: { "lazy-validation": "", enctype: "multipart/form-data" },
-      on: {
-        submit: function($event) {
-          $event.preventDefault()
-          return _vm.submit($event)
-        }
-      },
+      attrs: { "lazy-validation": "" },
       model: {
         value: _vm.valid,
         callback: function($$v) {
@@ -10333,65 +10363,138 @@ var render = function() {
       }
     },
     [
-      _c("v-text-field", {
-        attrs: {
-          counter: 20,
-          rules: _vm.nameRules,
-          label: "名前",
-          required: ""
-        },
-        model: {
-          value: _vm.name,
-          callback: function($$v) {
-            _vm.name = $$v
-          },
-          expression: "name"
-        }
-      }),
-      _vm._v(" "),
-      _c("v-text-field", {
-        attrs: {
-          counter: 20,
-          rules: _vm.nameRules,
-          label: "アカウント名",
-          required: ""
-        },
-        model: {
-          value: _vm.screenName,
-          callback: function($$v) {
-            _vm.screenName = $$v
-          },
-          expression: "screenName"
-        }
-      }),
-      _vm._v(" "),
-      _c("v-text-field", {
-        attrs: { rules: _vm.emailRules, label: "E-mail", required: "" },
-        model: {
-          value: _vm.email,
-          callback: function($$v) {
-            _vm.email = $$v
-          },
-          expression: "email"
-        }
-      }),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form__item",
-        attrs: { type: "file" },
-        on: { change: _vm.onUpload }
-      }),
-      _vm._v(" "),
-      _vm.image
-        ? _c("output", { staticClass: "form-output" }, [
-            _c("img", { attrs: { src: _vm.image, alt: "" } })
-          ])
-        : _vm._e(),
-      _vm._v(" "),
       _c(
-        "v-btn",
-        { staticClass: "mr-4", attrs: { type: "submit", color: "success" } },
-        [_vm._v("\n    更新\n  ")]
+        "v-row",
+        [
+          _c(
+            "v-col",
+            { attrs: { cols: "12", md: "6" } },
+            [
+              _c("v-text-field", {
+                attrs: {
+                  counter: 20,
+                  rules: _vm.nameRules,
+                  label: "名前",
+                  required: ""
+                },
+                model: {
+                  value: _vm.name,
+                  callback: function($$v) {
+                    _vm.name = $$v
+                  },
+                  expression: "name"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-col",
+            { attrs: { cols: "12", md: "6" } },
+            [
+              _c("v-text-field", {
+                attrs: {
+                  counter: 20,
+                  rules: _vm.nameRules,
+                  label: "アカウント名",
+                  required: ""
+                },
+                model: {
+                  value: _vm.screenName,
+                  callback: function($$v) {
+                    _vm.screenName = $$v
+                  },
+                  expression: "screenName"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-col",
+            { attrs: { cols: "12", md: "6" } },
+            [
+              _c("v-text-field", {
+                attrs: { rules: _vm.emailRules, label: "E-mail", required: "" },
+                model: {
+                  value: _vm.email,
+                  callback: function($$v) {
+                    _vm.email = $$v
+                  },
+                  expression: "email"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-col",
+            { attrs: { cols: "12", md: "6" } },
+            [
+              _c("v-textarea", {
+                attrs: {
+                  outlined: "",
+                  name: "input-7-4",
+                  label: "自己紹介文",
+                  counter: 250
+                },
+                model: {
+                  value: _vm.userText,
+                  callback: function($$v) {
+                    _vm.userText = $$v
+                  },
+                  expression: "userText"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-col", { attrs: { cols: "8", md: "8" } }, [
+            _c("input", {
+              staticClass: "form__item",
+              attrs: { type: "file" },
+              on: { change: _vm.onUpload }
+            })
+          ]),
+          _vm._v(" "),
+          _c("v-col", { attrs: { cols: "4", md: "4" } }, [
+            _vm.confirmedImage
+              ? _c("output", { staticClass: "form-output" }, [
+                  _c("img", {
+                    staticStyle: { width: "150px height: 20px" },
+                    attrs: { src: "" + _vm.confirmedImage, alt: "" }
+                  })
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c(
+            "v-col",
+            { attrs: { cols: "4" } },
+            [
+              _c(
+                "v-btn",
+                {
+                  staticClass: "mr-4",
+                  attrs: { color: "success" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.update($event)
+                    }
+                  }
+                },
+                [_vm._v("\n        更新\n      ")]
+              )
+            ],
+            1
+          )
+        ],
+        1
       )
     ],
     1
@@ -10419,65 +10522,81 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      _vm._l(_vm.users, function(user) {
-        return _c("tr", { key: user.id }, [
-          _c("th", [_vm._v(_vm._s(user.id))]),
-          _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(user.name))]),
-          _vm._v(" "),
-          _c(
-            "td",
+  return _c(
+    "v-row",
+    [
+      _c(
+        "v-col",
+        _vm._l(_vm.users, function(user) {
+          return _c(
+            "v-card",
+            { key: user.id, staticClass: "pa-2 mb-3" },
             [
               _c(
-                "RouterLink",
-                {
-                  attrs: {
-                    to: { name: "user.show", params: { userId: user.id } }
-                  }
-                },
-                [_c("button", [_vm._v("show")])]
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "4" } },
+                    [
+                      _c(
+                        "v-avatar",
+                        {
+                          staticClass: "align-items-center my-1 ml-1",
+                          attrs: { size: "50" }
+                        },
+                        [
+                          _c("v-img", {
+                            attrs: {
+                              color: "grey",
+                              src: "" + user.profile_image
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "8" } },
+                    [
+                      _c(
+                        "RouterLink",
+                        {
+                          staticClass: "button button--link",
+                          attrs: {
+                            to: {
+                              name: "user.show",
+                              params: { userId: user.id }
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n            " +
+                              _vm._s(user.name) +
+                              "\n          "
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
               )
             ],
             1
-          ),
-          _vm._v(" "),
-          _c("td", [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-danger",
-                on: {
-                  click: function($event) {
-                    return _vm.follow(user.id)
-                  }
-                }
-              },
-              [_vm._v("follow")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("td", [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-danger",
-                on: {
-                  click: function($event) {
-                    return _vm.unfollow(user.id)
-                  }
-                }
-              },
-              [_vm._v("unfollow")]
-            )
-          ])
-        ])
-      }),
-      0
-    )
-  ])
+          )
+        }),
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -10506,28 +10625,38 @@ var render = function() {
     [
       _c(
         "v-col",
-        { staticClass: "mb-1", attrs: { cols: "12" } },
+        { staticClass: "ma-1", attrs: { cols: "12" } },
         [
           _c(
             "v-card",
+            { attrs: { elevation: "5" } },
             [
               _c(
                 "v-row",
+                { staticClass: "ma-1" },
                 [
                   _c(
                     "v-col",
                     { attrs: { cols: "4" } },
                     [
-                      _c("v-img", {
-                        attrs: {
-                          size: "60",
-                          color: "grey",
-                          src:
-                            "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                        }
-                      }),
+                      _c(
+                        "v-avatar",
+                        {
+                          staticClass: "align-items-center",
+                          attrs: { size: "62" }
+                        },
+                        [
+                          _c("v-img", {
+                            attrs: {
+                              color: "grey",
+                              src: "" + _vm.user.profile_image
+                            }
+                          })
+                        ],
+                        1
+                      ),
                       _vm._v(" "),
-                      _c("div", { staticClass: "overline ml-1 mb-1" }, [
+                      _c("div", { staticClass: "text-secondary" }, [
                         _vm.user.screen_name !== null
                           ? _c("span", [_vm._v(_vm._s(_vm.user.screen_name))])
                           : _vm._e()
@@ -10546,72 +10675,179 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-col",
-                    { attrs: { cols: "8" } },
+                    {
+                      staticClass: "d-flex flex-column align-end",
+                      attrs: { cols: "8" }
+                    },
                     [
-                      _c("div", { staticClass: "d-flex flex-row mb-3" }, [
-                        _c("div", { staticClass: "d-flex flex-column mb-3" }, [
-                          _c("p", { staticClass: "font-weight-medium" }, [
-                            _vm._v("ログ数")
-                          ]),
+                      _c(
+                        "div",
+                        { staticClass: "d-flex flex-row" },
+                        [
+                          _c(
+                            "v-card",
+                            {
+                              staticClass:
+                                "d-flex align-end flex-column ma-1 pt-2",
+                              attrs: { elevation: "0", tile: "" }
+                            },
+                            [
+                              _c("p", { staticClass: "font-weight-medium" }, [
+                                _vm._v("ログ")
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [_vm._v(_vm._s(_vm.logCount))])
+                            ]
+                          ),
                           _vm._v(" "),
-                          _c("span", [_vm._v(_vm._s(_vm.logCount))])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "d-flex flex-column mb-3" }, [
-                          _c("p", { staticClass: "font-weight-medium" }, [
-                            _vm._v("フォロー数")
-                          ]),
+                          _c(
+                            "v-card",
+                            {
+                              staticClass:
+                                "d-flex align-end flex-column ma-1 pt-2",
+                              attrs: { elevation: "0", tile: "" }
+                            },
+                            [
+                              _c("p", { staticClass: "font-weight-medium" }, [
+                                _vm._v("フォロー")
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [_vm._v(_vm._s(_vm.follow_count))])
+                            ]
+                          ),
                           _vm._v(" "),
-                          _c("span", [_vm._v(_vm._s(_vm.follow_count))])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "d-flex flex-column mb-3" }, [
-                          _c("p", { staticClass: "font-weight-medium" }, [
-                            _vm._v("フォロワー数")
-                          ]),
-                          _vm._v(" "),
-                          _c("span", [_vm._v(_vm._s(_vm.follower_count))])
-                        ])
-                      ]),
+                          _c(
+                            "v-card",
+                            {
+                              staticClass:
+                                "d-flex align-end flex-column ma-1 pt-2",
+                              attrs: { elevation: "0", tile: "" }
+                            },
+                            [
+                              _c("p", { staticClass: "font-weight-medium" }, [
+                                _vm._v("フォロワー")
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [_vm._v(_vm._s(_vm.follower_count))])
+                            ]
+                          )
+                        ],
+                        1
+                      ),
                       _vm._v(" "),
                       _c(
-                        "v-card-actions",
+                        "div",
+                        { staticClass: "d-flex flex-row mt-auto" },
                         [
-                          _vm.user.id === _vm.loginUserId
-                            ? _c(
-                                "RouterLink",
-                                {
-                                  staticClass: "button button--link",
-                                  attrs: {
-                                    to: {
-                                      name: "user.edit",
-                                      params: { userId: _vm.user.id }
-                                    }
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "v-btn",
+                          _c(
+                            "v-card-actions",
+                            [
+                              _vm.user.id === _vm.loginUserId
+                                ? _c(
+                                    "RouterLink",
                                     {
+                                      staticClass: "button button--link",
                                       attrs: {
-                                        outlined: "",
-                                        rounded: "",
-                                        text: ""
+                                        to: {
+                                          name: "user.edit",
+                                          params: { userId: _vm.user.id }
+                                        }
                                       }
                                     },
                                     [
-                                      _vm._v(
-                                        "\n                プロフィール編集\n              "
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            outlined: "",
+                                            rounded: "",
+                                            text: ""
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                  プロフィール編集\n                "
+                                          )
+                                        ]
                                       )
-                                    ]
+                                    ],
+                                    1
                                   )
-                                ],
-                                1
-                              )
-                            : _vm._e()
+                                : _c(
+                                    "div",
+                                    [
+                                      _vm.following
+                                        ? _c(
+                                            "v-btn",
+                                            {
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.unFollow(
+                                                    _vm.user.id
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [_vm._v("フォロー解除")]
+                                          )
+                                        : _c(
+                                            "v-btn",
+                                            {
+                                              attrs: { color: "success" },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.follow(_vm.user.id)
+                                                }
+                                              }
+                                            },
+                                            [_vm._v("フォローする")]
+                                          ),
+                                      _vm._v(" "),
+                                      _vm.followed
+                                        ? _c("div", [
+                                            _vm._v("フォローされています")
+                                          ])
+                                        : _vm._e()
+                                    ],
+                                    1
+                                  )
+                            ],
+                            1
+                          )
                         ],
                         1
                       )
+                    ]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                { staticClass: "ma-1" },
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12" } },
+                    [
+                      _vm.user.user_text !== null
+                        ? _c(
+                            "v-card",
+                            {
+                              staticClass: "px-2",
+                              attrs: { elevation: "0", shaped: "" }
+                            },
+                            [_vm._v(_vm._s(_vm.user.user_text))]
+                          )
+                        : _c(
+                            "v-card",
+                            {
+                              staticClass: "pa-2",
+                              attrs: { elevation: "0", shaped: "" }
+                            },
+                            [_vm._v("よろしくお願いします！")]
+                          )
                     ],
                     1
                   )
@@ -10622,21 +10858,9 @@ var render = function() {
               _c(
                 "v-row",
                 [
-                  _c("v-col", { attrs: { cols: "12" } }, [
-                    _vm.user.user_text !== null
-                      ? _c("p", [_vm._v(_vm._s(_vm.user.user_text))])
-                      : _c("p", [_vm._v("よろしくお願いします！")])
-                  ])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-row",
-                [
                   _c(
                     "v-col",
-                    { staticClass: "mb-4", attrs: { cols: "12" } },
+                    { staticClass: "my-4", attrs: { cols: "12" } },
                     [
                       _c("UserEvent", {
                         attrs: { events: _vm.events, userId: _vm.user.id }
@@ -73262,15 +73486,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!******************************************!*\
   !*** ./resources/js/pages/LogCreate.vue ***!
   \******************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LogCreate_vue_vue_type_template_id_e39753b2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LogCreate.vue?vue&type=template&id=e39753b2& */ "./resources/js/pages/LogCreate.vue?vue&type=template&id=e39753b2&");
 /* harmony import */ var _LogCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LogCreate.vue?vue&type=script&lang=js& */ "./resources/js/pages/LogCreate.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _LogCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _LogCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -73300,7 +73523,7 @@ component.options.__file = "resources/js/pages/LogCreate.vue"
 /*!*******************************************************************!*\
   !*** ./resources/js/pages/LogCreate.vue?vue&type=script&lang=js& ***!
   \*******************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

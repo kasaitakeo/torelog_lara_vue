@@ -13,7 +13,7 @@
           </v-select>
           <v-text-field
             v-model="eventName"
-            :counter="10"
+            :counter="30"
             label="種目名"
             placeholder="インクラインベンチプレス"
             required

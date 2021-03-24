@@ -1,4 +1,7 @@
 <template>
+  <!-- <div v-if="log.event_logs.length > 0"> -->
+    <!-- <v-row>
+      <v-col cols="12" class="ma-3"> -->
         <v-card
           color="#E3F2FD"
           class="ma-1 pa-2" elevation="10"
@@ -42,27 +45,21 @@
             </v-row>
           
           <v-card-actions>
-            <v-row>
-              <v-col 
-                cols="4" 
-                align="start" 
-                justify="start"
-              >
-                <v-avatar color="grey darken-3">
-                  <v-img
-                    class="elevation-6"
-                    alt=""
-                    :src="log.user.profile_image"
-                  ></v-img>
-                </v-avatar>
+            <v-list-item class="grow">
+              <v-list-item-avatar color="grey darken-3">
+                <v-img
+                  class="elevation-6"
+                  alt=""
+                  :src="log.user.profile_image"
+                ></v-img>
+              </v-list-item-avatar>
+              <v-list-item-content>
                 <RouterLink class="button button--link" :to="{name: 'user.show', params: {userId: log.user.id}}">
                   {{ log.user.name }}
                 </RouterLink>
-
-              </v-col>
-              <v-col
-                cols="8"
-                align="end"
+              </v-list-item-content>
+              <v-row
+                align="center"
                 justify="end"
               >
                 <v-icon class="mr-0" v-if="favoriteStatus(log.favorites)" @click="favoriteLog(log.id)">
@@ -72,7 +69,7 @@
                   favorite
                 </v-icon>
                 <span class="subheading mr-2">{{ log.favorites.length }}</span>
-                <span class="mr-0">·</span>
+                <span class="mr-1">·</span>
                 <RouterLink class="button button--link" :to="{name: 'comment.create', params: {logId: log.id}}">
                   <v-icon class="mr-1">
                     mdi-share-variant
@@ -85,8 +82,8 @@
                 >
                   <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
                 </v-btn>
-              </v-col>
-            </v-row>
+              </v-row>
+            </v-list-item>
           </v-card-actions>
           <v-expand-transition>
             <v-card v-show="show">

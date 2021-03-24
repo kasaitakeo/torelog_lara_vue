@@ -223,7 +223,7 @@ export default {
     if (to.name === 'event.create') {
       next()
     } else {
-      if (this.setEventLogs) {
+      if (this.setEventLogs && this.logContent === '') {
         let answer = window.confirm("コメント未入力のままトレログを保存してもよろしいでしょうか")
         if (answer) {
           this.deleteLog()

@@ -1,13 +1,14 @@
 <template>
-        <v-card >
-          <RouterLink class=" d-flex justify-center button button--link " :to="{name: 'event.create'}">
+        <v-card class="ma-1 pa-2" elevation="10">
+          <RouterLink class="d-flex justify-center button button--link" :to="{name: 'event.create'}">
             種目追加
           </RouterLink>
           <v-tabs
             background-color="#039BE5"
-            center-active
             dark
+            show-arrows
           >
+          <v-tabs-slider color="teal lighten-3"></v-tabs-slider>
             <v-tab v-for="eventPart in eventParts" :key="eventPart.id" @click="activate(eventPart.id)">
               {{ eventPart.name }}
             </v-tab>

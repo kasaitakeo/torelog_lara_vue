@@ -1,9 +1,8 @@
 <template>
-  <div>
     <v-col cols="12">
-      <v-card raised
+      <v-card 
         color="#B3E5FC"
-        class="my-2"
+        class="mt-1"
       >
         <v-card-title class="px-2 py-1">
           <span>{{ item.event.part }}:</span>  
@@ -20,7 +19,6 @@
         </v-card-text>
       </v-card>
     </v-col>
-  </div>
 </template>
 
 <script>

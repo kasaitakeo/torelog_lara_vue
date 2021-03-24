@@ -1,23 +1,29 @@
 <template>
-  <div>
-    <div>
-      <tr v-for="user in users" :key="user.id">
-        <th>{{ user.id }}</th>
-        <td>{{ user.name }}</td>
-        <td>
-          <RouterLink :to="{name: 'user.show', params: {userId: user.id}}">
-            <button>show</button>
-          </RouterLink>
-        </td>
-        <td>
-          <button class="btn btn-danger" @click="follow(user.id)">follow</button>
-        </td>
-        <td>
-          <button class="btn btn-danger" @click="unfollow(user.id)">unfollow</button>
-        </td>
-      </tr>
-    </div>
-  </div>
+  <v-row>
+    <v-col>
+      <v-card v-for="user in users" :key="user.id" class="pa-2 mb-3">
+        <v-row>
+          <v-col cols="4"  >
+            <v-avatar
+              size="50"
+              class="align-items-center my-1 ml-1"
+            >
+              <v-img
+                color="grey"
+                :src="`${user.profile_image}`"
+              ></v-img>
+            </v-avatar>
+          </v-col>
+          <v-col cols="8">
+            <RouterLink class="button button--link"  :to="{name: 'user.show', params: {userId: user.id}}">
+              {{ user.name }}
+            </RouterLink>
+          </v-col>
+        </v-row>
+
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -26,45 +32,20 @@ import { OK } from '../util'
 export default {
   data () {
     return {
-      users: [],
+      users: {},
     }
   },
   methods: {
     async getUsers () {
-      const response = await axios.get('/api/users')
+      const response = await axios.get(`/api/users`)
 
+      console.log(response)
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
 
       this.users = response.data
-    },
-    async follow (id) {
-      const response = await axios.post('/api/follow', {
-        user_id: id
-      })
-
-      console.log(response)
-
-      if (response.status !== OK) {
-        this.$store.commit('error/setCode', response.status)
-        return false  
-      }
-
-      this.getUsers()
-    },
-    async unfollow (id) {
-      const response = await axios.post('/api/unfollow/' + id)
-
-      console.log(response)
-
-      if (response.status !== OK) {
-        this.$store.commit('error/setCode', response.status)
-        return false  
-      }
-
-      this.getLogs()
     },
   },
   mounted () {

@@ -98,25 +98,30 @@ class User extends Authenticatable
     }
     
     //  プロフィール編集
-    public function updateProfile(Array $data)
+    public function updateProfile(Array $data, $login_user)
     {
         // $dataの中に画像があれば処理を分けています
         if (isset($data['profile_image'])) {
             // $file_name = $data['profile_image']->store('public/profile_image/');こうすることで画像ファイルが/storage/app/public/profile_image/に保存されます。
-            $file_name = $data['profile_image']->store('public/profile_image/');
+            // $file_name = $data['profile_image']->store('public/profile_image/');
+            $file_name = time() . '.' . $data['profile_image']->getClientOriginalName();
+            $data['profile_image']->storeAs('public', $file_name);
             
-            $this::where('id', $this->id)
+            // $this::where('id', $this->id)
+            $this::where('id', $login_user->id)
             ->update([
                 'screen_name'   => $data['screen_name'],
                 'name'          => $data['name'],
-                'profile_image' => basename($file_name),
+                'user_text'     => $data['user_text'],
+                'profile_image' => '/storage/' . basename($file_name),
                 'email'         => $data['email'],
                 ]);
         } else {
-            $this::where('id', $this->id)
+            $this::where('id', $login_user->id)
                 ->update([
                     'screen_name'   => $data['screen_name'],
                     'name'          => $data['name'],
+                    'user_text'     => $data['user_text'],
                     'email'         => $data['email'],
                 ]); 
         }

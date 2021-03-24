@@ -54,40 +54,41 @@ class UsersController extends Controller
 
         $data = $request->all();
 
-        // Rule::unique('users')->ignore($user->id)の部分はユニークに設定しているscreen_name,emailを自身のIDの時だけユニーク無効にするという設定
+        // Rule::unique('users')->ignore($login_user->id)の部分はユニークに設定しているscreen_name,emailを自身のIDの時だけユニーク無効にするという設定
         $validator = Validator::make($data, [
-            'screen_name'   => ['required', 'string', 'max:50', Rule::unique('users')->ignore($user->id)],
+            'screen_name'   => ['required', 'string', 'max:50', Rule::unique('users')->ignore($login_user->id)],
             'name'          => ['required', 'string', 'max:255'],
+            'user_text'          => ['required', 'string', 'max:255'],
             'profile_image' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'email'         => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($login_user->id)]
         ]);
 
         $validator->validate();
 
-        $user->updateProfile($data);
+        $user->updateProfile($data, $login_user);
 
         return response('', 201);
     }
 
-    public function follow(User $user)
+    public function follow($user_id)
     {
         $follower = auth()->user();
 
-        $is_following = $follower->isFollowing($user->id);
+        $is_following = $follower->isFollowing($user_id);
 
         if (!$is_following) {
-            $folower->follow($user->id);
+            $follower->follow($user_id);
             return;
         }
     }
-    public function unfollow(User $user)
+    public function unfollow($user_id)
     {
         $follower = auth()->user();
 
-        $is_following = $follower->isFollowing($user->id);
+        $is_following = $follower->isFollowing($user_id);
 
         if ($is_following) {
-            $folower->unfollow($user->id);
+            $follower->unfollow($user_id);
             return;
         }
     }

@@ -1,57 +1,73 @@
 <template>
   <v-row>
-    <v-col cols="12" class="mb-1">
-      <v-card>
-        <v-row>
-          <v-col cols="4">
-            <v-img
-              size="60"
-              color="grey"
-              src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-            ></v-img>
-            <div class="overline ml-1 mb-1">
+    <v-col cols="12" class="ma-1">
+      <v-card elevation="5">
+        <v-row class="ma-1">
+          <v-col cols="4" >
+            <v-avatar
+              size="62"
+              class="align-items-center"
+            >
+              <v-img
+                color="grey"
+                :src="`${user.profile_image}`"
+              ></v-img>
+            </v-avatar>
+            <div class="text-secondary">
               <span v-if="user.screen_name !== null">{{ user.screen_name }}</span>
             </div>
             <div class="font-weight-bold ml-1 mb-1">
               {{ user.name }}
             </div>
           </v-col>
-          <v-col cols="8">
-            <div class="d-flex flex-row mb-3">
-              <div class="d-flex flex-column mb-3">
-                <p class="font-weight-medium">ログ数</p>
-                <span>{{ logCount }}</span>
+          <v-col cols="8" class="d-flex flex-column align-end">
+              <div class="d-flex flex-row">
+                <v-card class="d-flex align-end flex-column ma-1 pt-2" elevation="0" tile>
+                  <p class="font-weight-medium">ログ</p>
+                  <p>{{ logCount }}</p>
+                </v-card>
+
+                <v-card class="d-flex align-end flex-column ma-1 pt-2" elevation="0" tile>
+                  <p class="font-weight-medium">フォロー</p>
+                  <p>{{ follow_count }}</p>
+                </v-card>
+
+                <v-card class="d-flex align-end flex-column ma-1 pt-2" elevation="0" tile>
+                  <p class="font-weight-medium">フォロワー</p>
+                  <p>{{ follower_count }}</p>
+                </v-card>
               </div>
-              <div class="d-flex flex-column mb-3">
-                <p class="font-weight-medium">フォロー数</p>
-                <span>{{ follow_count }}</span>
-              </div>
-              <div class="d-flex flex-column mb-3">
-                <p class="font-weight-medium">フォロワー数</p>
-                <span>{{ follower_count }}</span>
-              </div>
+              
+            <div class="d-flex flex-row mt-auto">
+              <v-card-actions>
+                <RouterLink v-if="user.id === loginUserId" class="button button--link" :to="{ name: 'user.edit', params: { userId: user.id }}">
+                  <v-btn
+                    outlined
+                    rounded
+                    text
+                  >
+                    プロフィール編集
+                  </v-btn>
+                </RouterLink>
+                <div v-else>
+                  <v-btn v-if="following" @click="unFollow(user.id)">フォロー解除</v-btn>
+                  <v-btn v-else @click="follow(user.id)" color="success">フォローする</v-btn>
+                  <div v-if="followed">フォローされています</div>
+
+                </div>
+              </v-card-actions>
+
             </div>
-            <v-card-actions>
-              <RouterLink v-if="user.id === loginUserId" class="button button--link" :to="{ name: 'user.edit', params: { userId: user.id }}">
-                <v-btn
-                  outlined
-                  rounded
-                  text
-                >
-                  プロフィール編集
-                </v-btn>
-              </RouterLink>
-            </v-card-actions>
           </v-col>
         </v-row>
-        <v-row>
+        <v-row class="ma-1">
           <v-col cols="12">
-            <p v-if="user.user_text !== null">{{ user.user_text }}</p>
-            <p v-else>よろしくお願いします！</p>
+            <v-card class="px-2" elevation="0" shaped v-if="user.user_text !== null">{{ user.user_text }}</v-card>
+            <v-card class="pa-2" elevation="0" shaped v-else>よろしくお願いします！</v-card>
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" class="mb-4">
+          <v-col cols="12" class="my-4">
             <UserEvent
               :events="events"
               :userId="user.id"
@@ -155,8 +171,32 @@ export default {
 
       this.getUser()
     },
-    async unFavoriteLog ({ id }) {
+    async unFavoriteLog (id) {
       const response = await axios.post('/api/favorites/' + id)
+
+      console.log(response)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false  
+      }
+
+      this.getUser()
+    },
+    async follow (id) {
+      const response = await axios.post(`/api/users/follow/${id}`)
+
+      console.log(response)
+
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false  
+      }
+
+      this.getUser()
+    },
+    async unFollow (id) {
+      const response = await axios.post(`/api/users/unfollow/${id}`)
 
       console.log(response)
 
