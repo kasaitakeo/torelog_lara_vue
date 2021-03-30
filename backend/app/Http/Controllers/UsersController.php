@@ -17,24 +17,24 @@ class UsersController extends Controller
         return $user->all();
     }
 
-    public function show($user_id, Log $log, Follower $follower)
+    public function show(User $user, Log $log, Follower $follower)
     {
         $user_data = User::with(['logs' => function($query){
             $query->with(['user', 'favorites', 'comments','event_logs' => function($query){
                 $query->with('event');
             }]);
-        }])->where('id', $user_id)->first();
+        }])->where('id', $user->id)->first();
         
         // $login_userはログインしている自身の情報
         $login_user = auth()->user();
-        $is_following = $login_user->isFollowing($user_id);
-        $is_followed = $login_user->isFollowed($user_id);
+        $is_following = $login_user->isFollowing($user->id);
+        $is_followed = $login_user->isFollowed($user->id);
         // $timelinesはユーザのツイート情報
-        // $timelines = $log->getUserTimeLine($user_id);
+        // $timelines = $log->getUserTimeLine($user->id);
         // $~~countってついてるのがカウント関連
-        $log_count = $log->getLogCount($user_id);
-        $follow_count = $follower->getFollowCount($user_id);
-        $follower_count = $follower->getFollowerCount($user_id);
+        $log_count = $log->getLogCount($user->id);
+        $follow_count = $follower->getFollowCount($user->id);
+        $follower_count = $follower->getFollowerCount($user->id);
 
         return [
             'user_data'      => $user_data,
@@ -48,7 +48,7 @@ class UsersController extends Controller
         
     }
 
-    public function update(Request $request,User $user)
+    public function update(Request $request, User $user)
     {
         $login_user = auth()->user();
 
@@ -70,25 +70,25 @@ class UsersController extends Controller
         return response('', 201);
     }
 
-    public function follow($user_id)
+    public function follow(User $user)
     {
         $follower = auth()->user();
 
-        $is_following = $follower->isFollowing($user_id);
+        $is_following = $follower->isFollowing($user->id);
 
         if (!$is_following) {
-            $follower->follow($user_id);
+            $follower->follow($user->id);
             return;
         }
     }
-    public function unfollow($user_id)
+    public function unfollow(User $user)
     {
         $follower = auth()->user();
 
-        $is_following = $follower->isFollowing($user_id);
+        $is_following = $follower->isFollowing($user->id);
 
         if ($is_following) {
-            $follower->unfollow($user_id);
+            $follower->unfollow($user->id);
             return;
         }
     }

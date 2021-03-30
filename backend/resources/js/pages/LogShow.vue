@@ -6,7 +6,7 @@
         @favoriteLog="favoriteLog"
         @unFavoriteLog="unFavoriteLog"
       />
-      <div v-if="user.id === loginUserId">
+      <div v-if="log.user_id === loginUserId">
         <RouterLink v-bind:to="{name: 'log.edit', params: {logId: log.id}}">
           <button>edit</button> 
         </RouterLink>
@@ -29,9 +29,9 @@ export default {
   data () {
     return {
       log: {},
-      user: {},
-      favorites: {},
-      comments: {},
+      // user: {},
+      // favorites: {},
+      // comments: {},
     }
   },
   computed: {
@@ -46,19 +46,17 @@ export default {
     async getLog () {
       const response = await axios.get(`/api/logs/${this.logId}`)
 
-      console.log(response)
-      console.log(response.data.favorites)
-      console.log(response.data.comments)
-
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
 
+      // console.log(response)
+      console.log(response.data)
       this.log = response.data
-      this.user = response.data.user
-      this.favorites = response.data.favorites
-      this.comments = response.data.comments
+      // this.user = response.data.user
+      // this.favorites = response.data.favorites
+      // this.comments = response.data.comments
     },
     async deleteLog (id) {
       const response = await axios.delete('/api/logs/' + id)
@@ -110,10 +108,20 @@ export default {
       return true
     }
   },
-  mounted () {
+  created () {
     this.getLog()
-  }
-
+  },
+  // mounted () {
+  //   this.getLog()
+  // },
+  // watch: {
+  //   $route: {
+  //     async handler () {
+  //       await this.getLog()
+  //     },
+  //     immediate: true
+  //   }
+  // }
 }
 </script>
 

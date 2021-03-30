@@ -12,14 +12,8 @@ class Log extends Model
 {
     use SoftDeletes;
 
-    /**
-     * $fillableはメンバ変数
-     * $fillableにカラム名を定義するとそれ以外のカラムを登録/更新でエラーを吐く。(ホワイトリスト)
-     * 逆に$guardedというのは登録/更新できないカラムを指定(ブラックリスト)
-     * @var array
-     */
-    protected $fillable = [
-        'text'
+    protected $visible = [
+        'id', 'text', 'user', 'favorites', 'comments', 'event_logs',
     ];
 
     /**

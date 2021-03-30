@@ -3745,9 +3745,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
-    activate: function activate(id) {
-      this.active = id;
-    },
+    // activate (id) { 
+    //   this.active = id
+    // },
     deleteEventLog: function deleteEventLog(_ref) {
       var _this = this;
 
@@ -4135,8 +4135,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
-/* harmony import */ var _components_Event_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Event.vue */ "./resources/js/components/Event.vue");
+/* harmony import */ var _components_UserEvent_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/UserEvent.vue */ "./resources/js/components/UserEvent.vue");
 /* harmony import */ var _components_EventLog_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/EventLog.vue */ "./resources/js/components/EventLog.vue");
+/* harmony import */ var _eventBus_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../eventBus.js */ "./resources/js/eventBus.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -4180,13 +4181,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    Event: _components_Event_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    UserEvent: _components_UserEvent_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     EventLog: _components_EventLog_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: {
@@ -4194,39 +4207,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      log: '',
-      editLogId: '',
-      events: {},
-      event_logs: {},
+      events: [],
+      eventLogs: {},
       logContent: '',
-      active: 0,
-      eventParts: [{
-        id: 0,
-        name: '胸'
-      }, {
-        id: 1,
-        name: '背中'
-      }, {
-        id: 2,
-        name: '肩'
-      }, {
-        id: 3,
-        name: '脚'
-      }, {
-        id: 4,
-        name: '上腕二頭筋'
-      }, {
-        id: 5,
-        name: '上腕三頭筋'
-      }, {
-        id: 6,
-        name: '腹筋'
-      }, {
-        id: 7,
-        name: 'その他'
-      }],
-      msg: '',
-      errors: null
+      errors: null,
+      setEventLogs: false
     };
   },
   computed: {
@@ -4235,6 +4220,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
+    activate: function activate(id) {
+      this.active = id;
+    },
     getLog: function getLog() {
       var _this = this;
 
@@ -4245,14 +4233,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.get('/api/logs/' + _this.logId);
+                return axios.get("/api/logs/".concat(_this.logId));
 
               case 2:
                 response = _context.sent;
-                console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context.next = 7;
+                  _context.next = 6;
                   break;
                 }
 
@@ -4260,12 +4247,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 7:
-                _this.log = response.data;
-                _this.event_logs = response.data.event_logs;
+              case 6:
+                console.log(response.data);
                 _this.logContent = response.data.text;
+                _this.eventLogs = response.data.event_logs;
 
-              case 10:
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -4273,37 +4260,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    activate: function activate(id) {
-      this.active = id;
-    },
-    postEventLog: function postEventLog(_ref) {
+    deleteEventLog: function deleteEventLog(_ref) {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var id, weight, rep, set, response;
+        var id, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                id = _ref.id, weight = _ref.weight, rep = _ref.rep, set = _ref.set;
+                id = _ref.id;
                 _context2.next = 3;
-                return axios.post('/api/event_logs', {
-                  log_id: _this2.logId,
-                  event_id: id,
-                  weight: weight,
-                  rep: rep,
-                  set: set
-                });
+                return axios["delete"]("/api/event_logs/".concat(id));
 
               case 3:
                 response = _context2.sent;
                 console.log(response);
 
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context2.next = 8;
+                  break;
+                }
+
+                _this2.$store.commit('error/setCode', response.status);
+
+                return _context2.abrupt("return", false);
+
+              case 8:
                 _this2.getEventLogs();
 
-                _this2.msg = 'eventlogが追加されました';
-
-              case 7:
+              case 9:
               case "end":
                 return _context2.stop();
             }
@@ -4311,25 +4297,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    deleteEventLog: function deleteEventLog(_ref2) {
+    deleteAllEventLog: function deleteAllEventLog() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var id, response;
+        var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                id = _ref2.id;
-                _context3.next = 3;
-                return axios["delete"]("/api/event_logs/".concat(id));
+                _context3.next = 2;
+                return axios["delete"]("/api/".concat(_this3.logId, "/event_logs"));
 
-              case 3:
+              case 2:
                 response = _context3.sent;
                 console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context3.next = 8;
+                  _context3.next = 7;
                   break;
                 }
 
@@ -4337,10 +4322,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context3.abrupt("return", false);
 
-              case 8:
+              case 7:
                 _this3.getEventLogs();
 
-              case 9:
+              case 8:
               case "end":
                 return _context3.stop();
             }
@@ -4348,7 +4333,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
-    deleteAllEventLog: function deleteAllEventLog() {
+    updateLog: function updateLog() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
@@ -4358,14 +4343,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return axios["delete"]("/api/".concat(_this4.logId, "/event_logs"));
+                return axios.put("/api/logs/".concat(_this4.logId), {
+                  text: _this4.logContent
+                });
 
               case 2:
                 response = _context4.sent;
-                console.log(response);
+                console.log(response.data);
 
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
                   _context4.next = 7;
+                  break;
+                }
+
+                _this4.errors = response.data.errors;
+                return _context4.abrupt("return", false);
+
+              case 7:
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
+                  _context4.next = 10;
                   break;
                 }
 
@@ -4373,10 +4369,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context4.abrupt("return", false);
 
-              case 7:
-                _this4.getEventLogs();
+              case 10:
+                // メッセージ登録
+                _this4.$store.commit('message/setContent', {
+                  content: 'トレログが保存されました！',
+                  timeout: 6000
+                });
 
-              case 8:
+                _this4.$router.push('/');
+
+              case 12:
               case "end":
                 return _context4.stop();
             }
@@ -4384,7 +4386,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     },
-    updateLog: function updateLog() {
+    deleteLog: function deleteLog() {
       var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
@@ -4394,18 +4396,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context5.prev = _context5.next) {
               case 0:
                 _context5.next = 2;
-                return axios.put("/api/logs/".concat(_this5.logId), {
-                  text: _this5.logContent
-                });
+                return axios["delete"]("/api/logs/".concat(_this5.logId));
 
               case 2:
                 response = _context5.sent;
-                console.log(response.data);
-                _this5.msg = 'logが投稿されました';
+                console.log(response);
 
-                _this5.$router.push('/');
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context5.next = 7;
+                  break;
+                }
 
-              case 6:
+                _this5.$store.commit('error/setCode', response.status);
+
+                return _context5.abrupt("return", false);
+
+              case 7:
               case "end":
                 return _context5.stop();
             }
@@ -4413,7 +4419,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee5);
       }))();
     },
-    deleteLog: function deleteLog() {
+    getEvents: function getEvents() {
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
@@ -4423,7 +4429,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context6.prev = _context6.next) {
               case 0:
                 _context6.next = 2;
-                return axios["delete"]("/api/logs/".concat(_this6.logId));
+                return axios.get('/api/events');
 
               case 2:
                 response = _context6.sent;
@@ -4439,6 +4445,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context6.abrupt("return", false);
 
               case 7:
+                _this6.events = response.data;
+
+              case 8:
               case "end":
                 return _context6.stop();
             }
@@ -4446,7 +4455,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee6);
       }))();
     },
-    getEvents: function getEvents() {
+    getEventLogs: function getEventLogs() {
       var _this7 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
@@ -4456,7 +4465,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context7.prev = _context7.next) {
               case 0:
                 _context7.next = 2;
-                return axios.get('/api/events');
+                return axios.get("/api/".concat(_this7.logId, "/event_logs"));
 
               case 2:
                 response = _context7.sent;
@@ -4472,50 +4481,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context7.abrupt("return", false);
 
               case 7:
-                _this7.events = response.data;
+                if (!_this7.setEventLogs) {
+                  _this7.setEventLogs = true;
+                }
 
-              case 8:
+                _this7.eventLogs = response.data;
+
+              case 9:
               case "end":
                 return _context7.stop();
             }
           }
         }, _callee7);
-      }))();
-    },
-    getEventLogs: function getEventLogs() {
-      var _this8 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
-          while (1) {
-            switch (_context8.prev = _context8.next) {
-              case 0:
-                _context8.next = 2;
-                return axios.get("/api/".concat(_this8.logId, "/event_logs"));
-
-              case 2:
-                response = _context8.sent;
-                console.log(response);
-
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context8.next = 7;
-                  break;
-                }
-
-                _this8.$store.commit('error/setCode', response.status);
-
-                return _context8.abrupt("return", false);
-
-              case 7:
-                _this8.event_logs = response.data;
-
-              case 8:
-              case "end":
-                return _context8.stop();
-            }
-          }
-        }, _callee8);
       }))();
     },
     confirmSave: function confirmSave(event) {
@@ -4528,23 +4505,65 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   mounted: function mounted() {
-    if (!this.$store.getters['auth/check']) {
+    var _this8 = this;
+
+    if (this.$store.getters['auth/check']) {
+      this.getLog();
+      this.getEvents();
+    } else {
       this.$router.push('/');
     }
 
-    this.getLog();
-    this.getEvents();
-  },
-  destroyed: function destroyed() {
-    window.removeEventListener("beforeunload", this.confirmSave);
-  },
-  beforeRouteLeave: function beforeRouteLeave(to, from, next) {
-    if (typeof this.event_logs === 'undefined') {
-      this.deleteLog();
-      next();
-    } else {
-      next();
-    }
+    _eventBus_js__WEBPACK_IMPORTED_MODULE_4__["default"].$on('eventPost', /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(_ref2) {
+        var id, weight, rep, set, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                id = _ref2.id, weight = _ref2.weight, rep = _ref2.rep, set = _ref2.set;
+                _context8.next = 3;
+                return axios.post('/api/event_logs', {
+                  log_id: _this8.logId,
+                  event_id: id,
+                  weight: weight,
+                  rep: rep,
+                  set: set
+                });
+
+              case 3:
+                response = _context8.sent;
+                console.log(response);
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
+                  _context8.next = 8;
+                  break;
+                }
+
+                _this8.$store.commit('error/setCode', response.status);
+
+                return _context8.abrupt("return", false);
+
+              case 8:
+                _this8.$store.commit('message/setContent', {
+                  content: '実施種目が追加されました！',
+                  timeout: 3000
+                });
+
+                _this8.getEventLogs();
+
+              case 10:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }));
+
+      return function (_x) {
+        return _ref3.apply(this, arguments);
+      };
+    }());
   }
 });
 
@@ -4782,10 +4801,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      log: {},
-      user: {},
-      favorites: {},
-      comments: {}
+      log: {} // user: {},
+      // favorites: {},
+      // comments: {},
+
     };
   },
   computed: {
@@ -4811,12 +4830,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context.sent;
-                console.log(response);
-                console.log(response.data.favorites);
-                console.log(response.data.comments);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context.next = 9;
+                  _context.next = 6;
                   break;
                 }
 
@@ -4824,13 +4840,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 9:
-                _this.log = response.data;
-                _this.user = response.data.user;
-                _this.favorites = response.data.favorites;
-                _this.comments = response.data.comments;
+              case 6:
+                // console.log(response)
+                console.log(response.data);
+                _this.log = response.data; // this.user = response.data.user
+                // this.favorites = response.data.favorites
+                // this.comments = response.data.comments
 
-              case 13:
+              case 8:
               case "end":
                 return _context.stop();
             }
@@ -4960,9 +4977,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return true;
     }
   },
-  mounted: function mounted() {
+  created: function created() {
     this.getLog();
-  }
+  } // mounted () {
+  //   this.getLog()
+  // },
+  // watch: {
+  //   $route: {
+  //     async handler () {
+  //       await this.getLog()
+  //     },
+  //     immediate: true
+  //   }
+  // }
+
 });
 
 /***/ }),
@@ -9757,112 +9785,104 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("section", [
-        _c(
-          "ul",
-          _vm._l(_vm.eventParts, function(eventPart) {
-            return _c("li", { key: eventPart.id }, [
-              _c(
-                "a",
-                {
-                  class: { active: _vm.active === eventPart.id },
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      return _vm.activate(eventPart.id)
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(eventPart.name))]
-              )
-            ])
-          }),
-          0
-        )
-      ]),
-      _vm._v(" "),
-      _vm._l(_vm.events, function(event) {
-        return _c(
-          "div",
-          { key: event.id },
-          _vm._l(_vm.eventParts, function(part) {
-            return _c("div", { key: part.id }, [
-              event.part === part.name
-                ? _c("div", [
-                    _c(
-                      "div",
-                      {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: _vm.active === part.id,
-                            expression: "active === part.id"
-                          }
-                        ],
-                        staticClass: "tab__content"
-                      },
-                      [
-                        _c("Event", {
-                          staticClass: "grid__item",
-                          attrs: { event: event },
-                          on: { post: _vm.postEventLog }
-                        })
-                      ],
-                      1
-                    )
-                  ])
-                : _vm._e()
-            ])
-          }),
-          0
-        )
-      }),
-      _vm._v(" "),
-      _vm._l(_vm.event_logs, function(event_log) {
-        return _c("EventLog", {
-          key: event_log.id,
-          attrs: { item: event_log, ableDelete: true },
-          on: { deleteEventLog: _vm.deleteEventLog }
-        })
-      }),
+      _vm.errors
+        ? _c("div", { staticClass: "errors" }, [
+            _vm.errors.photo
+              ? _c(
+                  "ul",
+                  _vm._l(_vm.errors.photo, function(msg) {
+                    return _c("li", { key: msg }, [_vm._v(_vm._s(msg))])
+                  }),
+                  0
+                )
+              : _vm._e()
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c(
-        "form",
-        {
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.updateLog($event)
-            }
-          }
-        },
+        "v-row",
         [
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.logContent,
-                expression: "logContent"
-              }
+          _c(
+            "v-col",
+            [
+              _c(
+                "v-card",
+                { staticClass: "mx-auto mb-3", attrs: { "max-width": "800" } },
+                [
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        [_c("UserEvent", { attrs: { events: _vm.events } })],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        _vm._l(_vm.eventLogs, function(eventLog) {
+                          return _c("EventLog", {
+                            key: eventLog.id,
+                            attrs: { item: eventLog, ableDelete: true },
+                            on: { deleteEventLog: _vm.deleteEventLog }
+                          })
+                        }),
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    { staticClass: "mx-auto", attrs: { "max-width": "800" } },
+                    [
+                      _c(
+                        "form",
+                        {
+                          on: {
+                            submit: function($event) {
+                              $event.preventDefault()
+                              return _vm.updateLog($event)
+                            }
+                          }
+                        },
+                        [
+                          _c("v-textarea", {
+                            model: {
+                              value: _vm.logContent,
+                              callback: function($$v) {
+                                _vm.logContent = $$v
+                              },
+                              expression: "logContent"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-btn", { attrs: { type: "submit" } }, [
+                            _vm._v("ログ作成")
+                          ])
+                        ],
+                        1
+                      )
+                    ]
+                  )
+                ],
+                1
+              )
             ],
-            domProps: { value: _vm.logContent },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.logContent = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("button", { attrs: { type: "submit" } }, [_vm._v("ログ更新")])
-        ]
+            1
+          )
+        ],
+        1
       )
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -9940,7 +9960,7 @@ var render = function() {
           on: { favoriteLog: _vm.favoriteLog, unFavoriteLog: _vm.unFavoriteLog }
         }),
         _vm._v(" "),
-        _vm.user.id === _vm.loginUserId
+        _vm.log.user_id === _vm.loginUserId
           ? _c(
               "div",
               [

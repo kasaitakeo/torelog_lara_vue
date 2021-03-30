@@ -25,6 +25,10 @@ class User extends Authenticatable
         'password'
     ];
 
+    protected $visible = [
+        'id', 'screen_name', 'name', 'profile_image', 'logs', 'events'
+    ];
+
     // ユーザーは複数人のユーザをフォローするため多対多のリレーションになる。→中間テーブルとしてfollowersテーブルにユーザ間の関係をまとめる
 
     // 第二引数： 結合テーブル名 第三引数： リレーションを定義している（自身の）モデルの外部キー名 第四引数： 結合するモデル（相手）の外部キー名

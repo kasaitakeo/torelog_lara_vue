@@ -74,9 +74,9 @@ export default {
     },
   },  
   methods: {
-    activate (id) {
-      this.active = id
-    },
+    // activate (id) { 
+    //   this.active = id
+    // },
     async deleteEventLog ({ id }) {
       
       const response = await axios.delete(`/api/event_logs/${id}`)

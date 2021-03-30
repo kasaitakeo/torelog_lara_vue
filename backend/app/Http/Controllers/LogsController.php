@@ -15,56 +15,72 @@ class LogsController extends Controller
 {
     /**
      * ログ一覧取得
+     * @param Log $log
+     * @return \Illuminate\Http\Response
      */
     public function index(Log $log)
     {
-        $logs = $log->with(['user', 'favorites', 'comments' => function($query){
+        // logListで使用するlogsオブジェクトに入るデータの取得
+        $logs_data = $log->with(['user', 'favorites', 'comments' => function($query){
+            // コメントしたユーザー情報
             $query->with('user');
         }, 'event_logs' => function($query){
+            // ログに追加されている種目の情報
             $query->with('event');
         }])->orderBy(Log::CREATED_AT, 'desc')
-        ->paginate();
+        ->paginate(15);
 
-        return $logs;
+        return response($logs_data, 200);
     }
 
     /**
-     * ログ作成
-     * @param Request
-     * @param Models\Log
-     * @return Response
+     * ログ作成（空のログとして保存）
+     * @param Log $log
+     * @return \Illuminate\Http\Response
      */
     public function store(Log $log)
     {
+        // ログインしているユーザーのログとして保存（ログインしなければ保存できない）
         $user = auth()->user();
-        
+
         $log->user_id = $user->id;
 
         $log->save();
 
         // CreateLog.vueでlogIdを保持するため
         return response($log->id, 201);
-        // return $log->id;
     }
 
     /**
      * ログ詳細取得
-     * 
-     * 
+     * @param Models\Log
+     * @return Response
      */
-    public function show($log_id)
+    public function show(Log $log)
     {
-        $log = Log::with(['user', 'favorites', 'comments' => function($query){
+        $log_data = $log->with(['user', 'favorites', 'comments' => function($query){
             $query->with('user');
         }, 'event_logs' => function($query){
             $query->with('event');
         }])
-        // findだと上手くデータ取得できない
-        // ->find((int)$log_id)->first();
-        ->where('id', $log_id)->first();
+        // findだと上手くデータ取得できない？
+        ->where('id', $log->id)->first();
 
-        return $log;
+        return response($log_data, 200);
     }
+    // public function show($id)
+    // {
+    //     $log = Log::with(['user', 'favorites', 'comments' => function($query){
+    //         $query->with('user');
+    //     }, 'event_logs' => function($query){
+    //         $query->with('event');
+    //     }])
+    //     // findだと上手くデータ取得できない
+    //     // ->find((int)$log_id)->first();
+    //     ->where('id', $id)->first();
+
+    //     return $log;
+    // }
 
     /**
      * ログアップデート
@@ -79,22 +95,17 @@ class LogsController extends Controller
 
         // Validatorファザードでバリデーションを実行するにはmakeメソッド(新しいコレクションを作成)を使用してインスタンスを作成
         // 引数はValidator::make('値の配列', '検証ルールの配列')で記述
-        // $validator = Validator::make($text, [
-        //     'text' => ['required', 'string', 'max:300']
-        // ]);
+        // textは必須ではないので'required'は検証ルールに入れない
+        $validator = Validator::make($text, [
+            'text' => ['required', 'string', 'max:300']
+        ]);
 
         // validateメソッドは、POSTされた値のバリデーションに成功するとコードは通常通り続けて実行され、バリデーションに失敗すると自動的に例外が投げられユーザーへ適切なエラーメッセージが返されるメソッド
-        // $validator->validate();
+        $validator->validate();
         
-        // logモデルのlogStore()メソッドでrequestされたdataを保存
-        // $log->logStore($user->id, $data);
-        // $log->text = $text;
-
         $log->save();
 
         // レスポンスコード201(created)を返却
-        // $log->update($request->all());
-
         return response('', 201);
     }
 

@@ -27,9 +27,6 @@ Route::get('/user', function () {
     return Auth::user();
 })->name('user');
 
-// 'prefix' => 'contactでフォルダを指定することができ、頭につくcontact省略できる。'middleware' => 'auth'で認証機能 コールバックファンクションに通常のルーティングかく
-// Route::group(['prefix' => 'contact', 'middleware' => 'auth'], function () {} )
-
 Route::group(['prefix' => 'logs'], function () {
     // ログ一覧
     Route::get('', 'LogsController@index')->name('log.index');

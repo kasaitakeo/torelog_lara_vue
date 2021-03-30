@@ -1,49 +1,61 @@
 <template>
   <div>
-    <section>
-      <ul>
-        <li v-for="eventPart in eventParts" :key="eventPart.id">
-          <a href="#" @click="activate(eventPart.id)"
-          :class="{active: active === eventPart.id }">{{ eventPart.name }}</a>
-        </li>
+    <div class="errors" v-if="errors">
+      <ul v-if="errors.photo">
+        <li v-for="msg in errors.photo" :key="msg">{{ msg }}</li>
       </ul>
-    </section>
-    <div v-for="event in events" :key="event.id">
-      <div v-for="part in eventParts" :key="part.id">
-        <div v-if="event.part === part.name">
-          <div class="tab__content" v-show="active === part.id">
-            <Event
-              class="grid__item"
-              :event="event"
-              @post="postEventLog"
-            />
-          </div>
-        </div>
-      </div>
     </div>
-    <EventLog
-      v-for="event_log in event_logs"
-      :key="event_log.id"
-      :item="event_log"
-      :ableDelete="true"
-      @deleteEventLog="deleteEventLog"
-    />
-    <form @submit.prevent="updateLog">
-      <textarea v-model="logContent"></textarea>
-      <button type="submit">ログ更新</button>
-    </form>
+    <v-row>
+      <v-col>
+        <v-card
+          class="mx-auto mb-3"
+          max-width="800"
+        >
+          <v-row>
+            <v-col>
+              <UserEvent
+              :events="events"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <EventLog
+                v-for="eventLog in eventLogs"
+                :key="eventLog.id"
+                :item="eventLog"
+                :ableDelete="true"
+                @deleteEventLog="deleteEventLog"
+              />
+            </v-col>
+          </v-row>
+          <v-card
+            class="mx-auto"
+            max-width="800"
+          >
+          <form @submit.prevent="updateLog">
+            <v-textarea v-model="logContent"></v-textarea>
+            <v-btn type="submit">ログ作成</v-btn>
+          </form>
+          </v-card>
+
+        </v-card>
+      </v-col>
+    </v-row>
+
   </div>
 </template>
 
 <script>
 import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
 import { OK } from '../util'
-import Event from '../components/Event.vue'
+import UserEvent from '../components/UserEvent.vue'
 import EventLog from '../components/EventLog.vue'
+import eventBus from '../eventBus.js'
 
 export default {
   components: {
-    Event,
+    UserEvent,
     EventLog,
   },
   props: {
@@ -51,24 +63,11 @@ export default {
   },
   data () {
     return {
-      log: '',
-      editLogId: '',
-      events: {},
-      event_logs: {},
+      events: [],
+      eventLogs: {},
       logContent: '',
-      active: 0,
-      eventParts: [
-        {id: 0, name:'胸'},
-        {id: 1, name:'背中'},
-        {id: 2, name:'肩'},
-        {id: 3, name:'脚'},
-        {id: 4, name:'上腕二頭筋'},
-        {id: 5, name:'上腕三頭筋'},
-        {id: 6, name:'腹筋'},
-        {id: 7, name:'その他'},
-      ],
-      msg: '',
       errors: null,
+      setEventLogs: false
     }
   },
   computed: {
@@ -77,39 +76,21 @@ export default {
     },
   },  
   methods: {
-    async getLog() {
-      // console.log(this.logId)
-      const response = await axios.get('/api/logs/' + this.logId)
-
-      console.log(response)
+    activate (id) {
+      this.active = id
+    },
+    async getLog () {
+      const response = await axios.get(`/api/logs/${this.logId}`)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
 
-      this.log = response.data
-      this.event_logs = response.data.event_logs
+      console.log(response.data)
+
       this.logContent = response.data.text
-    },
-    activate (id) {
-      this.active = id
-    },
-    async postEventLog ({ id, weight, rep, set }) {
-
-      const response = await axios.post('/api/event_logs', {
-        log_id: this.logId,
-        event_id: id,
-        weight: weight,
-        rep: rep,
-        set: set
-      })
-
-      console.log(response)
-
-      this.getEventLogs()
-
-      this.msg = 'eventlogが追加されました'
+      this.eventLogs = response.data.event_logs
     },
     async deleteEventLog ({ id }) {
       
@@ -141,7 +122,21 @@ export default {
 
       console.log(response.data)
 
-      this.msg = 'logが投稿されました'
+      if (response.status === UNPROCESSABLE_ENTITY) {
+        this.errors = response.data.errors
+        return false
+      }
+
+      if (response.status !== CREATED) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      // メッセージ登録
+      this.$store.commit('message/setContent', {
+        content: 'トレログが保存されました！',
+        timeout: 6000
+      })
 
       this.$router.push('/')
     },
@@ -177,7 +172,11 @@ export default {
         return false
       }
 
-      this.event_logs = response.data
+      if (!this.setEventLogs) {
+        this.setEventLogs = true
+      }
+
+      this.eventLogs = response.data
     },
     confirmSave (event) {
       event.returnValue = "編集中のものは保存されませんが、よろしいですか？"
@@ -190,25 +189,37 @@ export default {
     }
   },
   mounted () {
-    if (!this.$store.getters['auth/check']) {
+    if (this.$store.getters['auth/check']) {
+      this.getLog()
+  
+      this.getEvents()
+
+    } else {
       this.$router.push('/')
     }
 
-    this.getLog()
-
-    this.getEvents()
-  },
-  destroyed () {
-    window.removeEventListener("beforeunload", this.confirmSave);
-  },
-  beforeRouteLeave (to, from, next) {
-    if (typeof this.event_logs === 'undefined') {
-      this.deleteLog()
-
-      next()
-    } else {
-      next()
-    }
+      eventBus.$on('eventPost', async({ id, weight, rep, set }) => {
+        const response = await axios.post('/api/event_logs', {
+          log_id: this.logId,
+          event_id: id,
+          weight: weight,
+          rep: rep,
+          set: set
+        })
+        console.log(response)
+  
+        if (response.status !== CREATED) {
+          this.$store.commit('error/setCode', response.status)
+          return false
+        }
+  
+        this.$store.commit('message/setContent', {
+          content: '実施種目が追加されました！',
+          timeout: 3000
+        })
+   
+        this.getEventLogs()
+      })
   },
 }
 </script>
