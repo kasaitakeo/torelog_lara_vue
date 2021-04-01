@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="errors" v-if="errors">
-      <ul v-if="errors.photo">
-        <li v-for="msg in errors.photo" :key="msg">{{ msg }}</li>
+      <ul>
+        <li v-for="msg in errors.text" :key="msg">{{ msg }}</li>
       </ul>
     </div>
     <v-row>
@@ -13,6 +13,7 @@
         >
           <v-row>
             <v-col>
+              <!-- ログインユーザーの種目コンポーネント -->
               <UserEvent
               :events="events"
               />
@@ -20,6 +21,7 @@
           </v-row>
           <v-row>
             <v-col>
+              <!-- 登録した種目ログ -->
               <EventLog
                 v-for="eventLog in eventLogs"
                 :key="eventLog.id"
@@ -33,10 +35,11 @@
             class="mx-auto"
             max-width="800"
           >
-          <form @submit.prevent="updateLog">
             <v-textarea v-model="logContent"></v-textarea>
-            <v-btn type="submit">ログ作成</v-btn>
-          </form>
+            <div class="d-flex justify-center mb-6">
+              <v-btn @submit.prevent="deleteLog">ログ削除</v-btn>
+              <v-btn @submit.prevent="updateLog">編集終了</v-btn>
+            </div>
           </v-card>
 
         </v-card>
@@ -76,9 +79,7 @@ export default {
     },
   },  
   methods: {
-    activate (id) {
-      this.active = id
-    },
+    // 編集するログの情報を取得
     async getLog () {
       const response = await axios.get(`/api/logs/${this.logId}`)
 
@@ -91,7 +92,9 @@ export default {
 
       this.logContent = response.data.text
       this.eventLogs = response.data.event_logs
+      this.setEventLogs = true
     },
+    // 種目ログの削除
     async deleteEventLog ({ id }) {
       
       const response = await axios.delete(`/api/event_logs/${id}`)
@@ -103,6 +106,7 @@ export default {
 
       this.getEventLogs()
     },
+    // 種目ログを全て削除
     async deleteAllEventLog () {
       
       const response = await axios.delete(`/api/${this.logId}/event_logs`)
@@ -112,8 +116,12 @@ export default {
         return false
       }
 
+      // 再度、空の状態（全て削除した為）の種目ログ取得
       this.getEventLogs()
+
+      this.setEventLogs = false
     },
+    // ログのテキスト入力後のログ更新処理
     async updateLog () {
       
       const response = await axios.put(`/api/logs/${this.logId}`, {
@@ -140,6 +148,7 @@ export default {
 
       this.$router.push('/')
     },
+    // ログ削除
     async deleteLog () {
       const response = await axios.delete(`/api/logs/${this.logId}`)
 
@@ -150,6 +159,7 @@ export default {
         return false  
       }
     },
+    // ユーザーが登録している種目を全て取得
     async getEvents () {
       const response = await axios.get('/api/events')
 
@@ -162,6 +172,7 @@ export default {
 
       this.events = response.data
     },
+    // 現在作成しているログに登録している全ての種目ログの取得
     async getEventLogs () {
       const response = await axios.get(`/api/${this.logId}/event_logs`)
 
@@ -172,21 +183,13 @@ export default {
         return false
       }
 
+      // 種目ログが登録されているかの真偽値がfalseの場合trueにする
       if (!this.setEventLogs) {
         this.setEventLogs = true
       }
 
       this.eventLogs = response.data
     },
-    confirmSave (event) {
-      event.returnValue = "編集中のものは保存されませんが、よろしいですか？"
-
-      if (event.returnValue) {
-        this.deleteLog()
-
-        this.deleteAllEventLog()
-      } 
-    }
   },
   mounted () {
     if (this.$store.getters['auth/check']) {
@@ -194,10 +197,7 @@ export default {
   
       this.getEvents()
 
-    } else {
-      this.$router.push('/')
-    }
-
+      // 孫コンポーネントのEvent.vueのeventPostが行われた際の新規種目ログ登録処理
       eventBus.$on('eventPost', async({ id, weight, rep, set }) => {
         const response = await axios.post('/api/event_logs', {
           log_id: this.logId,
@@ -220,6 +220,10 @@ export default {
    
         this.getEventLogs()
       })
+    } else {
+      this.$router.push('/')
+    }
+
   },
 }
 </script>

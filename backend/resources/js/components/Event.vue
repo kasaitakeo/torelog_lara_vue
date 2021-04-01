@@ -1,6 +1,5 @@
 <template>
   <div>
-    
     <v-dialog
       v-model="dialog"
     >
@@ -19,7 +18,8 @@
         <v-card-title class="headline grey lighten-2">
           {{ event.event_name }}
         </v-card-title>
-        <div v-if="this.$route.path === '/logs/create'">
+        <!-- ログ作成及び更新でない場合は種目名と種目解説のみ表示 -->
+        <div v-if="this.$route.name === 'log.create' || this.$route.name === 'log.edit'">
           <form @submit.prevent="eventPost">
             <v-card-text>
               <v-container>

@@ -96,8 +96,8 @@ class LogsController extends Controller
         // Validatorファザードでバリデーションを実行するにはmakeメソッド(新しいコレクションを作成)を使用してインスタンスを作成
         // 引数はValidator::make('値の配列', '検証ルールの配列')で記述
         // textは必須ではないので'required'は検証ルールに入れない
-        $validator = Validator::make($text, [
-            'text' => ['required', 'string', 'max:300']
+        $validator = Validator::make($request->all(), [
+            'text' => ['required', 'string', 'max:140']
         ]);
 
         // validateメソッドは、POSTされた値のバリデーションに成功するとコードは通常通り続けて実行され、バリデーションに失敗すると自動的に例外が投げられユーザーへ適切なエラーメッセージが返されるメソッド

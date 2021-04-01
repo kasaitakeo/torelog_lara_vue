@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="errors" v-if="errors">
-      <ul v-if="errors.photo">
-        <li v-for="msg in errors.photo" :key="msg">{{ msg }}</li>
+      <ul>
+        <li v-for="msg in errors.text" :key="msg">{{ msg }}</li>
       </ul>
     </div>
     <v-row>
@@ -13,6 +13,7 @@
         >
           <v-row>
             <v-col>
+              <!-- ログインユーザーの種目コンポーネント -->
               <UserEvent
               :events="events"
               />
@@ -20,6 +21,7 @@
           </v-row>
           <v-row>
             <v-col>
+              <!-- 登録した種目ログ -->
               <EventLog
                 v-for="event_log in event_logs"
                 :key="event_log.id"
@@ -33,10 +35,10 @@
             class="mx-auto"
             max-width="800"
           >
-          <form @submit.prevent="updateLog">
             <v-textarea v-model="logContent"></v-textarea>
-            <v-btn type="submit">ログ作成</v-btn>
-          </form>
+            <div class="d-flex justify-center mb-6">
+              <v-btn @submit.prevent="updateLog">編集終了</v-btn>
+            </div>
           </v-card>
 
         </v-card>
@@ -61,7 +63,7 @@ export default {
   data () {
     return {
       logId: '',
-      events: {},
+      events: [],
       event_logs: {},
       logContent: '',
       errors: null,
@@ -74,45 +76,49 @@ export default {
     },
   },  
   methods: {
-    // activate (id) { 
-    //   this.active = id
-    // },
+    // 種目ログの削除
     async deleteEventLog ({ id }) {
-      
       const response = await axios.delete(`/api/event_logs/${id}`)
-      console.log(response)
+
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
 
+      // 再度、削除後の種目ログ取得
       this.getEventLogs()
     },
+    // 種目ログを全て削除
     async deleteAllEventLog () {
-      
       const response = await axios.delete(`/api/${this.logId}/event_logs`)
-      console.log(response)
+      
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
 
+      // 再度、空の状態（全て削除した為）の種目ログ取得
       this.getEventLogs()
+
+      this.setEventLogs = false
     },
+    // ログの新規登録（新規ログのid取得）
     async postLog () {
       const response = await axios.post('/api/logs')
+      
+      if (response.status !== CREATED) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
 
-      console.log(response)
-
+      // response.dataに新規ログのidのみが返ってくる
       this.logId = response.data
     },
+    // ログのテキスト入力後のログ更新処理
     async updateLog () {
-      
       const response = await axios.put(`/api/logs/${this.logId}`, {
         text: this.logContent
       })
-
-      console.log(response.data)
 
       if (response.status === UNPROCESSABLE_ENTITY) {
         this.errors = response.data.errors
@@ -132,20 +138,18 @@ export default {
 
       this.$router.push('/')
     },
+    // ページ遷移時にログ削除する場合の処理
     async deleteLog () {
       const response = await axios.delete(`/api/logs/${this.logId}`)
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false  
       }
     },
+    // ユーザーが登録している種目を全て取得
     async getEvents () {
       const response = await axios.get('/api/events')
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
@@ -154,16 +158,16 @@ export default {
 
       this.events = response.data
     },
+    // 現在作成しているログに登録している全ての種目ログの取得
     async getEventLogs () {
       const response = await axios.get(`/api/${this.logId}/event_logs`)
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
 
+      // 種目ログが登録されているかの真偽値がfalseの場合trueにする
       if (!this.setEventLogs) {
         this.setEventLogs = true
       }
@@ -181,15 +185,13 @@ export default {
     }
   },
   mounted () {
+    // ログインされている場合のみ編集できる設定
     if (this.$store.getters['auth/check']) {
       this.postLog()
   
       this.getEvents()
 
-    } else {
-      this.$router.push('/')
-    }
-
+      // 孫コンポーネントのEvent.vueのeventPostが行われた際の新規種目ログ登録処理
       eventBus.$on('eventPost', async({ id, weight, rep, set }) => {
         const response = await axios.post('/api/event_logs', {
           log_id: this.logId,
@@ -198,7 +200,6 @@ export default {
           rep: rep,
           set: set
         })
-        console.log(response)
   
         if (response.status !== CREATED) {
           this.$store.commit('error/setCode', response.status)
@@ -210,46 +211,65 @@ export default {
           timeout: 3000
         })
    
+        // 新規種目ログが登録された状態で現在編集中の種目ログの状態を更新
         this.getEventLogs()
       })
+    } else {
+      // ログインされていない場合ホーム画面にページ遷移
+      this.$router.push('/')
+    }
+
   },
   created () {
+    // ページロード前の処理
     window.addEventListener("beforeunload", this.confirmSave)
   },
   destroyed () {
+    // ページ削除前の処理
     window.removeEventListener("beforeunload", this.confirmSave);
   },
+  // ページ遷移時の挙動
   beforeRouteLeave (to, from, next) {
+    // 種目追加画面へ遷移の場合
     if (to.name === 'event.create') {
       next()
     } else {
+      // 種目ログ設定済かつログのテキスト未入力の場合
       if (this.setEventLogs && this.logContent === '') {
         let answer = window.confirm("コメント未入力のままトレログを保存してもよろしいでしょうか")
         if (answer) {
           this.deleteLog()
+
           this.$store.commit('message/setContent', {
             content: 'トレログが保存されました。',
             timeout: 6000
           })
+
           next()
         } else {
           this.deleteLog()
+
           this.deleteAllEventLog()
+
           next()
         }
-        
-      } else {
+      // 種目ログ未設定の場合
+      } else if (!this.setEventLogs) {
         let answer = window.confirm("種目が未入力のままトレログの編集を終了してしまうとログは保存されません。このまま編集を終了してもよろしいでしょうか")
         if (answer) {
           this.deleteLog()
+
           this.$store.commit('message/setContent', {
             content: 'トレログ保存できませんでした。',
             timeout: 6000
           })
+
           next()
         } else {
           next(false)
         }
+      } else {
+        next()
       }
     }
   },  

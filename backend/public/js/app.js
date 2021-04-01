@@ -3719,6 +3719,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 
@@ -3732,7 +3734,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       logId: '',
-      events: {},
+      events: [],
       event_logs: {},
       logContent: '',
       errors: null,
@@ -3745,9 +3747,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
-    // activate (id) { 
-    //   this.active = id
-    // },
+    // 種目ログの削除
     deleteEventLog: function deleteEventLog(_ref) {
       var _this = this;
 
@@ -3763,10 +3763,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 response = _context.sent;
-                console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context.next = 8;
+                  _context.next = 7;
                   break;
                 }
 
@@ -3774,10 +3773,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context.abrupt("return", false);
 
-              case 8:
+              case 7:
+                // 再度、削除後の種目ログ取得
                 _this.getEventLogs();
 
-              case 9:
+              case 8:
               case "end":
                 return _context.stop();
             }
@@ -3785,6 +3785,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
+    // 種目ログを全て削除
     deleteAllEventLog: function deleteAllEventLog() {
       var _this2 = this;
 
@@ -3799,10 +3800,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context2.sent;
-                console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context2.next = 7;
+                  _context2.next = 6;
                   break;
                 }
 
@@ -3810,8 +3810,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context2.abrupt("return", false);
 
-              case 7:
+              case 6:
+                // 再度、空の状態（全て削除した為）の種目ログ取得
                 _this2.getEventLogs();
+
+                _this2.setEventLogs = false;
 
               case 8:
               case "end":
@@ -3821,6 +3824,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
+    // ログの新規登録（新規ログのid取得）
     postLog: function postLog() {
       var _this3 = this;
 
@@ -3835,10 +3839,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context3.sent;
-                console.log(response);
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
+                  _context3.next = 6;
+                  break;
+                }
+
+                _this3.$store.commit('error/setCode', response.status);
+
+                return _context3.abrupt("return", false);
+
+              case 6:
+                // response.dataに新規ログのidのみが返ってくる
                 _this3.logId = response.data;
 
-              case 5:
+              case 7:
               case "end":
                 return _context3.stop();
             }
@@ -3846,6 +3861,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
+    // ログのテキスト入力後のログ更新処理
     updateLog: function updateLog() {
       var _this4 = this;
 
@@ -3862,19 +3878,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context4.sent;
-                console.log(response.data);
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
-                  _context4.next = 7;
+                  _context4.next = 6;
                   break;
                 }
 
                 _this4.errors = response.data.errors;
                 return _context4.abrupt("return", false);
 
-              case 7:
+              case 6:
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context4.next = 10;
+                  _context4.next = 9;
                   break;
                 }
 
@@ -3882,7 +3897,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context4.abrupt("return", false);
 
-              case 10:
+              case 9:
                 // メッセージ登録
                 _this4.$store.commit('message/setContent', {
                   content: 'トレログが保存されました！',
@@ -3891,7 +3906,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this4.$router.push('/');
 
-              case 12:
+              case 11:
               case "end":
                 return _context4.stop();
             }
@@ -3899,6 +3914,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     },
+    // ページ遷移時にログ削除する場合の処理
     deleteLog: function deleteLog() {
       var _this5 = this;
 
@@ -3913,10 +3929,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context5.sent;
-                console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context5.next = 7;
+                  _context5.next = 6;
                   break;
                 }
 
@@ -3924,7 +3939,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context5.abrupt("return", false);
 
-              case 7:
+              case 6:
               case "end":
                 return _context5.stop();
             }
@@ -3932,6 +3947,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee5);
       }))();
     },
+    // ユーザーが登録している種目を全て取得
     getEvents: function getEvents() {
       var _this6 = this;
 
@@ -3946,10 +3962,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context6.sent;
-                console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context6.next = 7;
+                  _context6.next = 6;
                   break;
                 }
 
@@ -3957,10 +3972,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context6.abrupt("return", false);
 
-              case 7:
+              case 6:
                 _this6.events = response.data;
 
-              case 8:
+              case 7:
               case "end":
                 return _context6.stop();
             }
@@ -3968,6 +3983,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee6);
       }))();
     },
+    // 現在作成しているログに登録している全ての種目ログの取得
     getEventLogs: function getEventLogs() {
       var _this7 = this;
 
@@ -3982,10 +3998,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 response = _context7.sent;
-                console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context7.next = 7;
+                  _context7.next = 6;
                   break;
                 }
 
@@ -3993,14 +4008,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context7.abrupt("return", false);
 
-              case 7:
+              case 6:
+                // 種目ログが登録されているかの真偽値がfalseの場合trueにする
                 if (!_this7.setEventLogs) {
                   _this7.setEventLogs = true;
                 }
 
                 _this7.event_logs = response.data;
 
-              case 9:
+              case 8:
               case "end":
                 return _context7.stop();
             }
@@ -4020,74 +4036,81 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   mounted: function mounted() {
     var _this8 = this;
 
+    // ログインされている場合のみ編集できる設定
     if (this.$store.getters['auth/check']) {
       this.postLog();
-      this.getEvents();
+      this.getEvents(); // 孫コンポーネントのEvent.vueのeventPostが行われた際の新規種目ログ登録処理
+
+      _eventBus_js__WEBPACK_IMPORTED_MODULE_4__["default"].$on('eventPost', /*#__PURE__*/function () {
+        var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(_ref2) {
+          var id, weight, rep, set, response;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
+            while (1) {
+              switch (_context8.prev = _context8.next) {
+                case 0:
+                  id = _ref2.id, weight = _ref2.weight, rep = _ref2.rep, set = _ref2.set;
+                  _context8.next = 3;
+                  return axios.post('/api/event_logs', {
+                    log_id: _this8.logId,
+                    event_id: id,
+                    weight: weight,
+                    rep: rep,
+                    set: set
+                  });
+
+                case 3:
+                  response = _context8.sent;
+
+                  if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
+                    _context8.next = 7;
+                    break;
+                  }
+
+                  _this8.$store.commit('error/setCode', response.status);
+
+                  return _context8.abrupt("return", false);
+
+                case 7:
+                  _this8.$store.commit('message/setContent', {
+                    content: '実施種目が追加されました！',
+                    timeout: 3000
+                  }); // 新規種目ログが登録された状態で現在編集中の種目ログの状態を更新
+
+
+                  _this8.getEventLogs();
+
+                case 9:
+                case "end":
+                  return _context8.stop();
+              }
+            }
+          }, _callee8);
+        }));
+
+        return function (_x) {
+          return _ref3.apply(this, arguments);
+        };
+      }());
     } else {
+      // ログインされていない場合ホーム画面にページ遷移
       this.$router.push('/');
     }
-
-    _eventBus_js__WEBPACK_IMPORTED_MODULE_4__["default"].$on('eventPost', /*#__PURE__*/function () {
-      var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(_ref2) {
-        var id, weight, rep, set, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
-          while (1) {
-            switch (_context8.prev = _context8.next) {
-              case 0:
-                id = _ref2.id, weight = _ref2.weight, rep = _ref2.rep, set = _ref2.set;
-                _context8.next = 3;
-                return axios.post('/api/event_logs', {
-                  log_id: _this8.logId,
-                  event_id: id,
-                  weight: weight,
-                  rep: rep,
-                  set: set
-                });
-
-              case 3:
-                response = _context8.sent;
-                console.log(response);
-
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context8.next = 8;
-                  break;
-                }
-
-                _this8.$store.commit('error/setCode', response.status);
-
-                return _context8.abrupt("return", false);
-
-              case 8:
-                _this8.$store.commit('message/setContent', {
-                  content: '実施種目が追加されました！',
-                  timeout: 3000
-                });
-
-                _this8.getEventLogs();
-
-              case 10:
-              case "end":
-                return _context8.stop();
-            }
-          }
-        }, _callee8);
-      }));
-
-      return function (_x) {
-        return _ref3.apply(this, arguments);
-      };
-    }());
   },
   created: function created() {
+    // ページロード前の処理
     window.addEventListener("beforeunload", this.confirmSave);
   },
   destroyed: function destroyed() {
+    // ページ削除前の処理
     window.removeEventListener("beforeunload", this.confirmSave);
   },
+  // ページ遷移時の挙動
   beforeRouteLeave: function beforeRouteLeave(to, from, next) {
+    // 種目追加画面へ遷移の場合
     if (to.name === 'event.create') {
       next();
     } else {
+      // 種目ログ設定済かつログのテキスト未入力の場合
       if (this.setEventLogs && this.logContent === '') {
         var answer = window.confirm("コメント未入力のままトレログを保存してもよろしいでしょうか");
 
@@ -4102,8 +4125,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           this.deleteLog();
           this.deleteAllEventLog();
           next();
-        }
-      } else {
+        } // 種目ログ未設定の場合
+
+      } else if (!this.setEventLogs) {
         var _answer = window.confirm("種目が未入力のままトレログの編集を終了してしまうとログは保存されません。このまま編集を終了してもよろしいでしょうか");
 
         if (_answer) {
@@ -4116,6 +4140,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         } else {
           next(false);
         }
+      } else {
+        next();
       }
     }
   }
@@ -4192,6 +4218,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 
@@ -4220,9 +4249,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
-    activate: function activate(id) {
-      this.active = id;
-    },
+    // 編集するログの情報を取得
     getLog: function getLog() {
       var _this = this;
 
@@ -4251,8 +4278,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 console.log(response.data);
                 _this.logContent = response.data.text;
                 _this.eventLogs = response.data.event_logs;
+                _this.setEventLogs = true;
 
-              case 9:
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -4260,6 +4288,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
+    // 種目ログの削除
     deleteEventLog: function deleteEventLog(_ref) {
       var _this2 = this;
 
@@ -4297,6 +4326,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
+    // 種目ログを全て削除
     deleteAllEventLog: function deleteAllEventLog() {
       var _this3 = this;
 
@@ -4323,9 +4353,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context3.abrupt("return", false);
 
               case 7:
+                // 再度、空の状態（全て削除した為）の種目ログ取得
                 _this3.getEventLogs();
 
-              case 8:
+                _this3.setEventLogs = false;
+
+              case 9:
               case "end":
                 return _context3.stop();
             }
@@ -4333,6 +4366,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
+    // ログのテキスト入力後のログ更新処理
     updateLog: function updateLog() {
       var _this4 = this;
 
@@ -4386,6 +4420,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     },
+    // ログ削除
     deleteLog: function deleteLog() {
       var _this5 = this;
 
@@ -4419,6 +4454,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee5);
       }))();
     },
+    // ユーザーが登録している種目を全て取得
     getEvents: function getEvents() {
       var _this6 = this;
 
@@ -4455,6 +4491,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee6);
       }))();
     },
+    // 現在作成しているログに登録している全ての種目ログの取得
     getEventLogs: function getEventLogs() {
       var _this7 = this;
 
@@ -4481,6 +4518,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context7.abrupt("return", false);
 
               case 7:
+                // 種目ログが登録されているかの真偽値がfalseの場合trueにする
                 if (!_this7.setEventLogs) {
                   _this7.setEventLogs = true;
                 }
@@ -4494,14 +4532,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee7);
       }))();
-    },
-    confirmSave: function confirmSave(event) {
-      event.returnValue = "編集中のものは保存されませんが、よろしいですか？";
-
-      if (event.returnValue) {
-        this.deleteLog();
-        this.deleteAllEventLog();
-      }
     }
   },
   mounted: function mounted() {
@@ -4509,61 +4539,61 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
     if (this.$store.getters['auth/check']) {
       this.getLog();
-      this.getEvents();
+      this.getEvents(); // 孫コンポーネントのEvent.vueのeventPostが行われた際の新規種目ログ登録処理
+
+      _eventBus_js__WEBPACK_IMPORTED_MODULE_4__["default"].$on('eventPost', /*#__PURE__*/function () {
+        var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(_ref2) {
+          var id, weight, rep, set, response;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
+            while (1) {
+              switch (_context8.prev = _context8.next) {
+                case 0:
+                  id = _ref2.id, weight = _ref2.weight, rep = _ref2.rep, set = _ref2.set;
+                  _context8.next = 3;
+                  return axios.post('/api/event_logs', {
+                    log_id: _this8.logId,
+                    event_id: id,
+                    weight: weight,
+                    rep: rep,
+                    set: set
+                  });
+
+                case 3:
+                  response = _context8.sent;
+                  console.log(response);
+
+                  if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
+                    _context8.next = 8;
+                    break;
+                  }
+
+                  _this8.$store.commit('error/setCode', response.status);
+
+                  return _context8.abrupt("return", false);
+
+                case 8:
+                  _this8.$store.commit('message/setContent', {
+                    content: '実施種目が追加されました！',
+                    timeout: 3000
+                  });
+
+                  _this8.getEventLogs();
+
+                case 10:
+                case "end":
+                  return _context8.stop();
+              }
+            }
+          }, _callee8);
+        }));
+
+        return function (_x) {
+          return _ref3.apply(this, arguments);
+        };
+      }());
     } else {
       this.$router.push('/');
     }
-
-    _eventBus_js__WEBPACK_IMPORTED_MODULE_4__["default"].$on('eventPost', /*#__PURE__*/function () {
-      var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(_ref2) {
-        var id, weight, rep, set, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
-          while (1) {
-            switch (_context8.prev = _context8.next) {
-              case 0:
-                id = _ref2.id, weight = _ref2.weight, rep = _ref2.rep, set = _ref2.set;
-                _context8.next = 3;
-                return axios.post('/api/event_logs', {
-                  log_id: _this8.logId,
-                  event_id: id,
-                  weight: weight,
-                  rep: rep,
-                  set: set
-                });
-
-              case 3:
-                response = _context8.sent;
-                console.log(response);
-
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context8.next = 8;
-                  break;
-                }
-
-                _this8.$store.commit('error/setCode', response.status);
-
-                return _context8.abrupt("return", false);
-
-              case 8:
-                _this8.$store.commit('message/setContent', {
-                  content: '実施種目が追加されました！',
-                  timeout: 3000
-                });
-
-                _this8.getEventLogs();
-
-              case 10:
-              case "end":
-                return _context8.stop();
-            }
-          }
-        }, _callee8);
-      }));
-
-      return function (_x) {
-        return _ref3.apply(this, arguments);
-      };
-    }());
   }
 });
 
@@ -8113,7 +8143,8 @@ var render = function() {
                 _vm._v("\n        " + _vm._s(_vm.event.event_name) + "\n      ")
               ]),
               _vm._v(" "),
-              this.$route.path === "/logs/create"
+              this.$route.name === "log.create" ||
+              this.$route.name === "log.edit"
                 ? _c("div", [
                     _c(
                       "form",
@@ -9662,15 +9693,13 @@ var render = function() {
     [
       _vm.errors
         ? _c("div", { staticClass: "errors" }, [
-            _vm.errors.photo
-              ? _c(
-                  "ul",
-                  _vm._l(_vm.errors.photo, function(msg) {
-                    return _c("li", { key: msg }, [_vm._v(_vm._s(msg))])
-                  }),
-                  0
-                )
-              : _vm._e()
+            _c(
+              "ul",
+              _vm._l(_vm.errors.text, function(msg) {
+                return _c("li", { key: msg }, [_vm._v(_vm._s(msg))])
+              }),
+              0
+            )
           ])
         : _vm._e(),
       _vm._v(" "),
@@ -9718,34 +9747,37 @@ var render = function() {
                     "v-card",
                     { staticClass: "mx-auto", attrs: { "max-width": "800" } },
                     [
+                      _c("v-textarea", {
+                        model: {
+                          value: _vm.logContent,
+                          callback: function($$v) {
+                            _vm.logContent = $$v
+                          },
+                          expression: "logContent"
+                        }
+                      }),
+                      _vm._v(" "),
                       _c(
-                        "form",
-                        {
-                          on: {
-                            submit: function($event) {
-                              $event.preventDefault()
-                              return _vm.updateLog($event)
-                            }
-                          }
-                        },
+                        "div",
+                        { staticClass: "d-flex justify-center mb-6" },
                         [
-                          _c("v-textarea", {
-                            model: {
-                              value: _vm.logContent,
-                              callback: function($$v) {
-                                _vm.logContent = $$v
-                              },
-                              expression: "logContent"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("v-btn", { attrs: { type: "submit" } }, [
-                            _vm._v("ログ作成")
-                          ])
+                          _c(
+                            "v-btn",
+                            {
+                              on: {
+                                submit: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.updateLog($event)
+                                }
+                              }
+                            },
+                            [_vm._v("編集終了")]
+                          )
                         ],
                         1
                       )
-                    ]
+                    ],
+                    1
                   )
                 ],
                 1
@@ -9787,15 +9819,13 @@ var render = function() {
     [
       _vm.errors
         ? _c("div", { staticClass: "errors" }, [
-            _vm.errors.photo
-              ? _c(
-                  "ul",
-                  _vm._l(_vm.errors.photo, function(msg) {
-                    return _c("li", { key: msg }, [_vm._v(_vm._s(msg))])
-                  }),
-                  0
-                )
-              : _vm._e()
+            _c(
+              "ul",
+              _vm._l(_vm.errors.text, function(msg) {
+                return _c("li", { key: msg }, [_vm._v(_vm._s(msg))])
+              }),
+              0
+            )
           ])
         : _vm._e(),
       _vm._v(" "),
@@ -9843,34 +9873,50 @@ var render = function() {
                     "v-card",
                     { staticClass: "mx-auto", attrs: { "max-width": "800" } },
                     [
+                      _c("v-textarea", {
+                        model: {
+                          value: _vm.logContent,
+                          callback: function($$v) {
+                            _vm.logContent = $$v
+                          },
+                          expression: "logContent"
+                        }
+                      }),
+                      _vm._v(" "),
                       _c(
-                        "form",
-                        {
-                          on: {
-                            submit: function($event) {
-                              $event.preventDefault()
-                              return _vm.updateLog($event)
-                            }
-                          }
-                        },
+                        "div",
+                        { staticClass: "d-flex justify-center mb-6" },
                         [
-                          _c("v-textarea", {
-                            model: {
-                              value: _vm.logContent,
-                              callback: function($$v) {
-                                _vm.logContent = $$v
-                              },
-                              expression: "logContent"
-                            }
-                          }),
+                          _c(
+                            "v-btn",
+                            {
+                              on: {
+                                submit: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.deleteLog($event)
+                                }
+                              }
+                            },
+                            [_vm._v("ログ削除")]
+                          ),
                           _vm._v(" "),
-                          _c("v-btn", { attrs: { type: "submit" } }, [
-                            _vm._v("ログ作成")
-                          ])
+                          _c(
+                            "v-btn",
+                            {
+                              on: {
+                                submit: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.updateLog($event)
+                                }
+                              }
+                            },
+                            [_vm._v("編集終了")]
+                          )
                         ],
                         1
                       )
-                    ]
+                    ],
+                    1
                   )
                 ],
                 1
