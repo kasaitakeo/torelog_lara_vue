@@ -8,7 +8,6 @@
           <span>{{ item.event.part }}:</span>  
           <span>{{ item.event.event_name }}</span>  
         </v-card-title>
-
         <v-card-text class="px-2 pb-1">
           <span>{{ item.weight }}kg</span>
           <span>{{ item.rep }}rep</span>
@@ -22,6 +21,7 @@
 </template>
 
 <script>
+// Log LogCreateが親コンポーネント
 export default {
   props: {
     item: {
@@ -33,13 +33,9 @@ export default {
       required: true
     }
   },
-  data () {
-    return {
-    }
-  },
   methods: {
+    // 種目ログ削除後ページの更新が必要な為、親にemitで投げる
     async deleteEventLog () {
-      console.log(this.item.id)
       this.$emit('deleteEventLog', {
         id: this.item.id,
       })

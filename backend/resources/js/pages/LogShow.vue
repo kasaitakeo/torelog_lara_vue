@@ -1,18 +1,10 @@
 <template>
   <div>
-    <div>
-      <Log
-        :log="log"
-        @favoriteLog="favoriteLog"
-        @unFavoriteLog="unFavoriteLog"
-      />
-      <div v-if="log.user_id === loginUserId">
-        <RouterLink v-bind:to="{name: 'log.edit', params: {logId: log.id}}">
-          <button>edit</button> 
-        </RouterLink>
-        <button class="btn btn-danger" @click="deleteLog(log.id)">delete</button>
-      </div>
-    </div>
+    <Log
+      :log="log"
+      @favoriteLog="favoriteLog"
+      @unFavoriteLog="unFavoriteLog"
+    />
   </div>
 </template>
 <script>
@@ -29,20 +21,16 @@ export default {
   data () {
     return {
       log: {},
-      // user: {},
-      // favorites: {},
-      // comments: {},
     }
   },
   computed: {
+    // いいねする時のログインチェックに使用する
     isLogin () {
       return this.$store.getters['auth/check']
     },
-    loginUserId () {
-      return this.$store.getters['auth/userId']
-    },
   },
   methods: {
+    // propsで受け取ったidのログを取得する
     async getLog () {
       const response = await axios.get(`/api/logs/${this.logId}`)
 
@@ -51,28 +39,20 @@ export default {
         return false
       }
 
-      // console.log(response)
       console.log(response.data)
+
       this.log = response.data
-      // this.user = response.data.user
-      // this.favorites = response.data.favorites
-      // this.comments = response.data.comments
     },
-    async deleteLog (id) {
-      const response = await axios.delete('/api/logs/' + id)
+    // ログのいいねを登録する（いいね登録後ページ更新する時にこのコンポーネントのthis.getLogメソッドを使用する為、子からemitで投げてもらう）
+    async favoriteLog (e) {
+      if (!this.isLogin) {
+        alert('いいね機能を使うにはログインしてください。')
 
-      console.log(response)
-
-      if (response.status !== OK) {
-        this.$store.commit('error/setCode', response.status)
-        return false  
+        return false
       }
 
-      this.getLog()
-    },
-    async favoriteLog (id) {
       const response = await axios.post('/api/favorites', {
-        log_id: id
+        log_id: e.id
       })
 
       console.log(response)
@@ -84,8 +64,15 @@ export default {
 
       this.getLog()
     },
-    async unFavoriteLog (id) {
-      const response = await axios.post('/api/favorites/' + id)
+    // ログのいいねを解除する（いいね解除後ページ更新する時にこのコンポーネントのthis.getLogメソッドを使用する為、子からemitで投げてもらう）
+    async unFavoriteLog (e) {
+      if (!this.isLogin) {
+        alert('いいね機能を使うにはログインしてください。')
+
+        return false
+      }
+
+      const response = await axios.post('/api/favorites/' + e.id)
 
       console.log(response)
 
@@ -96,24 +83,14 @@ export default {
 
       this.getLog()
     },
-    favoriteStatus (favorites) {
-
-      console.log(this.userId)
-
-      for (let favorite in favorites) {
-        if (favorite.user_id !== this.userId) {
-          return false
-        } 
-      }
-      return true
-    }
   },
-  created () {
-    this.getLog()
-  },
-  // mounted () {
+  // ライフサイクルフックの設定ではlog.userのエラーを直せなかった
+  // created () {
   //   this.getLog()
   // },
+  mounted () {
+    this.getLog()
+  },
   // watch: {
   //   $route: {
   //     async handler () {

@@ -1,5 +1,4 @@
 <template>
-  
   <v-bottom-navigation
     app
     v-model="value"
@@ -40,12 +39,26 @@
           case 0: return 'blue-grey'
           case 1: return 'teal'
           case 2: return 'indigo'
-          default: return 'blue-grey'
+          default: return 'yellow'
         }
       },
       userId () {
-      return this.$store.getters['auth/userId']
-    }
+        return this.$store.getters['auth/userId']
+      },
+    },
+    mounted () {
+      switch (this.$route.name) {
+        case 'log.create': 
+          this.value = 0
+          break
+        case '/':
+          this.value = 1
+          break
+        case 'user.show':
+          this.value = 2
+          break
+        default: this.value = 3
+      }
     },
   }
 </script>

@@ -2104,7 +2104,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2124,11 +2123,29 @@ __webpack_require__.r(__webpack_exports__);
           return 'indigo';
 
         default:
-          return 'blue-grey';
+          return 'yellow';
       }
     },
     userId: function userId() {
       return this.$store.getters['auth/userId'];
+    }
+  },
+  mounted: function mounted() {
+    switch (this.$route.name) {
+      case 'log.create':
+        this.value = 0;
+        break;
+
+      case '/':
+        this.value = 1;
+        break;
+
+      case 'user.show':
+        this.value = 2;
+        break;
+
+      default:
+        this.value = 3;
     }
   }
 });
@@ -2545,7 +2562,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
+// Log LogCreateが親コンポーネント
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     item: {
@@ -2557,10 +2574,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       required: true
     }
   },
-  data: function data() {
-    return {};
-  },
   methods: {
+    // 種目ログ削除後ページの更新が必要な為、親にemitで投げる
     deleteEventLog: function deleteEventLog() {
       var _this = this;
 
@@ -2569,13 +2584,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log(_this.item.id);
-
                 _this.$emit('deleteEventLog', {
                   id: _this.item.id
                 });
 
-              case 2:
+              case 1:
               case "end":
                 return _context.stop();
             }
@@ -2835,7 +2848,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_EventLog_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/EventLog.vue */ "./resources/js/components/EventLog.vue");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+/* harmony import */ var _components_EventLog_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/EventLog.vue */ "./resources/js/components/EventLog.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2954,10 +2968,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// LogList LogShow UserShowが親コンポーネント
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    EventLog: _components_EventLog_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    EventLog: _components_EventLog_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   props: {
     log: {
@@ -2971,6 +3001,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   methods: {
+    // 引数idのログにいいね登録
     favoriteLog: function favoriteLog(log_id) {
       var _this = this;
 
@@ -2991,6 +3022,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
+    // 引数idのログにいいね解除
     unFavoriteLog: function unFavoriteLog(log_id) {
       var _this2 = this;
 
@@ -3011,18 +3043,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
+    // ログインユーザーがログをいいねしているかの状態
     favoriteStatus: function favoriteStatus(favorites) {
-      console.log(this.userId);
-
+      // このログの全てのいいねをループ
       for (var favorite in favorites) {
-        if (favorite.user_id !== this.userId) {
+        // いいねしたユーザーidとログインユーザーidが等しくない時false
+        if (favorite.user_id !== this.loginUserId) {
           return false;
         }
       }
 
       return true;
     },
-    deleteLog: function deleteLog(id) {
+    // ログ削除
+    deleteLog: function deleteLog(log_id) {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
@@ -3032,14 +3066,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios["delete"]('/api/logs/' + id);
+                return axios["delete"]('/api/logs/' + log_id);
 
               case 2:
                 response = _context3.sent;
-                console.log(response);
 
-                if (!(response.status !== OK)) {
-                  _context3.next = 7;
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context3.next = 6;
                   break;
                 }
 
@@ -3047,10 +3080,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context3.abrupt("return", false);
 
-              case 7:
-                _this3.getLog();
+              case 6:
+                _this3.$router.push('/');
 
-              case 8:
+              case 7:
               case "end":
                 return _context3.stop();
             }
@@ -3060,7 +3093,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   computed: {
-    userId: function userId() {
+    loginUserId: function loginUserId() {
       return this.$store.getters['auth/userId'];
     }
   }
@@ -3201,6 +3234,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+// LogCreate UserShowが親コンポーネント
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -4632,6 +4671,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4643,7 +4683,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       logs: []
     };
   },
+  computed: {
+    isLogin: function isLogin() {
+      return this.$store.getters['auth/check'];
+    }
+  },
   methods: {
+    // 全てのログタイムライン取得
     getLogs: function getLogs() {
       var _this = this;
 
@@ -4680,6 +4726,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
+    // ログのいいね登録
     favoriteLog: function favoriteLog(_ref) {
       var _this2 = this;
 
@@ -4691,7 +4738,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 id = _ref.id;
 
-                if (_this2.$store.getters['auth/check']) {
+                if (_this2.isLogin) {
                   _context2.next = 4;
                   break;
                 }
@@ -4729,6 +4776,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
+    // ログのいいね解除
     unFavoriteLog: function unFavoriteLog(_ref2) {
       var _this3 = this;
 
@@ -4740,7 +4788,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 id = _ref2.id;
 
-                if (_this3.$store.getters['auth/check']) {
+                if (_this3.isLogin) {
                   _context3.next = 4;
                   break;
                 }
@@ -4812,14 +4860,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4831,21 +4871,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      log: {} // user: {},
-      // favorites: {},
-      // comments: {},
-
+      log: {}
     };
   },
   computed: {
+    // いいねする時のログインチェックに使用する
     isLogin: function isLogin() {
       return this.$store.getters['auth/check'];
-    },
-    loginUserId: function loginUserId() {
-      return this.$store.getters['auth/userId'];
     }
   },
   methods: {
+    // propsで受け取ったidのログを取得する
     getLog: function getLog() {
       var _this = this;
 
@@ -4871,11 +4907,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 6:
-                // console.log(response)
                 console.log(response.data);
-                _this.log = response.data; // this.user = response.data.user
-                // this.favorites = response.data.favorites
-                // this.comments = response.data.comments
+                _this.log = response.data;
 
               case 8:
               case "end":
@@ -4885,7 +4918,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    deleteLog: function deleteLog(id) {
+    // ログのいいねを登録する（いいね登録後ページ更新する時にこのコンポーネントのthis.getLogメソッドを使用する為、子からemitで投げてもらう）
+    favoriteLog: function favoriteLog(e) {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
@@ -4894,15 +4928,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return axios["delete"]('/api/logs/' + id);
+                if (_this2.isLogin) {
+                  _context2.next = 3;
+                  break;
+                }
 
-              case 2:
+                alert('いいね機能を使うにはログインしてください。');
+                return _context2.abrupt("return", false);
+
+              case 3:
+                _context2.next = 5;
+                return axios.post('/api/favorites', {
+                  log_id: e.id
+                });
+
+              case 5:
                 response = _context2.sent;
                 console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context2.next = 7;
+                  _context2.next = 10;
                   break;
                 }
 
@@ -4910,10 +4955,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context2.abrupt("return", false);
 
-              case 7:
+              case 10:
                 _this2.getLog();
 
-              case 8:
+              case 11:
               case "end":
                 return _context2.stop();
             }
@@ -4921,7 +4966,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    favoriteLog: function favoriteLog(id) {
+    // ログのいいねを解除する（いいね解除後ページ更新する時にこのコンポーネントのthis.getLogメソッドを使用する為、子からemitで投げてもらう）
+    unFavoriteLog: function unFavoriteLog(e) {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
@@ -4930,17 +4976,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.next = 2;
-                return axios.post('/api/favorites', {
-                  log_id: id
-                });
+                if (_this3.isLogin) {
+                  _context3.next = 3;
+                  break;
+                }
 
-              case 2:
+                alert('いいね機能を使うにはログインしてください。');
+                return _context3.abrupt("return", false);
+
+              case 3:
+                _context3.next = 5;
+                return axios.post('/api/favorites/' + e.id);
+
+              case 5:
                 response = _context3.sent;
                 console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context3.next = 7;
+                  _context3.next = 10;
                   break;
                 }
 
@@ -4948,71 +5001,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context3.abrupt("return", false);
 
-              case 7:
+              case 10:
                 _this3.getLog();
 
-              case 8:
+              case 11:
               case "end":
                 return _context3.stop();
             }
           }
         }, _callee3);
       }))();
-    },
-    unFavoriteLog: function unFavoriteLog(id) {
-      var _this4 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return axios.post('/api/favorites/' + id);
-
-              case 2:
-                response = _context4.sent;
-                console.log(response);
-
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context4.next = 7;
-                  break;
-                }
-
-                _this4.$store.commit('error/setCode', response.status);
-
-                return _context4.abrupt("return", false);
-
-              case 7:
-                _this4.getLog();
-
-              case 8:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
-    },
-    favoriteStatus: function favoriteStatus(favorites) {
-      console.log(this.userId);
-
-      for (var favorite in favorites) {
-        if (favorite.user_id !== this.userId) {
-          return false;
-        }
-      }
-
-      return true;
     }
   },
-  created: function created() {
-    this.getLog();
-  } // mounted () {
+  // ライフサイクルフックの設定ではlog.userのエラーを直せなかった
+  // created () {
   //   this.getLog()
   // },
-  // watch: {
+  mounted: function mounted() {
+    this.getLog();
+  } // watch: {
   //   $route: {
   //     async handler () {
   //       await this.getLog()
@@ -5828,24 +5835,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
-    unFavoriteLog: function unFavoriteLog(id) {
+    unFavoriteLog: function unFavoriteLog(_ref2) {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        var response;
+        var id, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _context4.next = 2;
+                id = _ref2.id;
+                _context4.next = 3;
                 return axios.post('/api/favorites/' + id);
 
-              case 2:
+              case 3:
                 response = _context4.sent;
                 console.log(response);
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context4.next = 7;
+                  _context4.next = 8;
                   break;
                 }
 
@@ -5853,10 +5861,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 return _context4.abrupt("return", false);
 
-              case 7:
+              case 8:
                 _this4.getUser();
 
-              case 8:
+              case 9:
               case "end":
                 return _context4.stop();
             }
@@ -8093,6 +8101,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "ma-1" },
     [
       _c(
         "v-dialog",
@@ -8945,9 +8954,7 @@ var render = function() {
             { attrs: { cols: "12" } },
             [
               _c("v-card-text", { staticClass: "headline px-2" }, [
-                _vm._v(
-                  "\n              " + _vm._s(_vm.log.text) + "\n            "
-                )
+                _vm._v("\n        " + _vm._s(_vm.log.text) + "\n      ")
               ])
             ],
             1
@@ -8966,7 +8973,7 @@ var render = function() {
               _c("v-card-text", { attrs: { align: "end", justify: "end" } }, [
                 this.$route.name === "log.show"
                   ? _c("div", [
-                      _vm.log.user.id === _vm.userId
+                      _vm.log.user.id === _vm.loginUserId
                         ? _c(
                             "div",
                             [
@@ -8981,12 +8988,20 @@ var render = function() {
                                     }
                                   }
                                 },
-                                [_c("div", [_vm._v("edit")])]
+                                [
+                                  _c(
+                                    "v-btn",
+                                    { attrs: { outlined: "", "x-small": "" } },
+                                    [_vm._v("edit")]
+                                  )
+                                ],
+                                1
                               ),
                               _vm._v(" "),
                               _c(
-                                "div",
+                                "v-btn",
                                 {
+                                  attrs: { outlined: "", "x-small": "" },
                                   on: {
                                     click: function($event) {
                                       return _vm.deleteLog(_vm.log.id)
@@ -9062,9 +9077,9 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        "\n              " +
+                        "\n          " +
                           _vm._s(_vm.log.user.name) +
-                          "\n            "
+                          "\n        "
                       )
                     ]
                   )
@@ -9087,11 +9102,7 @@ var render = function() {
                             }
                           }
                         },
-                        [
-                          _vm._v(
-                            "\n              favorite_border\n            "
-                          )
-                        ]
+                        [_vm._v("\n          favorite_border\n        ")]
                       )
                     : _c(
                         "v-icon",
@@ -9103,7 +9114,7 @@ var render = function() {
                             }
                           }
                         },
-                        [_vm._v("\n              favorite\n            ")]
+                        [_vm._v("\n          favorite\n        ")]
                       ),
                   _vm._v(" "),
                   _c("span", { staticClass: "subheading mr-2" }, [
@@ -9125,9 +9136,7 @@ var render = function() {
                     },
                     [
                       _c("v-icon", { staticClass: "mr-1" }, [
-                        _vm._v(
-                          "\n                mdi-share-variant\n              "
-                        )
+                        _vm._v("\n            mdi-share-variant\n          ")
                       ]),
                       _vm._v(" "),
                       _c("span", { staticClass: "subheading" }, [
@@ -9188,7 +9197,7 @@ var render = function() {
                 "v-list",
                 { attrs: { "two-line": "" } },
                 [
-                  _vm._l(_vm.log.comments.slice(0, 6), function(comment) {
+                  _vm._l(_vm.log.comments.slice(0, 5), function(comment) {
                     return [
                       _c(
                         "v-list-item",
@@ -9414,35 +9423,29 @@ var render = function() {
       ),
       _vm._v(" "),
       _c(
-        "v-row",
-        _vm._l(_vm.events, function(event) {
+        "v-col",
+        { attrs: { cols: "12" } },
+        _vm._l(_vm.eventParts, function(part) {
           return _c(
             "div",
-            { key: event.id },
-            _vm._l(_vm.eventParts, function(part) {
-              return _c("div", { key: part.id }, [
+            { key: part.id },
+            _vm._l(_vm.events, function(event) {
+              return _c("div", { key: event.id }, [
                 event.part === part.name
                   ? _c(
                       "div",
                       [
-                        _c(
-                          "v-col",
-                          { staticClass: "ma-1" },
-                          [
-                            _c("Event", {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.active === part.id,
-                                  expression: "active === part.id"
-                                }
-                              ],
-                              attrs: { event: event, userId: _vm.userId }
-                            })
+                        _c("Event", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.active === part.id,
+                              expression: "active === part.id"
+                            }
                           ],
-                          1
-                        )
+                          attrs: { event: event, userId: _vm.userId }
+                        })
                       ],
                       1
                     )
@@ -9997,49 +10000,16 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      [
-        _c("Log", {
-          attrs: { log: _vm.log },
-          on: { favoriteLog: _vm.favoriteLog, unFavoriteLog: _vm.unFavoriteLog }
-        }),
-        _vm._v(" "),
-        _vm.log.user_id === _vm.loginUserId
-          ? _c(
-              "div",
-              [
-                _c(
-                  "RouterLink",
-                  {
-                    attrs: {
-                      to: { name: "log.edit", params: { logId: _vm.log.id } }
-                    }
-                  },
-                  [_c("button", [_vm._v("edit")])]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger",
-                    on: {
-                      click: function($event) {
-                        return _vm.deleteLog(_vm.log.id)
-                      }
-                    }
-                  },
-                  [_vm._v("delete")]
-                )
-              ],
-              1
-            )
-          : _vm._e()
-      ],
-      1
-    )
-  ])
+  return _c(
+    "div",
+    [
+      _c("Log", {
+        attrs: { log: _vm.log },
+        on: { favoriteLog: _vm.favoriteLog, unFavoriteLog: _vm.unFavoriteLog }
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

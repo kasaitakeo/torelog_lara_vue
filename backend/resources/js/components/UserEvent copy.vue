@@ -16,23 +16,22 @@
         {{ eventPart.name }}
       </v-tab>
     </v-tabs>
-    <v-col cols="12">
-      <!-- 種目部位を全てループ -->
-      <div v-for="part in eventParts" :key="part.id">
-        <!-- 取得したユーザーの種目をループ -->
-        <div v-for="event in events" :key="event.id">
-          <!-- 各種目部位と等しい種目から並べる（縦列で）※ -->
+    <v-row>
+      <!--  -->
+      <div v-for="event in events" :key="event.id">
+        <div v-for="part in eventParts" :key="part.id">
           <div v-if="event.part === part.name">
-              <!-- アクティブなタブと同じ種目を表示 -->
+            <v-col  class="ma-1">
               <Event
                 :event="event"
                 v-show="active === part.id"
                 :userId="userId"
               />
+            </v-col>
           </div>
         </div>
       </div>
-    </v-col>
+    </v-row>
   </v-card>
 </template>
 

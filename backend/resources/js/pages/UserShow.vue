@@ -171,7 +171,7 @@ export default {
 
       this.getUser()
     },
-    async unFavoriteLog (id) {
+    async unFavoriteLog ({ id }) {
       const response = await axios.post('/api/favorites/' + id)
 
       console.log(response)

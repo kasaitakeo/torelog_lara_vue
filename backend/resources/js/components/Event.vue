@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ma-1">
     <v-dialog
       v-model="dialog"
     >

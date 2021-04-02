@@ -26,7 +26,7 @@ class User extends Authenticatable
     ];
 
     protected $visible = [
-        'id', 'screen_name', 'name', 'profile_image', 'logs', 'events'
+        'id', 'screen_name', 'name', 'profile_image', 'email', 'logs', 'events'
     ];
 
     // ユーザーは複数人のユーザをフォローするため多対多のリレーションになる。→中間テーブルとしてfollowersテーブルにユーザ間の関係をまとめる

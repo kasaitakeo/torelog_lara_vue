@@ -1,6 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
+      <!-- ログのタイムライン -->
       <Log
         v-for="log in logs" 
         :key="log.id"
@@ -25,7 +26,13 @@ export default {
       logs: [],
     }
   },
+  computed: {
+    isLogin () {
+      return this.$store.getters['auth/check']
+    },
+  },
   methods: {
+    // 全てのログタイムライン取得
     async getLogs () {
       const response = await axios.get('/api/logs')
 
@@ -37,11 +44,14 @@ export default {
 
       this.logs = response.data.data
     },
+    // ログのいいね登録
     async favoriteLog ({ id }) {
-      if (!this.$store.getters['auth/check']) {
+      if (!this.isLogin) {
         alert('いいね機能を使うにはログインしてください。')
+
         return false
       }
+
       const response = await axios.post('/api/favorites', {
         log_id: id
       })
@@ -55,8 +65,9 @@ export default {
 
       this.getLogs()
     },
+    // ログのいいね解除
     async unFavoriteLog ({ id }) {
-      if (!this.$store.getters['auth/check']) {
+      if (!this.isLogin) {
         alert('いいね機能を使うにはログインしてください。')
         return false
       }
