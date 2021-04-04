@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\EventRequest;
 use App\Models\Event;
 
 class EventsController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * ログインユーザーの種目全て
      *
      * @return \Illuminate\Http\Response
      */
@@ -19,14 +20,19 @@ class EventsController extends Controller
 
         $all_events = $event->where('user_id', $user->id)->get();
 
-        return $all_events;
-    
+        return response($all_events, 200);
     }
+
+    /**
+     * 指定したユーザーIDの種目全て
+     * 
+     * 
+     */
     public function userEvents($user_id)
     {
         $all_events = Event::where('user_id', $user_id)->get();
 
-        return $all_events;
+        return response($all_events, 200);
     }
 
     /**
@@ -35,7 +41,7 @@ class EventsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Event $event)
+    public function store(EventRequest $request, Event $event)
     {
         //
         $user = auth()->user();
@@ -47,16 +53,16 @@ class EventsController extends Controller
 
         $event->save();
 
-        return response($event, 201);
+        return response('', 201);
     }
 
     /**
-     * Display the specified resource.
+     * EventUpdate.vueにて使用する種目データ
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function edit($id)
     {
         $event_data = event::with(['user'])
         ->where('id', $id)->first();
@@ -70,11 +76,8 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EventRequest $request, Event $event)
     {
-        //
-        $event = Event::find($id);
-
         $event->part = $request->input('eventPart');
         $event->event_name = $request->input('eventName');
         $event->event_explanation = $request->input('eventExplanation');
@@ -92,8 +95,7 @@ class EventsController extends Controller
      */
     public function destroy(Event $event)
     {
-        $user = auth()->user();
-        $event->eventDestroy($user->id, $event->id);
+        $event->delete();
 
         return response('', 200);
     }

@@ -56,18 +56,7 @@
           更新
         </v-btn>
       </v-col>
-    </v-row>
-    <!-- <v-file-input
-      type="file"
-      accept="image/*"
-      label="プロフィール画像"
-      @change="onImageUploaded"
-    >
-      <output class="form-output" v-if="image !== null">
-        <img :src="'storage/profile_image/'.image" alt="">
-      </output>
-    </v-file-input> -->
-    
+    </v-row>    
   </v-form>
 </template>
 
@@ -75,9 +64,6 @@
 import { OK } from '../util'
 
 export default {
-  props: {
-    userId: Number
-  },
   data () {
     return {
       user: {},
@@ -99,9 +85,12 @@ export default {
     }
   },
   methods: {
+    // 編集するユーザーの情報を取得
     async getUser () {
-      const response = await axios.get('/api/users/' + this.userId)
+      const response = await axios.get(`/api/users/${this.$route.params.userId}`)
+
       console.log(response.data)
+
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -111,21 +100,22 @@ export default {
       this.name = response.data.user_data.name
       this.email = response.data.user_data.email
       this.userText = response.data.user_data.user_text
-      // if (response.data.user_data.profile_image !== null) {
-      //   this.confirmedImage = response.data.user_data.profile_image
-      // }
     },
+    // 入力情報で更新する
     async update () {
-      
+      // 画像データの送信を行うためFormDataインスタンスを生成し、入力情報を追加後サーバーに送る
       let formData = new FormData()
       formData.append('name', this.name)
       formData.append('screen_name', this.screenName)
       formData.append('email', this.email)
       formData.append('user_text', this.userText)
       formData.append('profile_image', this.image)
+
+      // フォームデータ情報の表示
       console.log(formData.get('name'))
       console.log(...formData.entries())
 
+      // 画像データ送信の際にコンテンツタイプにmultipartを指定する、
       const response = await axios.post('/api/users/', formData, {
         headers: {
           'X-HTTP-Method-Override': 'PUT',
@@ -143,10 +133,6 @@ export default {
       this.$router.push({name: 'user'})
     },
     // フォームでファイルが選択されたら実行される
-    // onUpload (event) {
-    //   this.preview = event.target.files[0]
-    //   this.image = event.target.files[0]
-    // },
     onUpload (event) {
       // event(=e)から画像データを取得する
       this.image = event.target.files[0]

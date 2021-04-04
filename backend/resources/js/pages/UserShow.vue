@@ -2,6 +2,7 @@
   <v-row>
     <v-col cols="12" class="ma-1">
       <v-card elevation="5">
+        <!-- ユーザープロフィール -->
         <v-row class="ma-1">
           <v-col cols="4" >
             <v-avatar
@@ -40,6 +41,7 @@
               
             <div class="d-flex flex-row mt-auto">
               <v-card-actions>
+                <!-- ログインユーザーならプロフィール編集画面へのリンク -->
                 <RouterLink v-if="user.id === loginUserId" class="button button--link" :to="{ name: 'user.edit', params: { userId: user.id }}">
                   <v-btn
                     outlined
@@ -49,24 +51,25 @@
                     プロフィール編集
                   </v-btn>
                 </RouterLink>
+                <!-- ログインユーザーでなければフォローボタン -->
                 <div v-else>
                   <v-btn v-if="following" @click="unFollow(user.id)">フォロー解除</v-btn>
                   <v-btn v-else @click="follow(user.id)" color="success">フォローする</v-btn>
                   <div v-if="followed">フォローされています</div>
-
                 </div>
               </v-card-actions>
-
             </div>
           </v-col>
         </v-row>
         <v-row class="ma-1">
           <v-col cols="12">
+            <!-- 自己紹介文 -->
             <v-card class="px-2" elevation="0" shaped v-if="user.user_text !== null">{{ user.user_text }}</v-card>
             <v-card class="pa-2" elevation="0" shaped v-else>よろしくお願いします！</v-card>
           </v-col>
         </v-row>
         <v-row>
+          <!-- ユーザーの自己紹介文 -->
           <v-col cols="12" class="my-4">
             <UserEvent
               :events="events"
@@ -75,6 +78,7 @@
           </v-col>
         </v-row>
         <v-row>
+          <!-- ユーザーのログ -->
           <v-col cols="12">
             <Log
               v-for="log in user.logs"
@@ -85,12 +89,6 @@
             />
           </v-col>
         </v-row>
-    <!-- <RouterLink :to="{ name: 'user.event', params: { userId: user.id }}">
-      <button>種目リスト</button>
-    </RouterLink> -->
-    <!-- <UserEvent
-    :userId="user.id"
-    /> -->
       </v-card>
     </v-col>
   </v-row>
@@ -107,9 +105,6 @@ export default {
     Log,
     UserEvent,
   },
-  // props: {
-  //   userId: Number
-  // },
   computed: {
     loginUserId () {
       return this.$store.getters['auth/userId']
@@ -128,6 +123,7 @@ export default {
     }
   },
   methods: {
+    // 指定したIDのユーザー情報取得
     async getUser () {
       const response = await axios.get(`/api/users/${this.$route.params.userId}`)
 
@@ -145,6 +141,7 @@ export default {
       this.follower_count = response.data.follower_count
 
     },
+    // 指定したIDのユーザーの種目取得
     async getUserEvents () {
       const response = await axios.get(`/api/${this.$route.params.userId}/events`)
 
@@ -157,6 +154,7 @@ export default {
 
       this.events = response.data
     },
+    // Log子コンポーネントからemitで渡される、いいね登録
     async favoriteLog ({ id }) {
       const response = await axios.post('/api/favorites', {
         log_id: id
@@ -171,7 +169,8 @@ export default {
 
       this.getUser()
     },
-    async unFavoriteLog ({ id }) {
+    // Log子コンポーネントからemitで渡される、いいね解除
+   async unFavoriteLog ({ id }) {
       const response = await axios.post('/api/favorites/' + id)
 
       console.log(response)
@@ -183,6 +182,7 @@ export default {
 
       this.getUser()
     },
+    // 指定したIDのユーザーをフォロー
     async follow (id) {
       const response = await axios.post(`/api/users/follow/${id}`)
 
@@ -195,6 +195,7 @@ export default {
 
       this.getUser()
     },
+    // 指定したIDのユーザーのフォローを解除する
     async unFollow (id) {
       const response = await axios.post(`/api/users/unfollow/${id}`)
 

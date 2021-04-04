@@ -15,12 +15,12 @@
             </v-avatar>
           </v-col>
           <v-col cols="8">
+            <!-- UserShowへのリンク -->
             <RouterLink class="button button--link"  :to="{name: 'user.show', params: {userId: user.id}}">
               {{ user.name }}
             </RouterLink>
           </v-col>
         </v-row>
-
       </v-card>
     </v-col>
   </v-row>
@@ -36,6 +36,7 @@ export default {
     }
   },
   methods: {
+    // 全てのユーザーを取得
     async getUsers () {
       const response = await axios.get(`/api/users`)
 

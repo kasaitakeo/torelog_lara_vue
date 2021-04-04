@@ -238,8 +238,6 @@ export default {
       if (this.setEventLogs && this.logContent === '') {
         let answer = window.confirm("コメント未入力のままトレログを保存してもよろしいでしょうか")
         if (answer) {
-          this.deleteLog()
-
           this.$store.commit('message/setContent', {
             content: 'トレログが保存されました。',
             timeout: 6000

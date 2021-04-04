@@ -112,7 +112,7 @@ export default {
   data () {
     return {
       dialog: false,
-      weightItems: [...Array(251).keys()],
+      weightItems: [...Array(301).keys()],
       repItems: [...Array(31).keys()],
       setItems: [...Array(21).keys()],
       weight: '',

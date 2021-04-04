@@ -21,9 +21,6 @@
 import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
 
 export default {
-  props: {
-    logId: Number
-  },
   data () {
     return {
       commentContent: '',
@@ -32,16 +29,17 @@ export default {
     }
   },
   methods: {
+    // コメント送信
     async postComment () {
 
       const response = await axios.post('/api/comments', {
-        text: this.commentContent,
-        log_id: this.logId
+        log_id: this.$route.params.logId,
+        text: this.commentContent
       })
 
       console.log(response)
 
-      // if (response.status !== UNPROCESSABLE_ENTITY) {
+      // if (response.status === UNPROCESSABLE_ENTITY) {
       //   this.errors = response.data.errors
       //   return false
       // }

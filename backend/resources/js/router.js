@@ -9,7 +9,6 @@ import LogCreate from './pages/LogCreate.vue'
 import LogShow from './pages/LogShow.vue'
 import LogEdit from './pages/LogEdit.vue'
 import EventCreate from './pages/EventCreate.vue'
-import EventShow from './pages/EventShow.vue'
 import EventUpdate from './pages/EventUpdate.vue'
 import UserList from './pages/UserList.vue'
 import UserShow from './pages/UserShow.vue'
@@ -84,12 +83,6 @@ const routes = [
         next('/')
       }
     }
-  },
-  {
-    path: '/events/:eventId',
-    name: 'event.show',
-    component: EventShow,
-    props: true
   },
   {
     path: '/events/:eventId/update',

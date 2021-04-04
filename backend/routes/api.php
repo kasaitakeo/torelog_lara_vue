@@ -68,8 +68,8 @@ Route::group(['prefix' => 'events'], function () {
     // 種目作成
     Route::post('', 'EventsController@store')->name('event.store');
 
-    // 種目詳細
-    Route::get('/{event}', 'EventsController@show')->name('event.show');
+    // 種目情報
+    Route::get('/{event}', 'EventsController@edit')->name('event.edit');
     
     // 種目更新
     Route::put('/{event}', 'EventsController@update')->name('event.update');

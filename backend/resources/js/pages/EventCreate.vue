@@ -2,6 +2,7 @@
   <v-row>
     <v-col cols="12">
       <v-card>
+        <!-- イベント編集コンポーネント -->
         <EventEdit
           @event-edit="eventCreate" 
         />
@@ -19,6 +20,7 @@ export default {
     EventEdit
   },
   methods: {
+    // 子コンポーネントのevent-editイベントから渡される
     async eventCreate (e) {
       const response = await axios.post('/api/events', {
         eventPart: e.eventPart,
@@ -43,11 +45,9 @@ export default {
         timeout: 6000
       })
 
+      // 一つ前のページへ戻る（LogCreateからページ遷移している場合はそのページに戻すため）
       this.$router.go(-1)
     }
-  },
-  mounted () {
-
   },
 }
 </script>

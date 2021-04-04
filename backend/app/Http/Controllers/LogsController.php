@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\LogRequest;
 use App\Models\User;
 use App\Models\Log;
 use App\Models\Follower;
@@ -22,7 +23,7 @@ class LogsController extends Controller
     {
         // logListで使用するlogsオブジェクトに入るデータの取得
         $logs_data = $log->with(['user', 'favorites', 'comments' => function($query){
-            // コメントしたユーザー情報
+            // コメントした全ユーザー情報
             $query->with('user');
         }, 'event_logs' => function($query){
             // ログに追加されている種目の情報
@@ -59,8 +60,10 @@ class LogsController extends Controller
     public function show(Log $log)
     {
         $log_data = $log->with(['user', 'favorites', 'comments' => function($query){
+            // コメントした全ユーザー情報
             $query->with('user');
         }, 'event_logs' => function($query){
+            // 種目ログの詳細データ
             $query->with('event');
         }])
         // findだと上手くデータ取得できない？
@@ -68,40 +71,17 @@ class LogsController extends Controller
 
         return response($log_data, 200);
     }
-    // public function show($id)
-    // {
-    //     $log = Log::with(['user', 'favorites', 'comments' => function($query){
-    //         $query->with('user');
-    //     }, 'event_logs' => function($query){
-    //         $query->with('event');
-    //     }])
-    //     // findだと上手くデータ取得できない
-    //     // ->find((int)$log_id)->first();
-    //     ->where('id', $id)->first();
-
-    //     return $log;
-    // }
 
     /**
      * ログアップデート
      * @param int $log
      * @return Response
      */
-    public function update(Request $request, Log $log)
+    public function update(LogRequest $request, Log $log)
     {
         $user = auth()->user();
 
         $log->text = $request->input('text');
-
-        // Validatorファザードでバリデーションを実行するにはmakeメソッド(新しいコレクションを作成)を使用してインスタンスを作成
-        // 引数はValidator::make('値の配列', '検証ルールの配列')で記述
-        // textは必須ではないので'required'は検証ルールに入れない
-        $validator = Validator::make($request->all(), [
-            'text' => ['required', 'string', 'max:140']
-        ]);
-
-        // validateメソッドは、POSTされた値のバリデーションに成功するとコードは通常通り続けて実行され、バリデーションに失敗すると自動的に例外が投げられユーザーへ適切なエラーメッセージが返されるメソッド
-        $validator->validate();
         
         $log->save();
 
@@ -116,9 +96,9 @@ class LogsController extends Controller
      */
     public function destroy(Log $log)
     {
-        // $log->logDestroy($log->id);
         $log->delete();
 
-        return;
+        // レスポンスコード200(ok)を返却
+        return response('', 200);
     }
 }

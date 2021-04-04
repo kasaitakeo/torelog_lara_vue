@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\softDeletes;
 use App\Models\User;
 use App\Models\Favorite;
 use App\Models\Comment;
+use App\Models\EventLog;
 
 class Log extends Model
 {
     use SoftDeletes;
 
+    // responseで返却するデータの指定
     protected $visible = [
         'id', 'text', 'user', 'favorites', 'comments', 'event_logs',
     ];
@@ -43,112 +45,22 @@ class Log extends Model
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * Eloquentリレーション
+     * １対多の場合
+     */
     public function event_logs()
     {
-        return $this->hasMany('App\Models\EventLog');
+        return $this->hasMany(EventLog::class);
     }
 
     /**
-     * 自分のログのみ取得
+     * 自分のログの投稿数の取得(UsersControllerで使用)
      * @param Int $user_id
      * @return
      */
-    public function getUserTimeLine(Int $user_id)
-    {
-        return $this->where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(50);
-    }
-
-    /**
-     * 自分のログの投稿数の取得
-     * @param Int $user_id
-     * @return
-     */
-    public function getLogCount($user_id)
+    public function getLogCount(Int $user_id)
     {
         return $this->where('user_id', $user_id)->count();
     }
-
-    /**
-     * ログ一覧画面用のログ（全ユーザーの）を取得
-     * @param Int $user_id
-     * @param Array $follow_ids
-     * @return
-     */
-    public function getTimeLines(Int $user_id, Array $follow_ids)
-    {
-        // ログインユーザー自身とフォローしているユーザーIDを結合
-        $follow_ids[] = $user_id;
-
-        // whereInメソッドは複数の該当データを絞り込める
-        // カラムの値('user_id')のなかに指定した配列($follow_ids)が含まれている複数の条件を加える
-        return $this->whereIn('user_id', $follow_ids)->orderBy('created_at', 'DESC')->paginate(50);
-    }
-
-    /**
-     * 詳細画面
-     * ログIDを引数にログ情報を取得
-     * @param INT $log_id
-     * @return
-     */
-    public function getLog(INT $log_id)
-    {
-        return $this->where('id', $log_id)->first();
-    }
-
-    /**
-     * ログの保存処理
-     * @param Int $user_id
-     * @param Array $data
-     * @return 
-     */
-    public function logStore(Int $user_id, Array $data)
-    {
-        $this->user_id = $user_id;
-
-        $this->text = $data['text'];
-
-        $this->save();
-
-        return;
-    }
-
-    /**
-     * $user_idと$tweet_idに値に一致するログを取得(ログ編集のため)
-     * @param Int $user_id
-     * @param Int $log_id
-     * @return
-     */
-    public function getEditId(Int $user_id, Int $log_id)
-    {
-        // log_idのみを参照すれば良いのでは？
-        return $this->where('user_id', $user_id)->where('id', $log_id)->first();
-    }
-
-    /**
-     * ログの編集処理
-     * @param Int $log_id
-     * @param Array $data
-     * @return 
-     */
-    public function logUpdate(Int $log_id, Array $data)
-    {
-        $this->id = $log_id;
-
-        $this->text = $data['text'];
-
-        $this->update();
-
-        return;
-    }
-
-    /**
-     * ログの削除処理
-     * @param Int $log_id
-     * @return 
-     */
-    public function logDestroy(Int $log_id)
-    {
-        return $this->where('id', $log_id)->delete();
-    }
-
 }

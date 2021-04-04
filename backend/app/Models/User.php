@@ -1,6 +1,5 @@
 <?php
 
-// Userは元々app直下にあるのでapp/Modelsに移動してください。その際namespaceを変更するのを忘れずに
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -15,9 +14,8 @@ class User extends Authenticatable
     // 通知先は以下の機能を持ちます。通知送信メソッド、通知に伴う通信先情報の提供
     use Notifiable;
 
-    // screen_nameとprofile_imageを追加したので、登録/更新を許可するために$fillable(表示するカラムの選択)の配列にカラムを指定します。
+    // screen_nameとprofile_imageを追加したので、登録/更新を許可するために$fillable(表示するカラムの選択)の配列にカラムを指定します。fillableはホワイトリストで、guardedはブラックリスト
     protected $fillable = [
-        // 'name', 'email', 'password',
         'screen_name',
         'name',
         'profile_image',
@@ -25,8 +23,15 @@ class User extends Authenticatable
         'password'
     ];
 
+    // responseで返却するデータの指定
     protected $visible = [
-        'id', 'screen_name', 'name', 'profile_image', 'email', 'logs', 'events'
+        'id', 
+        'screen_name', 
+        'name', 
+        'profile_image', 
+        'email', 
+        'logs', 
+        'events'
     ];
 
     // ユーザーは複数人のユーザをフォローするため多対多のリレーションになる。→中間テーブルとしてfollowersテーブルにユーザ間の関係をまとめる
@@ -106,12 +111,10 @@ class User extends Authenticatable
     {
         // $dataの中に画像があれば処理を分けています
         if (isset($data['profile_image'])) {
-            // $file_name = $data['profile_image']->store('public/profile_image/');こうすることで画像ファイルが/storage/app/public/profile_image/に保存されます。
-            // $file_name = $data['profile_image']->store('public/profile_image/');
+            // $file_name = $data['profile_image']->storeAs('public/profile_image/');こうすることで画像ファイルが/storage/app/public/profile_image/に保存されます。
             $file_name = time() . '.' . $data['profile_image']->getClientOriginalName();
             $data['profile_image']->storeAs('public', $file_name);
             
-            // $this::where('id', $this->id)
             $this::where('id', $login_user->id)
             ->update([
                 'screen_name'   => $data['screen_name'],
@@ -119,7 +122,7 @@ class User extends Authenticatable
                 'user_text'     => $data['user_text'],
                 'profile_image' => '/storage/' . basename($file_name),
                 'email'         => $data['email'],
-                ]);
+            ]);
         } else {
             $this::where('id', $login_user->id)
                 ->update([
@@ -134,7 +137,7 @@ class User extends Authenticatable
     }
 
     /**
-     * The attributes that should be hidden for arrays.
+     * hidden は隠したいアトリビュートを指定(visibleを使用しているので今回は必要なし)
      *
      * @var array
      */
@@ -143,7 +146,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * モデルの$castsプロパティにカラム名と変換したい型を指定すると、データアクセス時に型変換をしてくれます
      *
      * @var array
      */

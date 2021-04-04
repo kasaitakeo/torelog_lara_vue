@@ -44,8 +44,10 @@
             <li v-for="msg in registerErrors.password" :key="msg">{{ msg }}</li>
           </ul>
         </div>
-        <label for="username">Name</label>
+        <label for="username">氏名</label>
         <input type="text" class="form__item" id="username" v-model="registerForm.name">
+        <label for="username">アカウント名</label>
+        <input type="text" class="form__item" id="username" v-model="registerForm.screen_name">
         <label for="email">Email</label>
         <input type="text" class="form__item" id="email" v-model="registerForm.email">
         <label for="password">Password</label>
@@ -56,7 +58,7 @@
           <button type="submit" class="button button--inverse">register</button>
         </div>
       </form>
-</div>
+    </div>
   </div>
 </template>
 
@@ -72,7 +74,8 @@ export default {
         password: ''
       },
       registerForm: {
-        name : '',
+        name: '',
+        screen_name: '',
         email: '',
         password: '',
         password_confirmation: ''

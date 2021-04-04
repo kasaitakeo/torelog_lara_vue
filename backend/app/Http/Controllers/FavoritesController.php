@@ -11,11 +11,7 @@ class FavoritesController extends Controller
     public function store(Request $request, Favorite $favorite)
     {
         $user = auth()->user();
-
-        if ($user === null) {
-            return back();
-        }
-
+        
         $log_id = $request->log_id;
 
         $is_favorite = $favorite->isFavorite($user->id, $log_id);
@@ -32,15 +28,11 @@ class FavoritesController extends Controller
         $user = auth()->user();
 
         $log_id = $id;
-
-        // $favorite_id = $favorite->where('user_id', $user->id)->where('log_id', $log_id)->get('id');
         
         $is_favorite = $favorite->isFavorite($user->id, $log_id);
         
         if ($is_favorite) {
             $favorite->where('user_id', $user->id)->where('log_id', $log_id)->delete();
-            // $favorite->destroyFavorite($favorite_id);
-            // $favorite->where('id', $favorite_id)->delete();
             return;
         }
         
