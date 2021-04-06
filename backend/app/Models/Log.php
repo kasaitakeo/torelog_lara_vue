@@ -19,7 +19,7 @@ class Log extends Model
 
     // responseで返却するデータの指定
     protected $visible = [
-        'id', 'text', 'user', 'favorites', 'comments', 'event_logs',
+        'id', 'text', 'user', 'favorites', 'comments', 'event_logs', 'created_at'
     ];
 
     /**
@@ -56,6 +56,65 @@ class Log extends Model
     public function event_logs()
     {
         return $this->hasMany(EventLog::class);
+    }
+
+    /**
+     * ログインユーザーがフォローしているユーザーの全てのログ取得
+     * 
+     * 
+     */
+    public function getFollowingTimelines(Int $user_id, Array $follow_ids) {
+        // 自身とフォローしているユーザIDを結合する
+        $follow_ids[] = $user_id;
+
+        $logs_data = $this->whereIn('user_id', $follow_ids)
+        ->with(['user', 'favorites', 'comments' => function($query){
+            // コメントした全ユーザー情報
+            $query->with('user');
+        }, 'event_logs' => function($query){
+            // ログに追加されている種目の情報
+            $query->with('event');
+        }])->orderBy('created_at', 'DESC')
+        ->paginate(10);
+
+        return $logs_data;
+    }
+
+    /**
+     * 全てのログ取得
+     * 
+     * 
+     */
+    public function getAllTimelines() {
+        $logs_data = $this->with(['user', 'favorites', 'comments' => function($query){
+            // コメントした全ユーザー情報
+            $query->with('user');
+        }, 'event_logs' => function($query){
+            // ログに追加されている種目の情報
+            $query->with('event');
+        }])->orderBy('created_at', 'DESC')
+        ->paginate(10);
+
+        return $logs_data;
+    }
+
+    /**
+     * 指定したユーザーのログのみ取得
+     * 
+     * 
+     */
+    public function getUserTimelines(Int $user_id) {
+        $logs_data = $this->where('user_id', $user_id)
+        ->with(['user', 'favorites', 'comments' => function($query){
+            // コメントした全ユーザー情報
+            $query->with('user');
+        }, 'event_logs' => function($query){
+            // ログに追加されている種目の情報
+            $query->with('event');
+        }])->orderBy('created_at', 'DESC')
+        ->paginate(10);
+
+        return $logs_data;
     }
 
     /**

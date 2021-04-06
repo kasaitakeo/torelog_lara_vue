@@ -3,6 +3,23 @@
     v-model="valid"
     lazy-validation
   >
+    <div class="errors" v-if="errors">
+      <ul v-if="errors.name">
+        <li v-for="msg in errors.name" :key="msg">{{ msg }}</li>
+      </ul>
+      <ul v-if="errors.screen_name">
+        <li v-for="msg in errors.screen_name" :key="msg">{{ msg }}</li>
+      </ul>
+      <ul v-if="errors.email">
+        <li v-for="msg in errors.email" :key="msg">{{ msg }}</li>
+      </ul>
+      <ul v-if="errors.user_text">
+        <li v-for="msg in errors.user_text" :key="msg">{{ msg }}</li>
+      </ul>
+      <ul v-if="errors.profile_image">
+        <li v-for="msg in errors.profile_image" :key="msg">{{ msg }}</li>
+      </ul>
+    </div>
     <v-row>
       <v-col cols="12" md="6">
         <v-text-field
@@ -61,11 +78,12 @@
 </template>
 
 <script>
-import { OK } from '../util'
+import { OK, UNPROCESSABLE_ENTITY } from '../util'
 
 export default {
   data () {
     return {
+      errors: null,
       user: {},
       screenName: '',
       name: '',
@@ -109,7 +127,7 @@ export default {
       formData.append('screen_name', this.screenName)
       formData.append('email', this.email)
       formData.append('user_text', this.userText)
-      formData.append('profile_image', this.image)
+      formData.append('profile_image', this.image ? this.image : '')
 
       // フォームデータ情報の表示
       console.log(formData.get('name'))
@@ -124,13 +142,18 @@ export default {
       })  
 
       console.log(response)
+      if (response.status === UNPROCESSABLE_ENTITY) {
+        console.log(response)
+        this.errors = response.data.errors
+        return false
+      }
 
-       if (response.status !== OK) {
+      if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
 
-      this.$router.push({name: 'user'})
+      this.$router.push('/')
     },
     // フォームでファイルが選択されたら実行される
     onUpload (event) {
@@ -155,8 +178,8 @@ export default {
       async handler () {
         if (!this.$store.getters['auth/check']) {
           this.$router.push('/')
-          await this.getUser()
         }
+        await this.getUser()
       },
       immediate: true
     }

@@ -29,6 +29,7 @@
     },
     "dependencies": {
         "material-design-icons-iconfont": "^6.1.0",
+        "moment": "^2.29.1",
         "vue-infinite-loading": "^2.4.5",
         "vue-router": "^3.5.1",
         "vuetify": "^2.4.6"

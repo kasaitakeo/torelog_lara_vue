@@ -28,6 +28,7 @@ class User extends Authenticatable
         'id', 
         'screen_name', 
         'name', 
+        'user_text',
         'profile_image', 
         'email', 
         'logs', 

@@ -23,7 +23,7 @@ import Message from './components/Message.vue'
 import Footer from './components/Footer.vue'
 import BottomNav from './components/BottomNav.vue'
 
-import { INTERNAL_SERVER_ERROR } from './util'
+import { NOT_FOUND, UNAUTHORIZED, INTERNAL_SERVER_ERROR } from './util'
 
 export default {
   components: {
@@ -41,9 +41,18 @@ export default {
   watch: {
     // $store.state.error.codeを算出プロパティで参照しwatchで監視
     errorCode: {
-      handler (val) {
+      async handler (val) {
         if (val === INTERNAL_SERVER_ERROR) {
           this.$router.push('/500')
+        } else if (val === UNAUTHORIZED) {
+          // トークンをリフレッシュ
+          await axios.get('/api/refresh-token')
+          // ストアのuserをクリア
+          this.$store.commit('auth/setUser', null)
+          // ログイン画面へ
+          this.$router.push('/login')
+        } else if (val === NOT_FOUND) {
+          this.$router.push('/not-found')
         }
       },
       // 変更があった場合のみでなく、ページが読み込まれた時に処理を行いたい場合は、immediate: trueを設置

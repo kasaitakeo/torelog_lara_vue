@@ -4,6 +4,7 @@
       color="#E3F2FD"
       class="ma-1 pa-2" elevation="10"
     >
+      <v-row class="ma-1">{{ log.created_at | moment }}</v-row>
       <v-row>
         <!-- 登録した種目ログ表示 -->
         <EventLog
@@ -15,8 +16,8 @@
       <v-row>
         <v-col cols="12">
           <!-- ログのテキストの表示 -->
-          <v-card-text class="headline px-2">
-            {{ log.text }}
+          <v-card-text class="px-2">
+            <p class="font-weight-regular">torememo</p><p class="headline">{{ log.text }}</p>
           </v-card-text>
         </v-col>
       </v-row>
@@ -59,6 +60,7 @@
             align="start" 
             justify="start"
           >
+          <v-row class="d-flex justify-start pl-2">
             <v-avatar color="grey darken-3">
               <v-img
                 class="elevation-6"
@@ -66,10 +68,15 @@
                 :src="log.user.profile_image"
               ></v-img>
             </v-avatar>
+
+          </v-row>
+          <v-row class="d-flex justify-start">
+
             <!-- ログ作成ユーザーの名前をクリックするとユーザー詳細ページへ飛ぶ -->
             <RouterLink class="button button--link" :to="{ name: 'user.show', params: { userId: log.user.id }}">
-              {{ log.user.screen_name }}
+              <div class="font-weight-bold">{{ log.user.screen_name }}</div>
             </RouterLink>
+          </v-row>
           </v-col>
           <v-col
             cols="8"
@@ -114,7 +121,7 @@
                   <img :src="comment.user.profile_image">
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title>{{ comment.user.name }}</v-list-item-title>
+                  <v-list-item-title>{{ comment.user.screen_name }}</v-list-item-title>
                   <v-list-item-subtitle>{{ comment.text }}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -129,8 +136,14 @@
 // LogList LogShow UserShowが親コンポーネント
 import { OK } from '../util'
 import EventLog from '../components/EventLog.vue'
+import moment from 'moment'
 
 export default {
+  filters: {
+    moment: function (date) {
+      return moment(date).format('YYYY/MM/DD HH:mm');
+    }
+  },
   components: {
     EventLog,
   },
@@ -161,9 +174,9 @@ export default {
     // ログインユーザーがログをいいねしているかの状態
     favoriteStatus (favorites) {
       // このログの全てのいいねをループ
-      for (let favorite in favorites) {
+      for (let favorite of favorites) {
         // いいねしたユーザーidとログインユーザーidが等しくない時false
-        if (favorite.user_id !== this.loginUserId) {
+        if (favorite.user_id === this.loginUserId) {
           return false
         } 
       }

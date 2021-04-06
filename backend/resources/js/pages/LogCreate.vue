@@ -1,8 +1,17 @@
 <template>
   <div>
     <div class="errors" v-if="errors">
-      <ul>
+      <ul v-if="errors.text">
         <li v-for="msg in errors.text" :key="msg">{{ msg }}</li>
+      </ul>
+      <ul v-if="errors.weight">
+        <li v-for="msg in errors.weight" :key="msg">{{ msg }}</li>
+      </ul>
+      <ul v-if="errors.rep">
+        <li v-for="msg in errors.rep" :key="msg">{{ msg }}</li>
+      </ul>
+      <ul v-if="errors.set">
+        <li v-for="msg in errors.set" :key="msg">{{ msg }}</li>
       </ul>
     </div>
     <v-row>
@@ -50,11 +59,9 @@
 </template>
 
 <script>
-import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
-import { OK } from '../util'
+import { OK, CREATED, UNPROCESSABLE_ENTITY } from '../util'
 import UserEvent from '../components/UserEvent.vue'
 import EventLog from '../components/EventLog.vue'
-import eventBus from '../eventBus.js'
 
 export default {
   components: {
@@ -135,7 +142,7 @@ export default {
         return false
       }
 
-      if (response.status !== CREATED) {
+      if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
@@ -160,8 +167,8 @@ export default {
       }
     },
     // ユーザーが登録している種目を全て取得
-    async getEvents () {
-      const response = await axios.get('/api/events')
+    async getUserEvents () {
+      const response = await axios.get(`/api/users/${this.userId}/events`)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
@@ -227,7 +234,7 @@ export default {
         if (this.$store.getters['auth/check']) {
           await this.postLog()
       
-          await this.getEvents()
+          await this.getUserEvents()
         } else {
           // ログインされていない場合ホーム画面にページ遷移
           this.$router.push('/')

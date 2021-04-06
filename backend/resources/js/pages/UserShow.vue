@@ -4,7 +4,7 @@
       <v-card elevation="5">
         <!-- ユーザープロフィール -->
         <v-row class="ma-1">
-          <v-col cols="4" >
+          <v-col cols="4" class="justify-items-center">
             <v-avatar
               size="62"
               class="align-items-center"
@@ -14,32 +14,29 @@
                 :src="`${user.profile_image}`"
               ></v-img>
             </v-avatar>
-            <div class="text-secondary">
+            <!-- <div class="text-secondary">
               <span v-if="user.screen_name !== null">{{ user.screen_name }}</span>
-            </div>
-            <div class="font-weight-bold ml-1 mb-1">
-              {{ user.name }}
+            </div> -->
+            <div class="font-weight-bold ml-1 mt-1">
+              {{ user.screen_name }}
             </div>
           </v-col>
           <v-col cols="8" class="d-flex flex-column align-end">
-              <div class="d-flex flex-row">
-                <v-card class="d-flex align-end flex-column ma-1 pt-2" elevation="0" tile>
-                  <p class="font-weight-medium">ログ</p>
-                  <p>{{ logCount }}</p>
-                </v-card>
-
-                <v-card class="d-flex align-end flex-column ma-1 pt-2" elevation="0" tile>
-                  <p class="font-weight-medium">フォロー</p>
-                  <p>{{ follow_count }}</p>
-                </v-card>
-
-                <v-card class="d-flex align-end flex-column ma-1 pt-2" elevation="0" tile>
-                  <p class="font-weight-medium">フォロワー</p>
-                  <p>{{ follower_count }}</p>
-                </v-card>
-              </div>
-              
-            <div class="d-flex flex-row mt-auto">
+            <div class="d-flex flex-row">
+              <v-card class="d-flex align-end flex-column pt-2" elevation="0" tile>
+                <p class="font-weight-medium">ログ</p>
+                <p>{{ logCount }}</p>
+              </v-card>
+              <v-card class="d-flex align-end flex-column pt-2" elevation="0" tile>
+                <p class="font-weight-medium">フォロー</p>
+                <p>{{ follow_count }}</p>
+              </v-card>
+              <v-card class="d-flex align-end flex-column pt-2" elevation="0" tile>
+                <p class="font-weight-medium">フォロワー</p>
+                <p>{{ follower_count }}</p>
+              </v-card>
+            </div>
+            <div class="d-flex flex-row">
               <v-card-actions>
                 <!-- ログインユーザーならプロフィール編集画面へのリンク -->
                 <RouterLink v-if="user.id === loginUserId" class="button button--link" :to="{ name: 'user.edit', params: { userId: user.id }}">
@@ -61,7 +58,7 @@
             </div>
           </v-col>
         </v-row>
-        <v-row class="ma-1">
+        <v-row class="mx-1">
           <v-col cols="12">
             <!-- 自己紹介文 -->
             <v-card class="px-2" elevation="0" shaped v-if="user.user_text !== null">{{ user.user_text }}</v-card>
@@ -69,7 +66,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <!-- ユーザーの自己紹介文 -->
+          <!-- ユーザーの登録種目 -->
           <v-col cols="12" class="my-4">
             <UserEvent
               :events="events"
@@ -168,7 +165,7 @@ export default {
     },
     // 指定したIDのユーザーの種目取得
     async getUserEvents () {
-      const response = await axios.get(`/api/${this.$route.params.userId}/events`)
+      const response = await axios.get(`/api/users/${this.$route.params.userId}/events`)
 
       console.log(response)
 
@@ -237,12 +234,15 @@ export default {
   watch: {
     $route: {
       async handler () {
-        await this.getUser()
-        await this.getUserEvents()
         await this.getUserLogs()
       },
       immediate: true
     }
+  },
+  // ルート遷移時呼ばないため
+  async mounted () {
+    await this.getUser()
+    await this.getUserEvents()
   }
 }
 </script>

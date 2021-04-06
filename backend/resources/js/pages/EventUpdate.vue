@@ -24,8 +24,7 @@
 </template>
 
 <script>
-import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
-import { OK } from '../util'
+import { OK, CREATED, UNPROCESSABLE_ENTITY } from '../util'
 import EventEdit from '../components/EventEdit.vue'
 
 export default {
@@ -65,7 +64,7 @@ export default {
         return false
       }
 
-      if (response.status !== CREATED) {
+      if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }

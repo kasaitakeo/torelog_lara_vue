@@ -26,7 +26,7 @@ class FavoritesController extends Controller
             $favorite->storeFavorite($user->id, $log_id);
             return;
         }
-        return;
+        return abort(404);;
     }
 
     /**
@@ -49,7 +49,7 @@ class FavoritesController extends Controller
             return;
         }
         
-        return;
+        return abort(404);;
     }
 
 }

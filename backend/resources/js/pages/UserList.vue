@@ -3,7 +3,7 @@
     <v-col>
       <v-card v-for="user in users" :key="user.id" class="pa-2 mb-3">
         <v-row>
-          <v-col cols="4"  >
+          <v-col cols="4">
             <v-avatar
               size="50"
               class="align-items-center my-1 ml-1"
@@ -17,7 +17,7 @@
           <v-col cols="8">
             <!-- UserShowへのリンク -->
             <RouterLink class="button button--link"  :to="{name: 'user.show', params: {userId: user.id}}">
-              {{ user.screen_name }}
+              <div class="font-weight-bold">{{ user.screen_name }}</div>
             </RouterLink>
           </v-col>
         </v-row>
@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import { OK } from '../util'
-
 export default {
   data () {
     return {

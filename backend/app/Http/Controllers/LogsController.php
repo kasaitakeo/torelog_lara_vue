@@ -19,19 +19,25 @@ class LogsController extends Controller
      * @param Log $log
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Log $log, Follower $follower)
     {
-        // logListで使用するlogsオブジェクトに入るデータの取得
-        $logs_data = Log::with(['user', 'favorites', 'comments' => function($query){
-            // コメントした全ユーザー情報
-            $query->with('user');
-        }, 'event_logs' => function($query){
-            // ログに追加されている種目の情報
-            $query->with('event');
-        }])->orderBy(Log::CREATED_AT, 'desc')
-        ->paginate(10);
+        if (auth()->user()) {
+            $user = auth()->user();
 
-        return response($logs_data, 200);
+            // 
+            $follow_ids = $follower->followingIds($user->id);
+
+            // $follow_idsの中にはfollowing_id（フォローしているユーザーID、つまりログインユーザーのID）も含まれるためpluckでfollowed_idカラムのみ配列で取得
+            $following_ids = $follow_ids->pluck('followed_id')->toArray();
+
+            // 
+            $logs_data = $log->getFollowingTimelines($user->id, $following_ids);
+        } else {
+            // 
+            $logs_data = $log->getAllTimelines();
+        }
+
+        return $logs_data;
     }
 
     /**
@@ -39,20 +45,12 @@ class LogsController extends Controller
      * @param Log $log
      * @return \Illuminate\Http\Response
      */
-    public function userLog($user_id)
+    public function userLog(Log $log, $user_id)
     {
         // logListで使用するlogsオブジェクトに入るデータの取得
-        $user_logs_data = Log::with(['user', 'favorites', 'comments' => function($query){
-            // コメントした全ユーザー情報
-            $query->with('user');
-        }, 'event_logs' => function($query){
-            // ログに追加されている種目の情報
-            $query->with('event');
-        }])->where('user_id', $user_id)
-        ->orderBy(Log::CREATED_AT, 'desc')
-        ->paginate(10);
+        $user_logs_data = $log->getUserTimelines($user_id);
 
-        return response($user_logs_data, 200);
+        return $user_logs_data;
     }
 
     /**
@@ -90,7 +88,7 @@ class LogsController extends Controller
         // findだと上手くデータ取得できない？
         ->where('id', $log->id)->first();
 
-        return response($log_data, 200);
+        return $log_data ?? abort(404);
     }
 
     /**
@@ -106,8 +104,7 @@ class LogsController extends Controller
         
         $log->save();
 
-        // レスポンスコード201(created)を返却
-        return response('', 201);
+        return;
     }
 
     /**

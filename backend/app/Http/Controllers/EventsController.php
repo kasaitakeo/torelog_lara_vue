@@ -9,21 +9,6 @@ use App\Models\Event;
 class EventsController extends Controller
 {
     /**
-     * ログインユーザーの種目全て返す
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Event $event)
-    {
-        //
-        $user = auth()->user();
-
-        $all_events = $event->where('user_id', $user->id)->get();
-
-        return response($all_events, 200);
-    }
-
-    /**
      * 指定したユーザーIDの種目全て返す
      * 
      * 
@@ -32,7 +17,7 @@ class EventsController extends Controller
     {
         $all_events = Event::where('user_id', $user_id)->get();
 
-        return response($all_events, 200);
+        return $all_events ?? abort(404);
     }
 
     /**
@@ -67,7 +52,7 @@ class EventsController extends Controller
         $event_data = event::with(['user'])
         ->where('id', $id)->first();
 
-        return $event_data;
+        return $event_data ?? abort(404);;
     }
     /**
      * 種目データの更新
@@ -84,7 +69,7 @@ class EventsController extends Controller
 
         $event->save();
 
-        return response('', 201);
+        return response('', 200);
     }
 
     /**

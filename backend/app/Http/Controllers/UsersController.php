@@ -39,15 +39,14 @@ class UsersController extends Controller
         $follow_count = $follower->getFollowCount($user->id);
         $follower_count = $follower->getFollowerCount($user->id);
 
-        return response([
+        return [
             'user_data'      => $user_data,
             'is_following'   => $is_following,
             'is_followed'    => $is_followed,
             'log_count'      => $log_count,
             'follow_count'   => $follow_count,
             'follower_count' => $follower_count
-        ], 200);
-        
+        ] ?? abort(404);
     }
 
     public function update(UserRequest $request, User $user)
@@ -58,7 +57,7 @@ class UsersController extends Controller
 
         $user->updateProfile($data, $login_user);
 
-        return response('', 201);
+        return response('', 200);
     }
 
     public function follow(User $user)
@@ -71,6 +70,8 @@ class UsersController extends Controller
             $follower->follow($user->id);
             return response('', 201);
         }
+
+        return abort(404);
     }
     public function unfollow(User $user)
     {
@@ -82,5 +83,7 @@ class UsersController extends Controller
             $follower->unfollow($user->id);
             return response('', 201);
         }
+
+        return abort(404);
     }
 }

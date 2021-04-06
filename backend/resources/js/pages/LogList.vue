@@ -44,7 +44,6 @@ export default {
     },
   },
   methods: {
-    
     // 全てのログタイムライン取得
     async getLogs () {
       const response = await axios.get(`/api/logs/?page=${this.page}`)
@@ -78,7 +77,7 @@ export default {
         return false  
       }
 
-      
+      this.getLogs()
     },
     // ログのいいね解除
     async unFavoriteLog ({ id }) {
@@ -95,7 +94,7 @@ export default {
         return false  
       }
 
-      
+      this.getLogs()
     },
   },
   watch: {

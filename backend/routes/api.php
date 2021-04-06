@@ -82,7 +82,7 @@ Route::group(['prefix' => 'events'], function () {
     Route::delete('/{event}', 'EventsController@destroy')->name('event.destroy');
 });
 
-Route::get('/{user}/events', 'EventsController@userEvents')->name('user.event');
+Route::get('/users/{user}/events', 'EventsController@userEvents')->name('user.event');
 
 // 種目ログ取得
 Route::get('/{log_id}/event_logs', 'EventLogsController@index')->name('event_log.index');
@@ -106,3 +106,11 @@ Route::post('/favorites', 'FavoritesController@store')->name('favorite.store');
 
 // いいね解除
 Route::post('/favorites/{id}', 'FavoritesController@destroy')->name('favorite.destroy');
+
+
+// トークンリフレッシュ
+Route::get('/reflesh-token', function (Illuminate\Http\Request $request) {
+    $request->session()->regenerateToken();
+
+    return response()->json();
+});

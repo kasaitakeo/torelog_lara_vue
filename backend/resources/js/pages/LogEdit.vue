@@ -1,8 +1,17 @@
 <template>
   <div>
     <div class="errors" v-if="errors">
-      <ul>
+      <ul v-if="errors.text">
         <li v-for="msg in errors.text" :key="msg">{{ msg }}</li>
+      </ul>
+      <ul v-if="errors.weight">
+        <li v-for="msg in errors.weight" :key="msg">{{ msg }}</li>
+      </ul>
+      <ul v-if="errors.rep">
+        <li v-for="msg in errors.rep" :key="msg">{{ msg }}</li>
+      </ul>
+      <ul v-if="errors.set">
+        <li v-for="msg in errors.set" :key="msg">{{ msg }}</li>
       </ul>
     </div>
     <v-row>
@@ -52,8 +61,7 @@
 </template>
 
 <script>
-import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
-import { OK } from '../util'
+import { OK, UNPROCESSABLE_ENTITY } from '../util'
 import UserEvent from '../components/UserEvent.vue'
 import EventLog from '../components/EventLog.vue'
 
@@ -143,7 +151,7 @@ export default {
         return false
       }
 
-      if (response.status !== CREATED) {
+      if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
