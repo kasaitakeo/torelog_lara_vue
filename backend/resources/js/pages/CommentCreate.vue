@@ -2,6 +2,11 @@
   <v-row>
     <v-col cols="12">
       <v-card>
+        <div class="errors" v-if="errors">
+          <ul v-if="errors.text">
+            <li v-for="msg in errors.text" :key="msg">{{ msg }}</li>
+          </ul>
+        </div>
         <form @submit.prevent="postComment">
           <v-textarea
             name="input-7-1"
@@ -39,23 +44,28 @@ export default {
 
       console.log(response)
 
-      // if (response.status === UNPROCESSABLE_ENTITY) {
-      //   this.errors = response.data.errors
-      //   return false
-      // }
+      if (response.status === UNPROCESSABLE_ENTITY) {
+        this.errors = response.data.errors
+        return false
+      }
 
-      // if (response.status !== CREATED) {
-      //   this.$store.commit('error/setCode', response.status)
-      //   return false
-      // }
+      if (response.status !== CREATED) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
 
       this.$router.push('/')
     }
   },
-  mounted () {
-    if (!this.$store.getters['auth/check']) {
-      this.$router.push('/')
+  watch: {
+    $route: {
+      async handler () {
+        if (!this.$store.getters['auth/check']) {
+          this.$router.push('/')
+        }
+      },
+      immediate: true
     }
-  },
+  }
 }
 </script>

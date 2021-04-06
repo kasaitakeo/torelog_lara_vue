@@ -8,6 +8,7 @@ class Favorite extends Model
 {
     // デフォルトでTimestampが設定されているのでfalse
     public $timestamps = false;
+    
 
     // いいねしているかどうかの判定処理
     public function isFavorite($user_id, $log_id) 

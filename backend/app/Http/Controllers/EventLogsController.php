@@ -20,6 +20,11 @@ class EventLogsController extends Controller
         return response($event_log_data, 200);
     }
 
+    /**
+     * 種目ログの登録
+     * 
+     * 
+     */
     public function store(EventLog $event_log, EventLogRequest $request)
     {
         $event_log->log_id = $request->input('log_id');

@@ -1,30 +1,32 @@
 <template>
-  <v-bottom-navigation
-    app
-    v-model="value"
-    :background-color="color"
-    dark
-    shift
-  >
-    <RouterLink class="button button--link" :to="{name: 'log.create'}">
-      <v-btn>
-        <v-icon>fitness_center</v-icon>
-        <span class="pt-5">トレログ</span>
-      </v-btn>
-    </RouterLink>
-    <RouterLink class="button button--link" :to="{name: '/'}">
-      <v-btn>
-        <v-icon>house</v-icon>
-        <span class="pt-5">ホーム</span>
-      </v-btn>
-    </RouterLink>
-    <RouterLink class="button button--link" :to="{name: 'user.show', params: {userId: userId}}">
-      <v-btn>
-        <v-icon>account_circle</v-icon>
-        <span class="pt-5">マイページ</span>
-      </v-btn>
-    </RouterLink>   
-  </v-bottom-navigation>
+  <div v-if="isLogin">
+    <v-bottom-navigation
+      app
+      v-model="value"
+      :background-color="color"
+      dark
+      shift
+    >
+      <RouterLink class="button button--link" :to="{name: 'log.create'}">
+        <v-btn>
+          <v-icon>fitness_center</v-icon>
+          <span class="pt-5">トレログ</span>
+        </v-btn>
+      </RouterLink>
+      <RouterLink class="button button--link" :to="{name: '/'}">
+        <v-btn>
+          <v-icon>house</v-icon>
+          <span class="pt-5">ホーム</span>
+        </v-btn>
+      </RouterLink>
+      <RouterLink class="button button--link" :to="{name: 'user.show', params: {userId: userId}}">
+        <v-btn>
+          <v-icon>account_circle</v-icon>
+          <span class="pt-5">マイページ</span>
+        </v-btn>
+      </RouterLink>   
+    </v-bottom-navigation>
+  </div>
 </template>
 <script>
   export default {
@@ -42,23 +44,47 @@
           default: return 'yellow'
         }
       },
+      isLogin () {
+        return this.$store.getters['auth/check']
+      },
       userId () {
         return this.$store.getters['auth/userId']
       },
     },
-    mounted () {
-      switch (this.$route.name) {
-        case 'log.create': 
-          this.value = 0
-          break
-        case '/':
-          this.value = 1
-          break
-        case 'user.show':
-          this.value = 2
-          break
-        default: this.value = 3
+    // mounted () {
+    //   switch (this.$route.name) {
+    //     case 'log.create': 
+    //       this.value = 0
+    //       break
+    //     case '/':
+    //       this.value = 1
+    //       break
+    //     case 'user.show':
+    //       this.value = 2
+    //       break
+    //     default: 
+    //       this.value = 3
+    //   }
+    // },
+    watch: {
+      $route: {
+        handler () {
+          switch (this.$route.name) {
+            case 'log.create': 
+              this.value = 0
+              break
+            case '/':
+              this.value = 1
+              break
+            case 'user.show':
+              this.value = 2
+              break
+            default: 
+              this.value = 3
+          }
+        },
+        immediate: true
       }
-    },
+    }  
   }
 </script>

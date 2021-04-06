@@ -150,12 +150,17 @@ export default {
       }
     },
   },
-  mounted () {
-    if (!this.$store.getters['auth/check']) {
-      this.$router.push('/')
+  watch: {
+    $route: {
+      async handler () {
+        if (!this.$store.getters['auth/check']) {
+          this.$router.push('/')
+          await this.getUser()
+        }
+      },
+      immediate: true
     }
-    this.getUser()
-  }
+  },
 }
 </script>
 

@@ -15,8 +15,7 @@
             <v-col>
               <!-- ログインユーザーの種目コンポーネント -->
               <UserEvent
-                :events="events"
-                @eventPost="eventPost"
+              :events="events"
               />
             </v-col>
           </v-row>
@@ -27,6 +26,7 @@
                 v-for="event_log in event_logs"
                 :key="event_log.id"
                 :item="event_log"
+                :ableDelete="true"
                 @deleteEventLog="deleteEventLog"
               />
             </v-col>
@@ -86,10 +86,6 @@ export default {
         return false
       }
 
-      this.$store.commit('message/setContent', {
-        content: '実施種目を削除しました！',
-        timeout: 3000
-      })
       // 再度、削除後の種目ログ取得
       this.getEventLogs()
     },
@@ -102,10 +98,6 @@ export default {
         return false
       }
 
-        this.$store.commit('message/setContent', {
-          content: '実施種目を全て削除しました！',
-          timeout: 3000
-        })
       // 再度、空の状態（全て削除した為）の種目ログ取得
       this.getEventLogs()
 
@@ -194,47 +186,52 @@ export default {
 
         this.deleteAllEventLog()
       } 
-    },
-    // 孫から子へ子から親へemitで投げる（eventBusだと予期せぬ挙動が出現した）
-    async eventPost (e) {
-      const response = await axios.post('/api/event_logs', {
-        log_id: this.logId,
-        event_id: e.id,
-        weight: e.weight,
-        rep: e.rep,
-        set: e.set
-      })
-      console.log(response)
-
-      if (response.status !== CREATED) {
-        this.$store.commit('error/setCode', response.status)
-        return false
-      }
-
-      this.$store.commit('message/setContent', {
-        content: '実施種目が追加されました！',
-        timeout: 3000
-      })
-
-      // 新規種目ログが登録された状態で現在編集中の種目ログの状態を更新
-      this.getEventLogs()
     }
   },
   watch: {
     $route: {
       async handler () {
-        // ログインされている場合のみ編集できる設定
-        if (this.$store.getters['auth/check']) {
-          await this.postLog()
-      
-          await this.getEvents()
-        } else {
-          // ログインされていない場合ホーム画面にページ遷移
-          this.$router.push('/')
-        }
+        eventBus.$on('eventPost', async({ id, weight, rep, set }) => {
+          const response = await axios.post('/api/event_logs', {
+            log_id: this.logId,
+            event_id: id,
+            weight: weight,
+            rep: rep,
+            set: set
+          })
+          console.log(response)
+    
+          if (response.status !== CREATED) {
+            this.$store.commit('error/setCode', response.status)
+            return false
+          }
+    
+          this.$store.commit('message/setContent', {
+            content: '実施種目が追加されました！',
+            timeout: 3000
+          })
+    
+          // 新規種目ログが登録された状態で現在編集中の種目ログの状態を更新
+          this.getEventLogs()
+        })
       },
       immediate: true
     }
+  },
+  mounted () {
+    // ログインされている場合のみ編集できる設定
+    if (this.$store.getters['auth/check']) {
+      this.postLog()
+  
+      this.getEvents()
+
+      // 孫コンポーネントのEvent.vueのeventPostが行われた際の新規種目ログ登録処理
+      
+    } else {
+      // ログインされていない場合ホーム画面にページ遷移
+      this.$router.push('/')
+    }
+
   },
   created () {
     // ページロード前の処理
@@ -266,8 +263,6 @@ export default {
           this.deleteAllEventLog()
 
           next()
-
-          // next(false)
         }
       // 種目ログ未設定の場合
       } else if (!this.setEventLogs) {

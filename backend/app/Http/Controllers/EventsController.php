@@ -9,7 +9,7 @@ use App\Models\Event;
 class EventsController extends Controller
 {
     /**
-     * ログインユーザーの種目全て
+     * ログインユーザーの種目全て返す
      *
      * @return \Illuminate\Http\Response
      */
@@ -24,7 +24,7 @@ class EventsController extends Controller
     }
 
     /**
-     * 指定したユーザーIDの種目全て
+     * 指定したユーザーIDの種目全て返す
      * 
      * 
      */
@@ -36,7 +36,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 種目を作成
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -57,7 +57,7 @@ class EventsController extends Controller
     }
 
     /**
-     * EventUpdate.vueにて使用する種目データ
+     * EventUpdate.vueにて使用する種目データを返す
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -70,7 +70,7 @@ class EventsController extends Controller
         return $event_data;
     }
     /**
-     * Update the specified resource in storage.
+     * 種目データの更新
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -88,7 +88,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 種目の削除
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

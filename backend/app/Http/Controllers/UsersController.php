@@ -15,7 +15,9 @@ class UsersController extends Controller
     //
     public function index(User $user)
     {
-        return $user->all();
+        $all_user = $user->orderBy(User::CREATED_AT, 'desc')->paginate(10);
+
+        return response($all_user, 200);
     }
 
     public function show(User $user, Log $log, Follower $follower)
@@ -37,14 +39,14 @@ class UsersController extends Controller
         $follow_count = $follower->getFollowCount($user->id);
         $follower_count = $follower->getFollowerCount($user->id);
 
-        return [
+        return response([
             'user_data'      => $user_data,
             'is_following'   => $is_following,
             'is_followed'    => $is_followed,
             'log_count'      => $log_count,
             'follow_count'   => $follow_count,
             'follower_count' => $follower_count
-        ];
+        ], 200);
         
     }
 
@@ -67,7 +69,7 @@ class UsersController extends Controller
 
         if (!$is_following) {
             $follower->follow($user->id);
-            return;
+            return response('', 201);
         }
     }
     public function unfollow(User $user)
@@ -78,7 +80,7 @@ class UsersController extends Controller
 
         if ($is_following) {
             $follower->unfollow($user->id);
-            return;
+            return response('', 201);
         }
     }
 }

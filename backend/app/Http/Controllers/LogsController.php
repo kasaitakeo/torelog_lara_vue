@@ -19,19 +19,40 @@ class LogsController extends Controller
      * @param Log $log
      * @return \Illuminate\Http\Response
      */
-    public function index(Log $log)
+    public function index()
     {
         // logListで使用するlogsオブジェクトに入るデータの取得
-        $logs_data = $log->with(['user', 'favorites', 'comments' => function($query){
+        $logs_data = Log::with(['user', 'favorites', 'comments' => function($query){
             // コメントした全ユーザー情報
             $query->with('user');
         }, 'event_logs' => function($query){
             // ログに追加されている種目の情報
             $query->with('event');
         }])->orderBy(Log::CREATED_AT, 'desc')
-        ->paginate(15);
+        ->paginate(10);
 
         return response($logs_data, 200);
+    }
+
+    /**
+     * ログ一覧取得
+     * @param Log $log
+     * @return \Illuminate\Http\Response
+     */
+    public function userLog($user_id)
+    {
+        // logListで使用するlogsオブジェクトに入るデータの取得
+        $user_logs_data = Log::with(['user', 'favorites', 'comments' => function($query){
+            // コメントした全ユーザー情報
+            $query->with('user');
+        }, 'event_logs' => function($query){
+            // ログに追加されている種目の情報
+            $query->with('event');
+        }])->where('user_id', $user_id)
+        ->orderBy(Log::CREATED_AT, 'desc')
+        ->paginate(10);
+
+        return response($user_logs_data, 200);
     }
 
     /**

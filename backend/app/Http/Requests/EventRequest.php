@@ -13,7 +13,7 @@ class EventRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,7 +27,7 @@ class EventRequest extends FormRequest
             //  種目の部位、名、は必須
             'eventPart' => 'required|string|max:10',
             'eventName' => 'required|string|max:30',
-            'eventExplanation' => 'string|max:200'
+            'eventExplanation' => 'required|string|max:200'
         ];
     }
 }

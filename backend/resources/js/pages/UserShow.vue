@@ -81,12 +81,13 @@
           <!-- ユーザーのログ -->
           <v-col cols="12">
             <Log
-              v-for="log in user.logs"
+              v-for="log in logs"
               :key="log.id"
               :log="log"
               @favoriteLog="favoriteLog"
               @unFavoriteLog="unFavoriteLog"
             />
+            <Pagination :current-page="currentPage" :last-page="lastPage" :user-id="Number($route.params.userId)"/>
           </v-col>
         </v-row>
       </v-card>
@@ -99,27 +100,38 @@
 import { OK } from '../util'
 import Log from '../components/Log.vue'
 import UserEvent from '../components/UserEvent.vue'
+import Pagination from '../components/Pagination'
 
 export default {
   components: {
     Log,
     UserEvent,
+    Pagination
   },
   computed: {
     loginUserId () {
       return this.$store.getters['auth/userId']
     },
-  },  
+  },
+  props: {
+    page: {
+      type: Number,
+      required: false,
+      default: 1
+    }
+  },
   data () {
     return {
       user: {},
       events: [],
+      logs: [],
       logCount: '',
       following: '',
       followed: '',
       follow_count: '',
       follower_count: '',
-
+      currentPage: 0,
+      lastPage: 0
     }
   },
   methods: {
@@ -140,6 +152,19 @@ export default {
       this.follow_count = response.data.follow_count
       this.follower_count = response.data.follower_count
 
+    },
+    async getUserLogs () {
+      const response = await axios.get(`/api/users/${this.$route.params.userId}/logs/?page=${this.page}`)
+
+      console.log(response)
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.logs = response.data.data
+      this.currentPage = response.data.current_page
+      this.lastPage = response.data.last_page
     },
     // 指定したIDのユーザーの種目取得
     async getUserEvents () {
@@ -167,7 +192,7 @@ export default {
         return false  
       }
 
-      this.getUser()
+      this.getUserLogs()
     },
     // Log子コンポーネントからemitで渡される、いいね解除
    async unFavoriteLog ({ id }) {
@@ -180,7 +205,7 @@ export default {
         return false  
       }
 
-      this.getUser()
+      this.getUserLogs()
     },
     // 指定したIDのユーザーをフォロー
     async follow (id) {
@@ -209,9 +234,15 @@ export default {
       this.getUser()
     },
   },
-  mounted () {
-    this.getUser()
-    this.getUserEvents()
+  watch: {
+    $route: {
+      async handler () {
+        await this.getUser()
+        await this.getUserEvents()
+        await this.getUserLogs()
+      },
+      immediate: true
+    }
   }
 }
 </script>

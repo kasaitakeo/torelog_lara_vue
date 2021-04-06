@@ -13,6 +13,10 @@ class Log extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'text'
+    ];
+
     // responseで返却するデータの指定
     protected $visible = [
         'id', 'text', 'user', 'favorites', 'comments', 'event_logs',

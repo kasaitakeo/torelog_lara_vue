@@ -15,6 +15,10 @@ import store from './store'
 // ルートコンポーネントをインポートする
 import App from './App.vue'
 
+import InfiniteLoading from 'vue-infinite-loading';
+//Vue-infinite-loadingを使用する
+Vue.use(InfiniteLoading);
+
 // ログインチェックしてからアプリを生成する
 const createApp = async () => {
   await store.dispatch('auth/currentUser')

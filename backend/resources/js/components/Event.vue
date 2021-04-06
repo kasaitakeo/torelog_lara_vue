@@ -122,14 +122,13 @@ export default {
   },
   methods: {
     async eventPost () {
-      
-      eventBus.$emit('eventPost', {
+      this.$emit('eventPost', {
         id: this.event.id,
         weight: this.weight,
         rep: this.rep,
         set: this.set
       })
-
+      
       this.dialog = false
     },
     close () {

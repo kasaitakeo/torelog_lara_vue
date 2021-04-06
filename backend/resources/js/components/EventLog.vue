@@ -12,7 +12,7 @@
           <span>{{ item.weight }}kg</span>
           <span>{{ item.rep }}rep</span>
           <span>{{ item.set }}set</span>
-          <span v-show="ableDelete">
+          <span v-if="$route.name === 'log.create'">
             <v-btn @click.prevent="deleteEventLog" color="blue darken-1" text>削除</v-btn>
           </span>
         </v-card-text>
@@ -28,10 +28,6 @@ export default {
       type: Object,
       required: true
     },
-    ableDelete: {
-      type: Boolean,
-      required: true
-    }
   },
   methods: {
     // 種目ログ削除後ページの更新が必要な為、親にemitで投げる

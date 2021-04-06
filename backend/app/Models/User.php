@@ -132,8 +132,6 @@ class User extends Authenticatable
                     'email'         => $data['email'],
                 ]); 
         }
-
-        return;
     }
 
     /**

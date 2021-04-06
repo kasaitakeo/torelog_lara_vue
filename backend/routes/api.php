@@ -31,18 +31,22 @@ Route::group(['prefix' => 'logs'], function () {
     // ログ一覧
     Route::get('', 'LogsController@index')->name('log.index');
 
+    
     // ログ作成（投稿）
     Route::post('', 'LogsController@store')->name('log.store');
-
+    
     // ログ詳細
     Route::get('/{log}', 'LogsController@show')->name('log.show');
-
+    
     // ログ更新
     Route::put('/{log}', 'LogsController@update')->name('log.update');
-
+    
     // ログ削除
     Route::delete('/{log}', 'LogsController@destroy')->name('log.destroy');
 });
+
+// 指定したユーザーのログ一覧
+Route::get('users/{user_id}/logs', 'LogsController@userLog')->name('user_log');
 
 Route::group(['prefix' => 'users'], function () {
     // ユーザー一覧
@@ -77,6 +81,7 @@ Route::group(['prefix' => 'events'], function () {
     // 種目削除
     Route::delete('/{event}', 'EventsController@destroy')->name('event.destroy');
 });
+
 Route::get('/{user}/events', 'EventsController@userEvents')->name('user.event');
 
 // 種目ログ取得

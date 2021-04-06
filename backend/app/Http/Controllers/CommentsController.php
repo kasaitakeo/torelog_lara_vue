@@ -10,10 +10,10 @@ use App\Models\Comment;
 class CommentsController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
+     * コメント作成
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\CommentRequest $request
+     * @return \Illuminate\Http\Response 201
      */
     public function store(CommentRequest $request, Comment $comment)
     {

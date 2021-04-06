@@ -28,6 +28,7 @@
                 :event="event"
                 v-show="active === part.id"
                 :userId="userId"
+                @eventPost="eventPost"
               />
           </div>
         </div>
@@ -68,15 +69,18 @@ export default {
       errors: null,
     }
   },
-  // computed: {
-  //   userId () {
-  //     return this.$store.getters['auth/userId']
-  //   },
-  // },  
   methods: {
     activate (id) {
       this.active = id
     },
+    async eventPost (e) {
+      this.$emit('eventPost', {
+        id: e.id,
+        weight: e.weight,
+        rep: e.rep,
+        set: e.set
+      })
+    }
   },
   mounted () {
   }

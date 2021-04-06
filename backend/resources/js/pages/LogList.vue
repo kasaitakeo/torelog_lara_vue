@@ -9,21 +9,33 @@
         @favoriteLog="favoriteLog"
         @unFavoriteLog="unFavoriteLog"
       />
+      <Pagination :current-page="currentPage" :last-page="lastPage" />
     </v-col>
   </v-row>
 </template>
 
 <script>
 import { OK } from '../util'
-import Log from '../components/Log.vue'
+import Log from '../components/Log'
+import Pagination from '../components/Pagination'
 
 export default {
   components: {
     Log,
+    Pagination
+  },
+  props: {
+    page: {
+      type: Number,
+      required: false,
+      default: 1
+    }
   },
   data () {
     return {
       logs: [],
+      currentPage: 0,
+      lastPage: 0
     }
   },
   computed: {
@@ -32,9 +44,10 @@ export default {
     },
   },
   methods: {
+    
     // 全てのログタイムライン取得
     async getLogs () {
-      const response = await axios.get('/api/logs')
+      const response = await axios.get(`/api/logs/?page=${this.page}`)
 
       console.log(response)
       if (response.status !== OK) {
@@ -43,6 +56,8 @@ export default {
       }
 
       this.logs = response.data.data
+      this.currentPage = response.data.current_page
+      this.lastPage = response.data.last_page
     },
     // ログのいいね登録
     async favoriteLog ({ id }) {
@@ -63,7 +78,7 @@ export default {
         return false  
       }
 
-      this.getLogs()
+      
     },
     // ログのいいね解除
     async unFavoriteLog ({ id }) {
@@ -80,11 +95,19 @@ export default {
         return false  
       }
 
-      this.getLogs()
+      
     },
   },
-  mounted () {
-    this.getLogs()
+  watch: {
+    $route: {
+      async handler () {
+        await this.getLogs()
+      },
+      immediate: true
+    }
   }
+  // mounted () {
+  //   this.getLogs()
+  // }
 }
 </script>

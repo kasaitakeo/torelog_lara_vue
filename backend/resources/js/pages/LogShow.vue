@@ -15,9 +15,6 @@ export default {
   components: {
     Log,
   },
-  props: {
-    logId: Number
-  },
   data () {
     return {
       log: {},
@@ -32,14 +29,14 @@ export default {
   methods: {
     // propsで受け取ったidのログを取得する
     async getLog () {
-      const response = await axios.get(`/api/logs/${this.logId}`)
+      const response = await axios.get(`/api/logs/${this.$route.params.logId}`)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
 
-      console.log(response.data)
+      console.log(response)
 
       this.log = response.data
     },
@@ -84,21 +81,14 @@ export default {
       this.getLog()
     },
   },
-  // ライフサイクルフックの設定ではlog.userのエラーを直せなかった
-  // created () {
-  //   this.getLog()
-  // },
-  mounted () {
-    this.getLog()
-  },
-  // watch: {
-  //   $route: {
-  //     async handler () {
-  //       await this.getLog()
-  //     },
-  //     immediate: true
-  //   }
-  // }
+  watch: {
+    $route: {
+      async handler () {
+        await this.getLog()
+      },
+      immediate: true
+    }
+  }
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-card>
+      <!-- <v-card> -->
         <form @submit.prevent="eventEdit">
           <v-select
             v-model="eventPart"
@@ -25,18 +25,22 @@
             label="種目解説"
             placeholder="大胸筋上部、コンパウンド種目、高重量狙い"
           ></v-textarea>
-          <v-btn v-if="this.$route.path === '/events/create'" type="submit">種目追加</v-btn>
-          <v-btn v-else type="submit">種目更新</v-btn>
+          <div v-if="this.$route.path === '/events/create'" class="d-flex justify-center">
+            <v-btn v-if="this.$route.path === '/events/create'" type="submit">種目追加</v-btn>
+            <v-btn @click="back">戻る</v-btn>
+          </div>
+          <div v-else>
+            <v-btn type="submit" class="d-flex justify-center mb-2">種目更新</v-btn>
+          </div>
+      
         </form>
-      </v-card>
+      <!-- </v-card> -->
     </v-col>
   </v-row>
 </template>
 
 <script>
-import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
-import { OK } from '../util'
-
+// EventCreate,EventUpdateの子コンポーネント
 export default {
   props: {
     event: {
@@ -59,85 +63,30 @@ export default {
     }
   },
   methods: {
-    async getEvent () {
-      const response = await axios.get(`/api/events/${this.$route.params.eventId}`)
-  
-      // if (response.status !== OK) {
-      //   this.$store.commit('error/setCode', response.status)
-      //   return false
-      // }
-  
-      console.log(response.data)
-      this.event = response.data
-    },
     async eventEdit () {
       this.$emit('event-edit', {
         eventPart: this.eventPart,
         eventName: this.eventName,
         eventExplanation: this.eventExplanation
       })
+      this.eventPart = ''
+      this.eventName = ''
+      this.eventExplanation = ''
+    },
+    back () {
+      this.$router.go(-1)
     }
   },
-  created () {
-    // this.getEvent()
-
-  },
-  mounted () {
-    // this.getEvent()
-
-    // this.$nextTick(()=>{
-    //   this.eventPart = this.event.part
-    //   this.eventPart = this.event.event_name
-    //   this.eventPart = this.event.event_explanation
-    
-    //     // console.log(this.event)
-    // })
-  },
-  // computed: {
-  //   // totalPrice(){
-  //   //   return this.number * this.price
-  //   // }
-  //     totalPrice: app => app.number * app.price
-  // },
   watch: {
     event: {
-      immediate: true,
       handler() {
         this.eventPart = this.event.part
         this.eventName = this.event.event_name
         this.eventExplanation = this.event.event_explanation
-      }
+      },
+      immediate: true,
     }
   }
-  // beforeRouteEnter (to, from, next) {
-  //   next(vm => {
-  //     // `vm` を通じてコンポーネントインスタンスにアクセス
-      
-  //       if(typeof vm.event !== 'undefined'){
-  //         vm.eventPart = vm.event.part
-  //         vm.eventPart = vm.event.event_name
-  //         vm.eventPart = vm.event.event_explanation
-  //       }
-  //         vm.eventPart = vm.event.part
-  //         vm.eventPart = vm.event.event_name
-  //         vm.eventPart = vm.event.event_explanation
-      
-  //       console.log(vm.event)
-  //   })
-  // }
-  // beforeRouteEnter (to, from, next) {
-  //   next(vm => {
-  //     console.log(vm.event)
-  //     // `vm` を通じてコンポーネントインスタンスにアクセス
-  //     vm.$nextTick(()=>{
-  //       if(vm.event){
-  //         vm.eventPart = vm.event.part
-  //         vm.eventPart = vm.event.event_name
-  //         vm.eventPart = vm.event.event_explanation
-  //       }
-  //     })
-  //   })
-  // }
 }
 </script>
 

@@ -16,6 +16,7 @@
               <!-- ログインユーザーの種目コンポーネント -->
               <UserEvent
               :events="events"
+              @eventPost="eventPost"
               />
             </v-col>
           </v-row>
@@ -26,7 +27,6 @@
                 v-for="eventLog in eventLogs"
                 :key="eventLog.id"
                 :item="eventLog"
-                :ableDelete="true"
                 @deleteEventLog="deleteEventLog"
               />
             </v-col>
@@ -35,11 +35,13 @@
             class="mx-auto"
             max-width="800"
           >
-            <v-textarea v-model="logContent"></v-textarea>
-            <div class="d-flex justify-center mb-6">
-              <v-btn @submit.prevent="deleteLog">ログ削除</v-btn>
-              <v-btn @submit.prevent="updateLog">編集終了</v-btn>
-            </div>
+            <form @submit.prevent="updateLog">
+              <v-textarea v-model="logContent"></v-textarea>
+              <div class="d-flex justify-center mb-6">
+                <v-btn @submit.prevent="deleteLog">ログ削除</v-btn>
+                <v-btn type="submit">編集終了</v-btn>
+              </div>
+            </form>  
           </v-card>
 
         </v-card>
@@ -54,15 +56,11 @@ import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
 import { OK } from '../util'
 import UserEvent from '../components/UserEvent.vue'
 import EventLog from '../components/EventLog.vue'
-import eventBus from '../eventBus.js'
 
 export default {
   components: {
     UserEvent,
     EventLog,
-  },
-  props: {
-    logId: Number
   },
   data () {
     return {
@@ -81,7 +79,7 @@ export default {
   methods: {
     // 編集するログの情報を取得
     async getLog () {
-      const response = await axios.get(`/api/logs/${this.logId}`)
+      const response = await axios.get(`/api/logs/${this.$route.params.logId}`)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
@@ -104,17 +102,27 @@ export default {
         return false
       }
 
+      this.$store.commit('message/setContent', {
+        content: '実施種目を削除しました！',
+        timeout: 3000
+      })
+
       this.getEventLogs()
     },
     // 種目ログを全て削除
     async deleteAllEventLog () {
       
-      const response = await axios.delete(`/api/${this.logId}/event_logs`)
+      const response = await axios.delete(`/api/${this.$route.params.logId}/event_logs`)
       console.log(response)
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
+
+      this.$store.commit('message/setContent', {
+        content: '実施種目を全て削除しました！',
+        timeout: 3000
+      })
 
       // 再度、空の状態（全て削除した為）の種目ログ取得
       this.getEventLogs()
@@ -124,7 +132,7 @@ export default {
     // ログのテキスト入力後のログ更新処理
     async updateLog () {
       
-      const response = await axios.put(`/api/logs/${this.logId}`, {
+      const response = await axios.put(`/api/logs/${this.$route.params.logId}`, {
         text: this.logContent
       })
 
@@ -150,7 +158,7 @@ export default {
     },
     // ログ削除
     async deleteLog () {
-      const response = await axios.delete(`/api/logs/${this.logId}`)
+      const response = await axios.delete(`/api/logs/${this.$route.params.logId}`)
 
       console.log(response)
 
@@ -158,6 +166,12 @@ export default {
         this.$store.commit('error/setCode', response.status)
         return false  
       }
+      this.$store.commit('message/setContent', {
+        content: 'トレログを削除しました！',
+        timeout: 3000
+      })
+      
+      this.$router.push('/')
     },
     // ユーザーが登録している種目を全て取得
     async getEvents () {
@@ -174,7 +188,7 @@ export default {
     },
     // 現在作成しているログに登録している全ての種目ログの取得
     async getEventLogs () {
-      const response = await axios.get(`/api/${this.logId}/event_logs`)
+      const response = await axios.get(`/api/${this.$route.params.logId}/event_logs`)
 
       console.log(response)
 
@@ -190,40 +204,44 @@ export default {
 
       this.eventLogs = response.data
     },
-  },
-  mounted () {
-    if (this.$store.getters['auth/check']) {
-      this.getLog()
-  
-      this.getEvents()
-
-      // 孫コンポーネントのEvent.vueのeventPostが行われた際の新規種目ログ登録処理
-      eventBus.$on('eventPost', async({ id, weight, rep, set }) => {
-        const response = await axios.post('/api/event_logs', {
-          log_id: this.logId,
-          event_id: id,
-          weight: weight,
-          rep: rep,
-          set: set
-        })
-        console.log(response)
-  
-        if (response.status !== CREATED) {
-          this.$store.commit('error/setCode', response.status)
-          return false
-        }
-  
-        this.$store.commit('message/setContent', {
-          content: '実施種目が追加されました！',
-          timeout: 3000
-        })
-   
-        this.getEventLogs()
+    // 孫から子へ子から親へemitで投げる（eventBusだと予期せぬ挙動が出現した）
+    async eventPost (e) {
+      const response = await axios.post('/api/event_logs', {
+        log_id: this.$route.params.logId,
+        event_id: e.id,
+        weight: e.weight,
+        rep: e.rep,
+        set: e.set
       })
-    } else {
-      this.$router.push('/')
-    }
+      console.log(response)
 
+      if (response.status !== CREATED) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+
+      this.$store.commit('message/setContent', {
+        content: '実施種目が追加されました！',
+        timeout: 3000
+      })
+
+      // 新規種目ログが登録された状態で現在編集中の種目ログの状態を更新
+      this.getEventLogs()
+    }
   },
+  watch: {
+    $route: {
+      async handler () {
+        if (this.$store.getters['auth/check']) {
+          await this.getLog()
+      
+          await this.getEvents()
+        } else {
+          this.$router.push('/')
+        }
+      },
+      immediate: true
+    }
+  }
 }
 </script>

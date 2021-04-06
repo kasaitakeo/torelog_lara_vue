@@ -17,11 +17,12 @@
           <v-col cols="8">
             <!-- UserShowへのリンク -->
             <RouterLink class="button button--link"  :to="{name: 'user.show', params: {userId: user.id}}">
-              {{ user.name }}
+              {{ user.screen_name }}
             </RouterLink>
           </v-col>
         </v-row>
       </v-card>
+      <infinite-loading @infinite="infiniteHandler"></infinite-loading>
     </v-col>
   </v-row>
 </template>
@@ -32,25 +33,33 @@ import { OK } from '../util'
 export default {
   data () {
     return {
-      users: {},
+      users: [],
+      page: 1,
     }
   },
   methods: {
-    // 全てのユーザーを取得
-    async getUsers () {
-      const response = await axios.get(`/api/users`)
-
-      console.log(response)
-      if (response.status !== OK) {
-        this.$store.commit('error/setCode', response.status)
-        return false
-      }
-
-      this.users = response.data
+    infiniteHandler($state) {
+      axios.get('/api/users', {
+        params: {
+          page: this.page,
+          per_page: 1
+        },
+      }).then(({ data }) => {
+        console.log(data)
+        //そのままだと読み込み時にカクつくので1500毎に読み込む
+        setTimeout(() => {
+          if (this.page < data.data.length) {
+            this.page += 1
+            this.users.push(...data.data)
+            $state.loaded()
+          } else {
+            $state.complete()
+          }
+        }, 1500)
+      }).catch((err) => {
+        $state.complete()
+      })
     },
-  },
-  mounted () {
-    this.getUsers()
   }
 }
 </script>
