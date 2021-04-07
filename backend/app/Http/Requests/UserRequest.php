@@ -30,7 +30,7 @@ class UserRequest extends FormRequest
             //  種目ログの重量、回数、セット数は全て必須で数値である
             'name' => 'required|string|max:255',
             'screen_name' => ['required', 'string', 'max:50', Rule::unique('App\Models\User')->ignore($login_user->id)],
-            'user_text' => 'string|max:250',
+            'user_text' => 'string|max:150',
             'profile_image' => 'nullable|file|image|mimes:jpeg,png,jpg|max:2048',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('App\Models\User')->ignore($login_user->id)]
         ];

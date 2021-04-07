@@ -35,13 +35,13 @@
                   <v-btn
                     outlined
                     x-small
-                  >edit</v-btn> 
+                  >編集</v-btn> 
                 </RouterLink>
                 <v-btn
                   @click="deleteLog(log.id)"
                   outlined
                   x-small
-                >delete</v-btn>
+                >削除</v-btn>
               </div>
             </div>
             <!-- LogShowページでない場合、ログの詳細ボタンを表示 -->
@@ -71,7 +71,6 @@
 
           </v-row>
           <v-row class="d-flex justify-start">
-
             <!-- ログ作成ユーザーの名前をクリックするとユーザー詳細ページへ飛ぶ -->
             <RouterLink class="button button--link" :to="{ name: 'user.show', params: { userId: log.user.id }}">
               <div class="font-weight-bold">{{ log.user.screen_name }}</div>
@@ -198,8 +197,14 @@ export default {
 
       this.$router.push('/')
     },
+    alert () {
+      alert('コメント機能を使うにはログインしてください。')
+    }
   },
   computed: {
+    isLogin () {
+      return this.$store.getters['auth/check']
+    },
     loginUserId () {
       return this.$store.getters['auth/userId']
     }

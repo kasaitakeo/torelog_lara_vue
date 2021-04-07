@@ -25,7 +25,6 @@ class CommentRequest extends FormRequest
     {
         return [
             //
-            'log_id' =>['required', 'integer'],
             'text'     => ['required', 'string', 'max:140']
         ];
     }

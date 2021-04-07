@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLogin">
+  <div v-if="isLogin && active">
     <v-bottom-navigation
       app
       v-model="value"
@@ -32,7 +32,8 @@
   export default {
     data () { 
       return {
-        value: 1
+        value: 1,
+        active: true,
       }
     },
     computed: {
@@ -41,7 +42,7 @@
           case 0: return 'blue-grey'
           case 1: return 'teal'
           case 2: return 'indigo'
-          default: return 'yellow'
+          default: return 'blue-grey'
         }
       },
       isLogin () {
@@ -51,36 +52,24 @@
         return this.$store.getters['auth/userId']
       },
     },
-    // mounted () {
-    //   switch (this.$route.name) {
-    //     case 'log.create': 
-    //       this.value = 0
-    //       break
-    //     case '/':
-    //       this.value = 1
-    //       break
-    //     case 'user.show':
-    //       this.value = 2
-    //       break
-    //     default: 
-    //       this.value = 3
-    //   }
-    // },
     watch: {
       $route: {
         handler () {
-          switch (this.$route.name) {
-            case 'log.create': 
+          switch (this.$route.path) {
+            case '/logs/create': 
               this.value = 0
+              this.active = true
               break
             case '/':
               this.value = 1
+              this.active = true
               break
-            case 'user.show':
+            case `/users/${this.userId}`:
               this.value = 2
+              this.active = true
               break
             default: 
-              this.value = 3
+              this.active = false
           }
         },
         immediate: true

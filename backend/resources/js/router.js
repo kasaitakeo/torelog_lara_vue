@@ -57,10 +57,8 @@ const routes = [
       if (store.getters['auth/check']) {
         next()
       } else {
-        this.$store.commit('message/setContent', {
-          content: 'ログインしなければ利用できません',
-          timeout: 6000
-        })
+        alert('ログインしなければ利用できません')
+
         next('/')
       }
     }
@@ -79,10 +77,8 @@ const routes = [
       if (store.getters['auth/check']) {
         next()
       } else {
-        this.$store.commit('message/setContent', {
-          content: 'ログインしなければ利用できません',
-          timeout: 6000
-        })
+        alert('ログインしなければ利用できません')
+        
         next('/')
       }
     }  
@@ -95,10 +91,8 @@ const routes = [
       if (store.getters['auth/check']) {
         next()
       } else {
-        this.$store.commit('message/setContent', {
-          content: 'ログインしなければ利用できません',
-          timeout: 6000
-        })
+        alert('ログインしなければ利用できません')
+        
         next('/')
       }
     }
@@ -112,10 +106,8 @@ const routes = [
       if (store.getters['auth/check']) {
         next()
       } else {
-        this.$store.commit('message/setContent', {
-          content: 'ログインしなければ利用できません',
-          timeout: 6000
-        })
+        alert('ログインしなければ利用できません')
+        
         next('/')
       }
     }
@@ -139,10 +131,8 @@ const routes = [
       if (store.getters['auth/check']) {
         next()
       } else {
-        this.$store.commit('message/setContent', {
-          content: 'ログインしなければ利用できません',
-          timeout: 6000
-        })
+        alert('ログインしなければ利用できません')
+        
         next('/')
       }
     }
@@ -155,10 +145,8 @@ const routes = [
       if (store.getters['auth/check']) {
         next()
       } else {
-        this.$store.commit('message/setContent', {
-          content: 'ログインしなければ利用できません',
-          timeout: 6000
-        })
+        alert('ログインしなければ利用できません')
+        
         next('/')
       }
     }
@@ -172,10 +160,8 @@ const routes = [
       if (store.getters['auth/check']) {
         next()
       } else {
-        this.$store.commit('message/setContent', {
-          content: 'ログインしなければ利用できません',
-          timeout: 6000
-        })
+        alert('ログインしなければ利用できません')
+        
         next('/')
       }
     }

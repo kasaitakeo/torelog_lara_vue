@@ -91,6 +91,7 @@ return [
             'prefix_indexes' => true,
         ],
 
+        // test用のデータベース
         'sqlite_testing' => [
             'driver' => 'sqlite',
             'database' => ':memory:',

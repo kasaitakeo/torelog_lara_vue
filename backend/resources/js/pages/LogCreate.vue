@@ -45,7 +45,7 @@
             max-width="800"
           >
             <form @submit.prevent="updateLog">
-              <v-textarea v-model="logContent"></v-textarea>
+              <v-textarea v-model="logContent" :counter="140"></v-textarea>
               <div class="d-flex justify-center mb-6">
                 <v-btn type="submit">編集終了</v-btn>
               </div>
@@ -212,6 +212,11 @@ export default {
         set: e.set
       })
       console.log(response)
+
+      if (response.status === UNPROCESSABLE_ENTITY) {
+        this.errors = response.data.errors
+        return false
+      }
 
       if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)

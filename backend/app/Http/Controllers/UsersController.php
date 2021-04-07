@@ -81,7 +81,7 @@ class UsersController extends Controller
 
         if ($is_following) {
             $follower->unfollow($user->id);
-            return response('', 201);
+            return response('', 200);
         }
 
         return abort(404);

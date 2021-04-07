@@ -1,7 +1,7 @@
 <template>
   <v-card class="ma-1 pa-2" elevation="10">
     <!-- 種目作成のリンク -->
-    <RouterLink class="d-flex justify-center button button--link" :to="{name: 'event.create'}">
+    <RouterLink v-if="loginUserId === userId"class="d-flex justify-center button button--link" :to="{name: 'event.create'}">
       種目追加
     </RouterLink>
     <v-tabs
@@ -67,6 +67,11 @@ export default {
       ],
       msg: '',
       errors: null,
+    }
+  },
+  computed: {
+    loginUserId () {
+      return this.$store.getters['auth/userId']
     }
   },
   methods: {

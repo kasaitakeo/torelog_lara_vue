@@ -45,7 +45,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>
         <RouterLink class="button button--link" to="/">
-        torelog
+          トレログ
         </RouterLink>
       </v-toolbar-title>
       <v-spacer></v-spacer>

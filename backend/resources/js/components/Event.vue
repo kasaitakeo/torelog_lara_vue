@@ -115,9 +115,9 @@ export default {
       weightItems: [...Array(301).keys()],
       repItems: [...Array(31).keys()],
       setItems: [...Array(21).keys()],
-      weight: '',
-      rep: '',
-      set: '',
+      weight: 50,
+      rep: 10,
+      set: 3,
     }
   },
   methods: {

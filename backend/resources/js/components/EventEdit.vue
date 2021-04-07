@@ -20,6 +20,7 @@
           ></v-text-field>
           <v-textarea
             v-model="eventExplanation"
+            :counter="200"
             clearable
             clear-icon="mdi-close-circle"
             label="種目解説"

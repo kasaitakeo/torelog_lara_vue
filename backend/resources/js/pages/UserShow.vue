@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { OK } from '../util'
+import { OK, CREATED } from '../util'
 import Log from '../components/Log.vue'
 import UserEvent from '../components/UserEvent.vue'
 import Pagination from '../components/Pagination'
@@ -210,9 +210,9 @@ export default {
 
       console.log(response)
 
-      if (response.status !== OK) {
+      if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)
-        return false  
+        return false
       }
 
       this.getUser()
@@ -235,14 +235,14 @@ export default {
     $route: {
       async handler () {
         await this.getUserLogs()
+        await this.getUser()
+        await this.getUserEvents()
       },
       immediate: true
     }
   },
   // ルート遷移時呼ばないため
   async mounted () {
-    await this.getUser()
-    await this.getUserEvents()
   }
 }
 </script>
