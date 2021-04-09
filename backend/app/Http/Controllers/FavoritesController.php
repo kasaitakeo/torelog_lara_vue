@@ -24,7 +24,7 @@ class FavoritesController extends Controller
         // いいねしていない状態ならいいね登録
         if (!$is_favorite) {
             $favorite->storeFavorite($user->id, $log_id);
-            return;
+            return response('', 201);
         }
         return abort(404);;
     }

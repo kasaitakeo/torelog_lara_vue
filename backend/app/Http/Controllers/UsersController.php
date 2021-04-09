@@ -15,18 +15,35 @@ class UsersController extends Controller
     //
     public function index(User $user)
     {
-        $all_user = $user->orderBy(User::CREATED_AT, 'desc')->paginate(10);
+        $users = $user->orderBy(User::CREATED_AT, 'desc')->paginate(10);
 
-        return response($all_user, 200);
+        $login_user = auth()->user();
+
+        $all_user_datas = array();
+
+        foreach ($users as $user) {
+            // $is_followingはログインユーザーがフォローしているユーザー情報
+            $is_following = $login_user->isFollowing($user->id);
+            // $is_followedはログインユーザーをフォローしているユーザー情報
+            $is_followed = $login_user->isFollowed($user->id);
+
+            $all_user_datas = array_merge($all_user_datas, array([
+                'user_data'      => $user,
+                'is_following'   => $is_following,
+                'is_followed'    => $is_followed,
+            ]));
+        }
+        return response(['data' => $all_user_datas, 'users' => $users], 200);
     }
 
     public function show(User $user, Log $log, Follower $follower)
     {
-        $user_data = User::with(['logs' => function($query){
-            $query->with(['user', 'favorites', 'comments','event_logs' => function($query){
-                $query->with('event');
-            }]);
-        }])->where('id', $user->id)->first();
+        $user_data = User::where('id', $user->id)
+            ->with(['logs' => function($query){
+                $query->with(['user', 'favorites', 'comments','event_logs' => function($query){
+                    $query->with('event');
+                }]);
+            }])->first();
         
         // $login_userはログインしている自身の情報
         $login_user = auth()->user();

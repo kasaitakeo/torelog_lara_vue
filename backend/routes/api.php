@@ -65,10 +65,10 @@ Route::group(['prefix' => 'users'], function () {
     Route::post('/unfollow/{user}', 'UsersController@unfollow')->name('user.unfollow');
 });
 
-Route::group(['prefix' => 'events'], function () {
-    // 種目一覧
-    Route::get('', 'EventsController@index')->name('event.index');
+// 指定したユーザーidの種目の取得
+Route::get('/users/{user}/events', 'EventsController@userEvents')->name('user.event');
 
+Route::group(['prefix' => 'events'], function () {
     // 種目作成
     Route::post('', 'EventsController@store')->name('event.store');
 
@@ -82,12 +82,11 @@ Route::group(['prefix' => 'events'], function () {
     Route::delete('/{event}', 'EventsController@destroy')->name('event.destroy');
 });
 
-Route::get('/users/{user}/events', 'EventsController@userEvents')->name('user.event');
 
 // 種目ログ取得
 Route::get('/{log_id}/event_logs', 'EventLogsController@index')->name('event_log.index');
 
-// 種目ログ作成中のログ分を全て削除
+// 作成中のログに登録されている種目ログを全て削除
 Route::delete('/{log_id}/event_logs', 'EventLogsController@allDelete')->name('event_log.all_delete');
 
 Route::group(['prefix' => 'event_logs'], function () {

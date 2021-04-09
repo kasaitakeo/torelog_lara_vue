@@ -41,7 +41,7 @@ class LogsController extends Controller
     }
 
     /**
-     * ログ一覧取得
+     * 指定したユーザーのログ取得
      * @param Log $log
      * @return \Illuminate\Http\Response
      */
@@ -98,13 +98,11 @@ class LogsController extends Controller
      */
     public function update(LogRequest $request, Log $log)
     {
-        $user = auth()->user();
-
         $log->text = $request->input('text');
         
         $log->save();
 
-        return;
+        return response('', 200);
     }
 
     /**

@@ -71,7 +71,6 @@ class User extends Authenticatable
         return $this->hasMany(Event::class);
     }
 
-    
     // フォローする
     public function follow(Int $user_id) 
     {

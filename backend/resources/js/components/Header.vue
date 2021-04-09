@@ -50,11 +50,6 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="isLogin">  
-        <span>
-          <RouterLink class="button button--link" :to="{name: 'user.show', params: {userId: userId}}">
-            {{ userName }} 
-          </RouterLink>
-        </span>/
         <span class="button button--link" @click="logout">
           Logout
         </span>

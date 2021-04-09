@@ -2,21 +2,34 @@
 
 namespace Tests\Feature;
 
+use App\Models\Log;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CommentsTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $response = $this->get('/');
+    use RefreshDatabase;
 
-        $response->assertStatus(200);
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        // テストログ作成
+        $this->log = factory(Log::class)->create();
+
+    }
+
+    /**
+     * @test
+     */
+    public function 指定したコメントの作成()
+    {
+        $response = $this->actingAs($this->log->user)->json('POST', '/api/comments', [
+            'log_id' => 1,
+            'text' => 'test',
+        ]);
+
+        $response->assertStatus(201);
     }
 }

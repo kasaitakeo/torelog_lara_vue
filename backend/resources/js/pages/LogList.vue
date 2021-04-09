@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { OK } from '../util'
+import { OK, CREATED } from '../util'
 import Log from '../components/Log'
 import Pagination from '../components/Pagination'
 
@@ -72,7 +72,7 @@ export default {
 
       console.log(response)
 
-      if (response.status !== OK) {
+      if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)
         return false  
       }

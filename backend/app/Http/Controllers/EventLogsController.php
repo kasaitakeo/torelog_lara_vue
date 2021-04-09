@@ -21,7 +21,7 @@ class EventLogsController extends Controller
     }
 
     /**
-     * 種目ログの登録
+     * 種目ログの作成
      * 
      * 
      */

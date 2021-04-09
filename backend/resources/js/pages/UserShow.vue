@@ -184,7 +184,7 @@ export default {
 
       console.log(response)
 
-      if (response.status !== OK) {
+      if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)
         return false  
       }
