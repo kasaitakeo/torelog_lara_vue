@@ -25,6 +25,7 @@
               <!-- ログインユーザーの種目コンポーネント -->
               <UserEvent
                 :events="events"
+                :userId="userId"
                 @eventPost="eventPost"
               />
             </v-col>
