@@ -25,6 +25,7 @@ class LogRequest extends FormRequest
     {
         return [
              //  種目の部位、名、は必須
+             'title' => 'required|string|max:30',
              'text' => 'nullable|string|max:140',
         ];
     }

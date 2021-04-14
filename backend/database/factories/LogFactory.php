@@ -11,6 +11,7 @@ $factory->define(Log::class, function (Faker $faker) {
     $user = factory(User::class)->create();
     return [
         'user_id' => $user->id,
+        'title' => $faker->word(),
         'text' => $faker->word(),
         'created_at' => now(),
         'updated_at' => now()

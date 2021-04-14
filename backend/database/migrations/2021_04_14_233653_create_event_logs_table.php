@@ -16,21 +16,19 @@ class CreateEventLogsTable extends Migration
         Schema::create('event_logs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('log_id')->comment('ログID');
-            $table->unsignedInteger('event_id')->comment('イベントID');
-            $table->integer('weight');
-            $table->integer('rep');
-            $table->integer('set');
+            $table->unsignedInteger('event_id')->comment('種目ID');
+            $table->integer('weight')->comment('重量');
+            $table->integer('rep')->comment('回数');
+            $table->integer('set')->comment('セット数');
             $table->timestamps();
+
+            $table->index('id');
+            $table->index('log_id');
+            $table->index('event_id');
 
             $table->foreign('log_id')
                 ->references('id')
                 ->on('logs')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-
-            $table->foreign('event_id')
-                ->references('id')
-                ->on('events')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });

@@ -16,15 +16,15 @@ class CreateEventsTable extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id')->comment('ユーザーID');
-            $table->string('event_name')->comment('種目');
-            $table->string('part')->comment('部位');
+            $table->string('event_part', 10)->comment('部位');
+            $table->string('event_name', 30)->comment('種目名');
+            $table->string('event_explanation', 200)->comment('種目解説');
             $table->softDeletes();
             $table->timestamps();
 
             $table->index('id');
             $table->index('user_id');
-            $table->index('event_name');
-            $table->index('part');
+            $table->index('event_part');
 
             $table->foreign('user_id')
                 ->references('id')

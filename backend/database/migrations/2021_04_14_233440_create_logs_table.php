@@ -16,13 +16,13 @@ class CreateLogsTable extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id')->comment('ユーザID');
-            $table->string('text')->comment('本文');
+            $table->string('title', 30)->comment('ログのタイトル');
+            $table->string('text', 140)->nullable()->comment('ログの一言');
             $table->softDeletes();
             $table->timestamps();
 
             $table->index('id');
             $table->index('user_id');
-            $table->index('text');
 
             $table->foreign('user_id')
                 ->references('id')

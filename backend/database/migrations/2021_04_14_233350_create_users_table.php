@@ -15,14 +15,17 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('screen_name')->unique()->nullable()->comment('アカウント名');
-            $table->string('name')->null()->comment('ユーザ名');
-            $table->string('profile_image')->nullable()->comment('プロフィール画像');
-            $table->string('email')->unique();
+            $table->string('name', 255)->comment('ユーザ名');
+            $table->string('screen_name', 15)->unique()->comment('アカウント名');
+            $table->string('email', 255)->unique()->comment('メールアドレス');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('profile_image')->default('https://placehold.jp/50x50.png')->comment('プロフィール画像');
+            $table->string('profile_text')->default('よろしくお願いします')->comment('プロフィール文');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->index('id');
         });
     }
 

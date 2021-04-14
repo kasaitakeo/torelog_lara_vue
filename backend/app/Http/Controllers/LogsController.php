@@ -64,6 +64,7 @@ class LogsController extends Controller
         $user = auth()->user();
 
         $log->user_id = $user->id;
+        $log->title = $request->input('title');
 
         $log->save();
 
@@ -98,9 +99,7 @@ class LogsController extends Controller
      */
     public function update(LogRequest $request, Log $log)
     {
-        $log->text = $request->input('text');
-        
-        $log->save();
+        $log->fill($request->all())->save();
 
         return response('', 200);
     }
