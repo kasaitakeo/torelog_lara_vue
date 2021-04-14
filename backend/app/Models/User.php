@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Log;
 use App\Models\Event;
+use Storage;
 
 class User extends Authenticatable
 {
@@ -109,18 +110,18 @@ class User extends Authenticatable
     //  プロフィール編集
     public function updateProfile(Array $data, $login_user)
     {
-        // $dataの中に画像があれば処理を分けています
+        // $dataの中に画像があればS3に画像アップロード
         if (isset($data['profile_image'])) {
-            // $file_name = $data['profile_image']->storeAs('public/profile_image/');こうすることで画像ファイルが/storage/app/public/profile_image/に保存されます。
-            $file_name = time() . '.' . $data['profile_image']->getClientOriginalName();
-            $data['profile_image']->storeAs('public', $file_name);
+            // StorageファザードでS3につなぎ、putメソッドを利用してファイルをアップロード
+            // 第1引数にはアップロード先のディレクトリ、第2引数にはフォームから受け取ったファイルデータ、第3引数には外部からアクセスできるようにpublicを指定
+            $path = Storage::disk('s3')->put('/', $data['profile_image'], 'public');
             
             $this::where('id', $login_user->id)
             ->update([
                 'screen_name'   => $data['screen_name'],
                 'name'          => $data['name'],
                 'user_text'     => $data['user_text'],
-                'profile_image' => '/storage/' . basename($file_name),
+                'profile_image' => Storage::disk('s3')->url($path),
                 'email'         => $data['email'],
             ]);
         } else {
