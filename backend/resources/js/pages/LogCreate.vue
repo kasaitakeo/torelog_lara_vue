@@ -45,7 +45,7 @@
             class="mx-auto"
             max-width="800"
           >
-            <form @submit.prevent="updateLog">
+            <form @submit.prevent="endEditLog">
               <v-textarea v-model="logContent" :counter="140"></v-textarea>
               <div class="d-flex justify-center mb-6">
                 <v-btn type="submit">編集終了</v-btn>
@@ -127,9 +127,13 @@ export default {
         this.$store.commit('error/setCode', response.status)
         return false
       }
+      console.log(response)
 
       // response.dataに新規ログのidのみが返ってくる
       this.logId = response.data
+    },
+    endEditLog () {
+      this.$router.push('/')
     },
     // ログのテキスト入力後のログ更新処理
     async updateLog () {
@@ -151,12 +155,8 @@ export default {
       // メッセージ登録
       this.$store.commit('message/setContent', {
         content: 'トレログが保存されました！',
-        timeout: 6000
+        timeout: 3000
       })
-
-      // this.logId = ''
-
-      this.$router.push('/')
     },
     // ページ遷移時にログ削除する場合の処理
     async deleteLog () {
@@ -195,13 +195,17 @@ export default {
       this.event_logs = response.data
     },
     confirmSave (event) {
-      event.returnValue = "編集中のものは保存されませんが、よろしいですか？"
+      if (window.confirm(メッセージ)) {
+        // OKが選択された時の処理
+      event.preventDefault()
+      event.returnValue = ""
+      }
 
-      if (event.returnValue) {
-        this.deleteLog()
+      // if (event.returnValue) {
+      //   this.deleteLog()
 
-        this.deleteAllEventLog()
-      } 
+      //   this.deleteAllEventLog()
+      // } 
     },
     // 孫から子へ子から親へemitで投げる（eventBusだと予期せぬ挙動が出現した）
     async eventPost (e) {
@@ -263,27 +267,8 @@ export default {
     if (to.name === 'event.create') {
       next()
     } else {
-      // 種目ログ設定済かつログのテキスト未入力の場合
-      if (this.setEventLogs && this.logContent === '') {
-        let answer = window.confirm("コメント未入力のままトレログを保存してもよろしいでしょうか")
-        if (answer) {
-          this.$store.commit('message/setContent', {
-            content: 'トレログが保存されました。',
-            timeout: 6000
-          })
-
-          next()
-        } else {
-          this.deleteLog()
-
-          this.deleteAllEventLog()
-
-          next()
-
-          // next(false)
-        }
       // 種目ログ未設定の場合
-      } else if (!this.setEventLogs) {
+      if (!this.setEventLogs) {
         let answer = window.confirm("種目が未入力のままトレログの編集を終了してしまうとログは保存されません。このまま編集を終了してもよろしいでしょうか")
         if (answer) {
           this.deleteLog()
@@ -297,7 +282,23 @@ export default {
         } else {
           next(false)
         }
+      // 種目ログ設定済かつログのテキスト未入力の場合
+      } else if (this.setEventLogs && this.logContent === '') {
+        let answer = window.confirm("コメント未入力のままトレログを保存してもよろしいでしょうか（種目ログは保存されたままです）")
+
+        if (answer) {
+          this.$store.commit('message/setContent', {
+            content: 'トレログ保存されました。',
+            timeout: 6000
+          })
+
+          next()
+        } else {
+          next(false)
+        }  
       } else {
+        this.updateLog ()
+
         next()
       }
     }
