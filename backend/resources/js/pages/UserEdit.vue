@@ -13,8 +13,8 @@
       <ul v-if="errors.email">
         <li v-for="msg in errors.email" :key="msg">{{ msg }}</li>
       </ul>
-      <ul v-if="errors.user_text">
-        <li v-for="msg in errors.user_text" :key="msg">{{ msg }}</li>
+      <ul v-if="errors.profile_text">
+        <li v-for="msg in errors.profile_text" :key="msg">{{ msg }}</li>
       </ul>
       <ul v-if="errors.profile_image">
         <li v-for="msg in errors.profile_image" :key="msg">{{ msg }}</li>
@@ -53,7 +53,7 @@
           name="input-7-4"
           label="自己紹介文"
           :counter="250"
-          v-model="userText"
+          v-model="profileText"
         ></v-textarea>
       </v-col>
       <v-col cols="8" md="8">
@@ -88,7 +88,7 @@ export default {
       screenName: '',
       name: '',
       email: '',
-      userText: '',
+      profileText: '',
       image: null,
       confirmedImage: '',
       valid: false,
@@ -117,7 +117,7 @@ export default {
       this.screenName = response.data.user_data.screen_name
       this.name = response.data.user_data.name
       this.email = response.data.user_data.email
-      this.userText = response.data.user_data.user_text
+      this.profileText = response.data.user_data.profile_text
     },
     // 入力情報で更新する
     async update () {
@@ -126,7 +126,7 @@ export default {
       formData.append('name', this.name)
       formData.append('screen_name', this.screenName)
       formData.append('email', this.email)
-      formData.append('user_text', this.userText)
+      formData.append('profile_text', this.profileText)
       formData.append('profile_image', this.image ? this.image : '')
 
       // フォームデータ情報の表示

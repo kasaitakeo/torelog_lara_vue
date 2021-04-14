@@ -16,7 +16,8 @@ class LogsTableSeeder extends Seeder
         for ($i = 1; $i <= 20; $i++) {
             Log::create([
                 'user_id'    => $i,
-                'text'       => 'これはテストログ' .$i,
+                'title'       => 'これはテストログtitle' .$i,
+                'text'       => 'これはテストログtext' .$i,
                 'created_at' => now(),
                 'updated_at' => now()
             ]);

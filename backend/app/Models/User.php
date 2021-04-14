@@ -19,6 +19,7 @@ class User extends Authenticatable
     protected $fillable = [
         'screen_name',
         'name',
+        'profile_text',
         'profile_image',
         'email',
         'password'
@@ -29,7 +30,7 @@ class User extends Authenticatable
         'id', 
         'screen_name', 
         'name', 
-        'user_text',
+        'profile_text',
         'profile_image', 
         'email', 
         'logs', 
@@ -120,7 +121,7 @@ class User extends Authenticatable
             ->update([
                 'screen_name'   => $data['screen_name'],
                 'name'          => $data['name'],
-                'user_text'     => $data['user_text'],
+                'profile_text'    => $data['profile_text'],
                 'profile_image' => Storage::disk('s3')->url($path),
                 'email'         => $data['email'],
             ]);
@@ -129,7 +130,7 @@ class User extends Authenticatable
                 ->update([
                     'screen_name'   => $data['screen_name'],
                     'name'          => $data['name'],
-                    'user_text'     => $data['user_text'],
+                    'profile_text'     => $data['profile_text'],
                     'email'         => $data['email'],
                 ]); 
         }

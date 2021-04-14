@@ -49,14 +49,14 @@ class UsersTest extends TestCase
             ->json('PUT', '/api/users', [
                 'screen_name'   => 'test',
                 'name'          => 'test',
-                'user_text'     => 'test',
+                'profile_text'     => 'test',
                 'email'         => 'test@gmail.com',
             ]);
 
         $response->assertStatus(200);
         
         $this->actingAs($this->user)->get('/api/users/3')
-            ->assertJson(['user_data' => ['user_text' => 'test']]);
+            ->assertJson(['user_data' => ['profiler_text' => 'test']]);
     }
 
     /**

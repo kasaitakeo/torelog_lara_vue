@@ -32,7 +32,7 @@ class EventsController extends Controller
         $user = auth()->user();
 
         $event->user_id = $user->id;
-        $event->part = $request->input('eventPart');
+        $event->event_part = $request->input('eventPart');
         $event->event_name = $request->input('eventName');
         $event->event_explanation = $request->input('eventExplanation');
 
@@ -63,7 +63,7 @@ class EventsController extends Controller
      */
     public function update(EventRequest $request, Event $event)
     {
-        $event->part = $request->input('eventPart');
+        $event->event_part = $request->input('eventPart');
         $event->event_name = $request->input('eventName');
         $event->event_explanation = $request->input('eventExplanation');
 

@@ -61,8 +61,7 @@
         <v-row class="mx-1">
           <v-col cols="12">
             <!-- 自己紹介文 -->
-            <v-card class="px-2" elevation="0" shaped v-if="user.user_text !== null">{{ user.user_text }}</v-card>
-            <v-card class="pa-2" elevation="0" shaped v-else>よろしくお願いします！</v-card>
+            <v-card class="px-2" elevation="0" shaped>{{ user.profile_text }}</v-card>
           </v-col>
         </v-row>
         <v-row>

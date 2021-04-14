@@ -31,6 +31,7 @@ class LogsTest extends TestCase
             ->assertJson(["data" => [
                 [
                     "id" => $this->log->id,                                 
+                    "title" => $this->log->title,                                        
                     "text" => $this->log->text,                                        
                     "created_at" => true,                  
                     "user"=> [
@@ -39,7 +40,7 @@ class LogsTest extends TestCase
                         "name" => $this->log->user->name,                             
                         "profile_image" => $this->log->user->profile_image,
                         "email" => $this->log->user->email,                  
-                        "user_text" => $this->log->user->user_text          
+                        "profile_text" => $this->log->user->profile_text          
                     ],                                         
                     "favorites" => [],                                      
                     "comments" => [],                                       
@@ -60,6 +61,7 @@ class LogsTest extends TestCase
             ->assertJson(["data" => [
                 [
                     "id" => $this->log->id,                                 
+                    "title" => $this->log->title,                                        
                     "text" => $this->log->text,                                        
                     "created_at" => true,                  
                     "user"=> [
@@ -68,7 +70,7 @@ class LogsTest extends TestCase
                         "name" => $this->log->user->name,                             
                         "profile_image" => $this->log->user->profile_image,
                         "email" => $this->log->user->email,                  
-                        "user_text" => $this->log->user->user_text          
+                        "profile_text" => $this->log->user->profile_text          
                     ],                                         
                     "favorites" => [],                                      
                     "comments" => [],                                       
@@ -89,6 +91,7 @@ class LogsTest extends TestCase
             ->assertJson(["data" => [
                 [
                     "id" => $this->log->id,                                 
+                    "title" => $this->log->title,                                        
                     "text" => $this->log->text,                                        
                     "created_at" => true,                  
                     "user"=> [
@@ -97,7 +100,7 @@ class LogsTest extends TestCase
                         "name" => $this->log->user->name,                             
                         "profile_image" => $this->log->user->profile_image,
                         "email" => $this->log->user->email,                  
-                        "user_text" => $this->log->user->user_text          
+                        "profile_text" => $this->log->user->profile_text          
                     ],                                         
                     "favorites" => [],                                      
                     "comments" => [],                                       
