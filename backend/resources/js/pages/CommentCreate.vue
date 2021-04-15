@@ -9,6 +9,7 @@
         </div>
         <form @submit.prevent="postComment">
           <v-textarea
+            :counter="140"
             name="input-7-1"
             filled
             label="コメント"
@@ -57,15 +58,5 @@ export default {
       this.$router.push('/')
     }
   },
-  watch: {
-    $route: {
-      async handler () {
-        if (!this.$store.getters['auth/check']) {
-          this.$router.push('/')
-        }
-      },
-      immediate: true
-    }
-  }
 }
 </script>

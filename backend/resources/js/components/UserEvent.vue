@@ -1,7 +1,7 @@
 <template>
   <v-card class="ma-1 pa-2" elevation="10">
     <!-- 種目作成のリンク -->
-    <RouterLink v-if="loginUserId === userId" class="d-flex justify-center button button--link" :to="{name: 'event.create'}">
+    <RouterLink v-if="this.$route.name === 'log.show' || 'log.edit'" class="d-flex justify-center button button--link" :to="{name: 'event.create'}">
       種目追加
     </RouterLink>
     <v-tabs
@@ -22,7 +22,7 @@
         <!-- 取得したユーザーの種目をループ -->
         <div v-for="event in events" :key="event.id">
           <!-- 各種目部位と等しい種目から並べる（縦列で）※ -->
-          <div v-if="event.part === part.name">
+          <div v-if="event.event_part === part.name">
               <!-- アクティブなタブと同じ種目を表示 -->
               <Event
                 :event="event"

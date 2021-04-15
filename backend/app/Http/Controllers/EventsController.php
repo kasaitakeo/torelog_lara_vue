@@ -17,7 +17,7 @@ class EventsController extends Controller
     {
         $all_events = Event::where('user_id', $user_id)->get();
 
-        return $all_events ?? abort(404);
+        return $all_events;
     }
 
     /**

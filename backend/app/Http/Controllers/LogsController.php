@@ -58,7 +58,7 @@ class LogsController extends Controller
      * @param Log $log
      * @return \Illuminate\Http\Response
      */
-    public function store(Log $log)
+    public function store(LogRequest $request, Log $log)
     {
         // ログインしているユーザーのログとして保存（ログインしなければ保存できない）
         $user = auth()->user();
