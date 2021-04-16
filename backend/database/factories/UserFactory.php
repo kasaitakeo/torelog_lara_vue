@@ -19,8 +19,8 @@ use Illuminate\Support\Str;
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'screen_name' => $faker->name,
+        'name' => $faker->name(),
+        'screen_name' => $faker->name(),
         'profile_text' => $faker->realText(30),
         'profile_image' => 'https://placehold.jp/50x50.png',
         'email' => $faker->unique()->safeEmail,
