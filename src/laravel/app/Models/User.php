@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Log;
 use App\Models\Event;
-use Storage;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
