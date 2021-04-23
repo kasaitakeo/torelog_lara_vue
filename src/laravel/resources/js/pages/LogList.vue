@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12">
+    <v-col cols="12" sm="8" md="8" class="mx-auto">
       <!-- ログのタイムライン -->
       <Log
         v-for="log in logs" 
