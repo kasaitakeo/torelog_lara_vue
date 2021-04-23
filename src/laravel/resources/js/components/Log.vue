@@ -1,19 +1,19 @@
 <template>
   <v-card
-    color="#E3F2FD"
-    class="ma-1 pa-2" elevation="10"
+    class="my-5 ma-1 pa-2 orange lighten-2" elevation="10"
   >
     <v-row class="ma-1">
       <v-col cols="3">{{ log.created_at | moment }}</v-col>
       <v-col cols="9">title: {{ log.title }}</v-col>
     </v-row>
     <v-row>
-      <!-- 登録した種目ログ表示 -->
-      <EventLog
-        v-for="event_log in log.event_logs" 
-        :key="event_log.id"
-        :item="event_log"
-      />
+      <v-col cols="12">
+        <!-- 登録した種目ログ表示 -->
+        <EventLog
+          :items="log.event_logs"
+        />
+
+      </v-col>
     </v-row>
     <v-row>
       <v-col cols="12">

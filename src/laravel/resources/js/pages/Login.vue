@@ -27,7 +27,7 @@
         <label for="login-password">パスワード</label>
         <input type="password" class="form__item" id="login-password" v-model="loginForm.password">
         <div class="form__button">
-          <button type="submit" class="button button--inverse">ログイン</button>
+          <button type="submit" class="button button--inverse white--text">ログイン</button>
         </div>
       </form>
     </div>
@@ -55,7 +55,7 @@
         <label for="password-confirmation">パスワード (確認)</label>
         <input type="password" class="form__item" id="password-confirmation" v-model="registerForm.password_confirmation">
         <div class="form__button">
-          <button type="submit" class="button button--inverse">新規登録</button>
+          <button type="submit" class="button button--inverse white--text">新規登録</button>
         </div>
       </form>
     </div>
@@ -100,12 +100,9 @@ export default {
     async register () {
       // stores/index.js にて Vue.use(Vuex) という記述で Vuex プラグインの使用を宣言したので、this.$store からストアを参照することができる。
       // アクション呼び出すにはdispatchメソッド使用
-    
       await this.$store.dispatch('auth/register', this.registerForm)
 
-      // トップページに移動する
-      // awaitで非同期なアクションの処理が完了するのを待ってから（Promiseの解決を待ってから）、トップページに遷移するためにthis.$routerのpushメソッドを読んでいます
-      // VueRouterの設定時にVue.use(VueRouter)でVueRouterプラグインの使用を宣言したため thisにルーターオブジェクトを表す$routerが追加
+      // awaitで非同期なアクションの処理が完了するのを待ってから（Promiseの解決を待ってから）、トップページに遷移する
       if (this.apiStatus) {
         // トップページへ移動
         this.$router.push('/')

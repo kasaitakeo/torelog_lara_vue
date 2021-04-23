@@ -19,6 +19,13 @@
         class="mx-auto mb-3"
         max-width="800"
       >
+        <v-text-field
+            v-model="logTitle"
+            :counter="30"
+            label="トレログにタイトルをつけよう"
+            placeholder="胸の日"
+            required
+          ></v-text-field>
         <v-row>
           <v-col>
             <!-- ログインユーザーの種目コンポーネント -->
@@ -32,9 +39,7 @@
           <v-col>
             <!-- 登録した種目ログ -->
             <EventLog
-              v-for="eventLog in eventLogs"
-              :key="eventLog.id"
-              :item="eventLog"
+              :items="eventLogs"
               @deleteEventLog="deleteEventLog"
             />
           </v-col>
@@ -44,14 +49,6 @@
           max-width="800"
         >
           <form @submit.prevent="updateLog">
-            <v-textarea
-              v-model="logTitle"
-              :counter="30"
-              name="input-7-1"
-              filled
-              label="トレログにタイトルをつけよう"
-              auto-grow
-            ></v-textarea>
             <v-textarea 
               v-model="logContent"
               :counter="140"
