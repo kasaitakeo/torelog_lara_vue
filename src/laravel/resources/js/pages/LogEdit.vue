@@ -25,6 +25,7 @@
             label="トレログにタイトルをつけよう"
             placeholder="胸の日"
             required
+            background-color="orange lighten-4"
           ></v-text-field>
         <v-row>
           <v-col>
@@ -56,9 +57,10 @@
               filled
               label="今回のトレログに一言"
               auto-grow
+              background-color="orange lighten-4"
             ></v-textarea>
             <div class="d-flex justify-center mb-6">
-              <v-btn @submit.prevent="deleteLog">このトレログを削除する</v-btn>
+              <v-btn @click="deleteLog">このトレログを削除する</v-btn>
               <v-btn type="submit">編集終了</v-btn>
             </div>
           </form>  
@@ -85,7 +87,8 @@ export default {
       logTitle: '',
       logContent: '',
       errors: null,
-      setEventLogs: false
+      setEventLogs: false,
+      deleteLogStatus: false,
     }
   },
   computed: {
@@ -195,6 +198,7 @@ export default {
         content: 'トレログを削除しました！',
         timeout: 3000
       })
+      this.deleteLogStatus = true
       
       this.$router.push('/')
     },
@@ -258,6 +262,8 @@ export default {
   beforeRouteLeave (to, from, next) {
     // 種目追加画面へ遷移の場合
     if (to.name === 'event.create') {
+      next()
+    } else if (this.deleteLogStatus) {
       next()
     } else {
       // 種目ログ未設定の場合
