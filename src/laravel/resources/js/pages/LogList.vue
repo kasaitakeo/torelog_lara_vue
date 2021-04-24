@@ -5,9 +5,9 @@
       <RouterLink v-if="!logs.length" class="button button--link" :to="{name: 'user'}">
         <v-btn
           block
-          color="primary"
+          color="orange lighten-4"
           elevation="4"
-        >ユーザーリストから他のユーザーをフォローしてみよう！</v-btn>
+        >ユーザーリストから他のユーザーをフォロー</v-btn>
       </RouterLink>
       <!-- ログのタイムライン -->
       <Log

@@ -1,10 +1,11 @@
 FROM nginx:1.17-alpine
-# node command
-COPY --from=node /usr/local/bin /usr/local/bin
-# npm command
-COPY --from=node /usr/local/lib /usr/local/lib
-# yarn command
-COPY --from=node /opt /opt
+
+RUN apk update && \
+  apk add bash && \
+  apk add --update nodejs nodejs-npm && \
+  npm install n -g && \
+  n 14.16.1
+
 COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY ./src /work
 
