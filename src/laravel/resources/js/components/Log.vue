@@ -114,7 +114,7 @@
     </v-card-actions>
     <v-expand-transition>
       <v-card v-show="show">
-        <v-list two-line>
+        <v-list two-line  class="orange lighten-4">
           <!-- 全てのコメントの内5つまで表示（0番目から5番目までのコメント） -->
           <template v-for="comment in log.comments.slice(0, 5)" >
             <v-list-item :key="comment.id">

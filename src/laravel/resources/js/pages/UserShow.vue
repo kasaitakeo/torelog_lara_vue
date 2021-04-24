@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <Loading v-show="loading" :loading="loading"></Loading>
-    <v-col cols="12" sm="8" md="8" class="mx-auto" v-show="!loading">
+    <v-col cols="12" sm="8" md="6" class="mx-auto" v-show="!loading">
       <v-card elevation="5">
         <!-- ユーザープロフィール -->
         <v-row class="ma-1">
