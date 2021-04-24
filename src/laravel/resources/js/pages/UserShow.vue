@@ -1,6 +1,7 @@
 <template>
   <v-row>
-    <v-col cols="12" class="ma-1">
+    <Loading v-show="loading" :loading="loading"></Loading>
+    <v-col cols="12" sm="8" md="8" class="mx-auto" v-show="!loading">
       <v-card elevation="5">
         <!-- ユーザープロフィール -->
         <v-row class="ma-1">
@@ -97,9 +98,12 @@ import { OK, CREATED } from '../util'
 import Log from '../components/Log.vue'
 import UserEvent from '../components/UserEvent.vue'
 import Pagination from '../components/Pagination'
+import Loading from '../components/Loading.vue'
+
 
 export default {
   components: {
+    Loading,
     Log,
     UserEvent,
     Pagination
@@ -118,6 +122,7 @@ export default {
   },
   data () {
     return {
+      loading: true,
       user: {},
       events: [],
       logs: [],
@@ -240,9 +245,11 @@ export default {
       immediate: true
     }
   },
-  // ルート遷移時呼ばないため
-  async mounted () {
-  }
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 3000);
+  },
 }
 </script>
 

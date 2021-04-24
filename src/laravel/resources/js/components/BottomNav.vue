@@ -39,10 +39,10 @@
     computed: {
       color () {
         switch (this.value) {
-          case 0: return 'blue-grey'
-          case 1: return 'teal'
-          case 2: return 'indigo'
-          default: return 'blue-grey'
+          case 0: return 'deep-orange lighten-1'
+          case 1: return 'red darken-1'
+          case 2: return 'orange lighten-2'
+          default: return 'deep-orange lighten-1'
         }
       },
       isLogin () {

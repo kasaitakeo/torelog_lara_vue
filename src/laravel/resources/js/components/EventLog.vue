@@ -1,39 +1,76 @@
 <template>
-    <v-col cols="12">
-      <v-card 
-        color="#B3E5FC"
-        class="mt-1"
-      >
-        <v-card-title class="px-2 py-1">
-          <span>{{ item.event.event_part }}:</span>  
-          <span>{{ item.event.event_name }}</span>  
-        </v-card-title>
-        <v-card-text class="px-2 pb-1">
-          <span>{{ item.weight }}kg</span>
-          <span>{{ item.rep }}rep</span>
-          <span>{{ item.set }}set</span>
-          <span v-if="$route.name === 'log.edit'">
-            <v-btn @click.prevent="deleteEventLog" color="blue darken-1" text>削除</v-btn>
-          </span>
-        </v-card-text>
-      </v-card>
-    </v-col>
+  <v-simple-table class="orange lighten-4">
+    <template v-slot:default>
+      <thead>
+        <tr>
+          <th class="text-left">
+            部位
+          </th>
+          <th class="text-left">
+            種目名
+          </th>
+          <th class="text-left">
+            重量
+          </th>
+          <th class="text-left">
+            回数
+          </th>
+          <th class="text-left">
+            セット数
+          </th>
+          <th v-if="$route.name === 'log.edit'" class="text-left">
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="item in items"
+          :key="item.id"
+        >
+          <td>{{ item.event.event_part }}</td>
+          <td>{{ item.event.event_name }}</td>
+          <td>{{ item.weight }}</td>
+          <td>{{ item.rep }}</td>
+          <td>{{ item.set }}</td>
+          <td v-if="$route.name === 'log.edit'">
+            <v-btn @click.prevent="deleteEventLog(item.id)" color="blue darken-1" text>削除</v-btn>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+  </v-simple-table>
 </template>
 
 <script>
 // Log LogCreateが親コンポーネント
 export default {
   props: {
-    item: {
-      type: Object,
+    items: {
+      type: Array,
       required: true
     },
   },
+  data () {
+    return {
+      headers: [
+        {
+          text: 'トレログ',
+          align: 'start',
+          value: 'name',
+        },
+        { text: '部位', value: 'event.event_part' },
+        { text: '種目名', value: 'event.event_name' },
+        { text: '重量', value: 'weight' },
+        { text: '回数', value: 'rep' },
+        { text: 'セット数', value: 'set' },
+      ],
+    }
+  },
   methods: {
     // 種目ログ削除後ページの更新が必要な為、親にemitで投げる
-    async deleteEventLog () {
+    async deleteEventLog (id) {
       this.$emit('deleteEventLog', {
-        id: this.item.id,
+        id: id,
       })
     }
   }

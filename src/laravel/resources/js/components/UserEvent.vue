@@ -5,8 +5,7 @@
       種目追加
     </RouterLink>
     <v-tabs
-      background-color="#039BE5"
-      dark
+      background-color="orange lighten-1"
       show-arrows
     >
     <!-- タブで各部位毎に種目を分ける -->

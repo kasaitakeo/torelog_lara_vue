@@ -1,6 +1,14 @@
 <template>
   <v-row>
-    <v-col cols="12">
+    <Loading v-show="loading" :loading="loading"></Loading>
+    <v-col v-show="!loading" cols="12" sm="8" md="8" class="mx-auto">
+      <RouterLink v-if="!logs.length" class="button button--link" :to="{name: 'user'}">
+        <v-btn
+          block
+          color="orange lighten-4"
+          elevation="4"
+        >ユーザーリストから他のユーザーをフォロー</v-btn>
+      </RouterLink>
       <!-- ログのタイムライン -->
       <Log
         v-for="log in logs" 
@@ -18,9 +26,11 @@
 import { OK, CREATED } from '../util'
 import Log from '../components/Log'
 import Pagination from '../components/Pagination'
+import Loading from '../components/Loading.vue'
 
 export default {
   components: {
+    Loading,
     Log,
     Pagination
   },
@@ -33,6 +43,7 @@ export default {
   },
   data () {
     return {
+      loading: true,
       logs: [],
       currentPage: 0,
       lastPage: 0
@@ -104,9 +115,11 @@ export default {
       },
       immediate: true
     }
-  }
-  // mounted () {
-  //   this.getLogs()
-  // }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 3000);
+  },
 }
 </script>

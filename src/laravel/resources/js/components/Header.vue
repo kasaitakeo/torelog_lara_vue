@@ -39,12 +39,12 @@
     </v-navigation-drawer>
     <v-app-bar
       app
-      color="indigo"
+      color="red darken-1"
       dark
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>
-        <RouterLink class="button button--link" to="/">
+        <RouterLink class="button button--link white--text" to="/">
           トレログ
         </RouterLink>
       </v-toolbar-title>
