@@ -50,13 +50,13 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="isLogin">  
-        <span class="button button--link" @click="logout">
+        <span class="button button--link  white--text" @click="logout">
           Logout
         </span>
 
       </div>
       <div v-else>
-        <RouterLink class="button button--link" to="/login">
+        <RouterLink class="button button--link  white--text" to="/login">
           Login / Register
         </RouterLink>
       </div>
