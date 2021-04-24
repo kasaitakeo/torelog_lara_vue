@@ -15,8 +15,12 @@
             filled
             label="トレログにタイトルをつけよう"
             auto-grow
+            background-color="orange lighten-4"
           ></v-textarea>
-          <v-btn type="submit">トレログ編集へ</v-btn>
+          <div>
+          <v-btn type="submit" block color="orange lighten-4">トレログ編集へ</v-btn>
+
+          </div>
         </form>
       </v-card>
     </v-col>

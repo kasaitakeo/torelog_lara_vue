@@ -63,6 +63,10 @@ class LogsController extends Controller
         // ログインしているユーザーのログとして保存（ログインしなければ保存できない）
         $user = auth()->user();
 
+        if ($request->user_id !== $user->id) {
+            return abort(404);
+        }
+
         $log->user_id = $user->id;
         $log->title = $request->input('title');
 
@@ -99,6 +103,13 @@ class LogsController extends Controller
      */
     public function update(LogRequest $request, Log $log)
     {
+        // ログインしているユーザーのログとして保存（ログインしなければ保存できない）
+        $user = auth()->user();
+
+        if ($request->user_id !== $user->id) {
+            return abort(404);
+        }
+        
         $log->fill($request->all())->save();
 
         return response('', 200);
