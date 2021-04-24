@@ -2,13 +2,15 @@
   <v-row>
     <Loading v-show="loading" :loading="loading"></Loading>
     <v-col v-show="!loading" cols="12" sm="8" md="8" class="mx-auto">
-      <RouterLink v-if="!logs.length" class="button button--link" :to="{name: 'user'}">
+      <!-- <RouterLink v-if="!logs.length" class="button button--link" :to="{name: 'user'}"> -->
         <v-btn
+          v-if="!logs.length"
+          to="/users"
           block
           color="orange lighten-4"
           elevation="4"
-        >ユーザーリストから他のユーザーをフォロー</v-btn>
-      </RouterLink>
+        >ユーザーリストから他のユーザーをフォローしてください！</v-btn>
+      <!-- </RouterLink> -->
       <!-- ログのタイムライン -->
       <Log
         v-for="log in logs" 

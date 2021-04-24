@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col>
+    <v-col cols="12" sm="8" md="8" class="mx-auto">
       <v-card v-for="item in users" :key="item.id" class="pa-2 mb-3">
         <v-row>
           <v-col cols="2">
