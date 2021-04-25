@@ -11,14 +11,17 @@ class Comment extends Model
     use SoftDeletes;
 
     /**
-     * The attributes that are mass assignable.
-     *
+     * textのホワイトリスト化
      * @var array
      */
     protected $fillable = [
         'text'
     ];
 
+    /**
+     * Eloquentリレーション
+     * １対１の場合
+     */
     public function user()
     {
         return $this->belongsTo(User::class);

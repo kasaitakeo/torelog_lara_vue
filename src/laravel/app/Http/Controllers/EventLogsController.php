@@ -9,9 +9,10 @@ use App\Models\EventLog;
 class EventLogsController extends Controller
 {
     /**
-     * 指定したlogのidに登録されている種目ログを全て取得
-     * 
-     * 
+     * 指定したログのidに登録されている種目ログを全て取得
+     * @param App\Models\EventLog $event_log
+     * @param integer $log_id
+     * @return array $event_log_data
      */
     public function index(EventLog $event_log, $log_id)
     {
@@ -21,9 +22,10 @@ class EventLogsController extends Controller
     }
 
     /**
-     * 種目ログの作成
-     * 
-     * 
+     * 行った種目のログ登録
+     * @param App\Models\EventLog $event_log
+     * @param App\Http\Requests\EventLogRequest $request
+     * @return void
      */
     public function store(EventLog $event_log, EventLogRequest $request)
     {
@@ -40,8 +42,8 @@ class EventLogsController extends Controller
 
     /**
      * 指定したidの種目ログを削除
-     * 
-     * 
+     * @param App\Models\EventLog $event_log
+     * @return void
      */
     public function delete(EventLog $event_log, $event_log_id)
     {
@@ -51,9 +53,10 @@ class EventLogsController extends Controller
     }
 
     /**
-     * 指定したlogのidに登録されている全ての種目ログを削除
-     * 
-     * 
+     * 指定したidのログに登録されている全ての種目ログを削除
+     * @param App\Models\EventLog $event_log
+     * @param integer $log_id
+     * @return void
      */
     public function allDelete(EventLog $event_log, $log_id)
     {

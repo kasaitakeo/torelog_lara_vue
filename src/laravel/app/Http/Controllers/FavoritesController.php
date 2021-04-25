@@ -8,9 +8,10 @@ use App\Models\Favorite;
 class FavoritesController extends Controller
 {
     /**
-     * いいね登録
-     * 
-     * 
+     * ログインユーザーが指定したidのログにいいね登録
+     * @param Illuminate\Http\Request $request
+     * @param App\Models\Favorite $favorite
+     * @return void
      */
     public function store(Request $request, Favorite $favorite)
     {
@@ -30,9 +31,10 @@ class FavoritesController extends Controller
     }
 
     /**
-     * いいね解除
-     * 
-     * 
+     * ログインユーザーが指定したidのログにいいね解除
+     * @param Illuminate\Http\Request $request
+     * @param App\Models\Favorite $favorite
+     * @return void
      */
     public function destroy($id, Favorite $favorite)
     {
