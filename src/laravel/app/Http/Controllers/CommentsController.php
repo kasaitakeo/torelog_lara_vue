@@ -10,10 +10,10 @@ use App\Models\Comment;
 class CommentsController extends Controller
 {
     /**
-     * コメント作成
-     *
-     * @param  \Illuminate\Http\CommentRequest $request
-     * @return \Illuminate\Http\Response 201
+     * 指定したidのログへのコメント登録
+     * @param  App\Http\Requests\CommentRequest $request
+     * @param  App\Models\Comment $comment
+     * @return void
      */
     public function store(CommentRequest $request, Comment $comment)
     {

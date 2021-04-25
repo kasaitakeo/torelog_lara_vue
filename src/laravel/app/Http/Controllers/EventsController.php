@@ -9,9 +9,9 @@ use App\Models\Event;
 class EventsController extends Controller
 {
     /**
-     * 指定したユーザーIDの種目全て返す
-     * 
-     * 
+     * 指定したユーザーidの種目全て取得
+     * @param integer $user_id
+     * @return array $all_events
      */
     public function userEvents($user_id)
     {
@@ -22,9 +22,9 @@ class EventsController extends Controller
 
     /**
      * 種目を作成
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  App\Http\Requests\EventRequest  $request
+     * @param  App\Models\Event  $event
+     * @return void
      */
     public function store(EventRequest $request, Event $event)
     {
@@ -42,10 +42,9 @@ class EventsController extends Controller
     }
 
     /**
-     * EventUpdate.vueにて使用する種目データを返す
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * EventUpdate.vueにて使用する種目データを取得
+     * @param  integer  $id
+     * @return array $event_data
      */
     public function edit($id)
     {
@@ -56,10 +55,9 @@ class EventsController extends Controller
     }
     /**
      * 種目データの更新
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  App\Http\Requests\EventRequestt  $request
+     * @param  App\Models\Event  $event
+     * @return void
      */
     public function update(EventRequest $request, Event $event)
     {
@@ -74,9 +72,8 @@ class EventsController extends Controller
 
     /**
      * 種目の削除
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  App\Models\Event  $event
+     * @return void
      */
     public function destroy(Event $event)
     {

@@ -16,8 +16,9 @@ class LogsController extends Controller
 {
     /**
      * ログ一覧取得
-     * @param Log $log
-     * @return \Illuminate\Http\Response
+     * @param App\Models\Log $log
+     * @param App\Models\Follower $follower
+     * @return array $logs_data
      */
     public function index(Log $log, Follower $follower)
     {
@@ -31,10 +32,14 @@ class LogsController extends Controller
             $following_ids = $follow_ids->pluck('followed_id')->toArray();
 
             // 
-            $logs_data = $log->getFollowingTimelines($user->id, $following_ids);
+            $logs_data = $log->getFollowingTimelines($user->id, $following_ids)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
         } else {
             // 
-            $logs_data = $log->getAllTimelines();
+            $logs_data = $log->getAllTimelines()
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
         }
 
         return $logs_data;
@@ -42,21 +47,25 @@ class LogsController extends Controller
 
     /**
      * 指定したユーザーのログ取得
-     * @param Log $log
-     * @return \Illuminate\Http\Response
+     * @param App\Models\Log $log
+     * @param integer $user_id 指定したユーザーのid
+     * @return array $user_logs_data
      */
     public function userLog(Log $log, $user_id)
     {
         // logListで使用するlogsオブジェクトに入るデータの取得
-        $user_logs_data = $log->getUserTimelines($user_id);
+        $user_logs_data = $log->getUserTimelines($user_id)
+        ->orderBy('created_at', 'DESC')
+        ->paginate(10);
 
         return $user_logs_data;
     }
 
     /**
-     * ログ作成（空のログとして保存）
-     * @param Log $log
-     * @return \Illuminate\Http\Response
+     * ログ作成
+     * @param App\Http\Requests\LogRequest $request バリデーション後のリクエスト
+     * @param App\Models\Log $log
+     * @return integer $log->id 
      */
     public function store(LogRequest $request, Log $log)
     {
@@ -78,8 +87,8 @@ class LogsController extends Controller
 
     /**
      * ログ詳細取得
-     * @param Models\Log
-     * @return Response
+     * @param App\Models\Log $log
+     * @return array $log_data
      */
     public function show(Log $log)
     {
@@ -98,8 +107,9 @@ class LogsController extends Controller
 
     /**
      * ログアップデート
-     * @param int $log
-     * @return Response
+     * @param App\Http\Requests\LogRequest $request バリデーション後のリクエスト
+     * @param App\Models\Log $log 
+     * @return void
      */
     public function update(LogRequest $request, Log $log)
     {
@@ -110,15 +120,15 @@ class LogsController extends Controller
             return abort(404);
         }
         
-        $log->fill($request->all())->save();
+        $log->fill($request->validated())->save();
 
         return response('', 200);
     }
 
     /**
      * ログ削除
-     * 
-     * 
+     * @param App\Models\Log $log 
+     * @return void
      */
     public function destroy(Log $log)
     {
