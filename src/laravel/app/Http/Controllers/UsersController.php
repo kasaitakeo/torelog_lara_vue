@@ -12,14 +12,18 @@ use App\Models\Follower;
 
 class UsersController extends Controller
 {
-    //
+    /**
+     * 全ユーザーのデータを返す（10人ずつ、フロントで無限スクロール実装）
+     * @param User $user
+     * @return ofj  $all_user_datas（ユーザーのフォロー状況等）,$users（ページネーションで取得したユーザー情報）
+     */
     public function index(User $user)
     {
         $users = $user->orderBy(User::CREATED_AT, 'desc')->paginate(10);
 
         $login_user = auth()->user();
 
-        $all_user_datas = array();
+        $all_user_datas = [];
 
         foreach ($users as $user) {
             // $is_followingはログインユーザーがフォローしているユーザー情報
@@ -36,9 +40,15 @@ class UsersController extends Controller
         return response(['data' => $all_user_datas, 'users' => $users], 200);
     }
 
+    /**
+     * 
+     * 
+     * 
+     * 
+     */
     public function show(User $user, Log $log, Follower $follower)
     {
-        $user_data = User::where('id', $user->id)
+        $user_data = $user->where('id', $user->id)
             ->with(['logs' => function($query){
                 $query->with(['user', 'favorites', 'comments','event_logs' => function($query){
                     $query->with('event');

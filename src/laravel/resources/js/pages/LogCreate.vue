@@ -18,8 +18,7 @@
             background-color="orange lighten-4"
           ></v-textarea>
           <div>
-          <v-btn type="submit" block color="orange lighten-4">トレログ編集へ</v-btn>
-
+            <v-btn type="submit" block color="orange lighten-4">トレログ編集へ</v-btn>
           </div>
         </form>
       </v-card>
