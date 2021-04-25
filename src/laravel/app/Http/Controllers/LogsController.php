@@ -110,7 +110,7 @@ class LogsController extends Controller
             return abort(404);
         }
         
-        $log->fill($request->all())->save();
+        $log->fill($request->validated())->save();
 
         return response('', 200);
     }
