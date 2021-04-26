@@ -16,7 +16,7 @@
     </div>
     <v-col>
       <v-card
-        class="mx-auto mb-3"
+        class="mx-auto mb-3 orange lighten-5"
         max-width="800"
       >
         <v-text-field
@@ -25,7 +25,7 @@
             label="トレログにタイトルをつけよう"
             placeholder="胸の日"
             required
-            background-color="orange lighten-4"
+            background-color="orange lighten-5"
           ></v-text-field>
         <v-row>
           <v-col>
@@ -46,7 +46,7 @@
           </v-col>
         </v-row>
         <v-card
-          class="mx-auto"
+          class="mx-auto orange lighten-5"
           max-width="800"
         >
           <form @submit.prevent="updateLog">
@@ -57,11 +57,11 @@
               filled
               label="今回のトレログに一言"
               auto-grow
-              background-color="orange lighten-4"
+              background-color="orange lighten-5"
             ></v-textarea>
-            <div class="d-flex justify-center mb-6">
+            <div class="d-flex justify-center mb-6 orange lighten-5">
               <v-btn @click="deleteLog">このトレログを削除する</v-btn>
-              <v-btn type="submit">編集終了</v-btn>
+              <v-btn type="submit" color="green accent-3">編集終了</v-btn>
             </div>
           </form>  
         </v-card>
