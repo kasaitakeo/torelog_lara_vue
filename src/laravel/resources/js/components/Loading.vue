@@ -33,7 +33,7 @@ export default {
   height: 100%;
   background: #fefefe;
   position: fixed;
-  top: 0;
+  top: 100;
   left: 0;
 }
 .loading-spacer {

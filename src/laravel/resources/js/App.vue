@@ -2,14 +2,12 @@
   <div>
     <v-app id="inspire">
     <Header/>
-      <!-- <Navbar /> -->
       <v-main class="pa-2 mt-15">
         <v-container fluid>
           <Message />
           <RouterView />
         </v-container>
       </v-main>
-    <!-- <Footer /> -->
     <BottomNav/>
 
     </v-app>

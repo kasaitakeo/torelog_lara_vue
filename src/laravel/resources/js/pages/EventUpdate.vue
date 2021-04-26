@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-card>
+      <v-card class="mx-auto orange lighten-5">
         <div class="errors" v-if="errors">
           <ul v-if="errors.eventPart">
             <li v-for="msg in errors.eventPart" :key="msg">{{ msg }}</li>
