@@ -25,7 +25,7 @@
         placeholder="大胸筋上部、コンパウンド種目、高重量狙い"
       ></v-textarea>
       <div v-if="this.$route.path === '/events/create'" class="d-flex justify-center">
-        <v-btn type="submit">種目追加</v-btn>
+        <v-btn type="submit" color="green accent-3">種目追加</v-btn>
         <v-btn @click="back">戻る</v-btn>
       </div>
       <div v-else>

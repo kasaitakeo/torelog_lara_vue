@@ -83,7 +83,6 @@ export default {
           per_page: 1
         },
       }).then(({ data }) => {
-        console.log(data)
         //そのままだと読み込み時にカクつくので1500毎に読み込む
         setTimeout(() => {
           if (this.page < data.users.data.length) {
@@ -101,8 +100,6 @@ export default {
     async follow (id) {
       const response = await axios.post(`/api/users/follow/${id}`)
 
-      console.log(response)
-
       if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -113,8 +110,6 @@ export default {
     // 指定したIDのユーザーのフォローを解除する
     async unFollow (id) {
       const response = await axios.post(`/api/users/unfollow/${id}`)
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)

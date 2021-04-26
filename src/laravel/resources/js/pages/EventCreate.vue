@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-card>
+      <v-card class="mx-auto orange lighten-5">
         <div class="errors" v-if="errors">
           <ul v-if="errors.eventPart">
             <li v-for="msg in errors.eventPart" :key="msg">{{ msg }}</li>
@@ -39,12 +39,10 @@ export default {
     // 子コンポーネントのevent-editイベントから渡される
     async eventCreate (e) {
       const response = await axios.post('/api/events', {
-        eventPart: e.eventPart,
-        eventName: e.eventName,
-        eventExplanation: e.eventExplanation
+        event_part: e.eventPart,
+        event_name: e.eventName,
+        event_explanation: e.eventExplanation
       })
-
-      console.log(response)
 
       if (response.status === UNPROCESSABLE_ENTITY) {
         console.log(response)

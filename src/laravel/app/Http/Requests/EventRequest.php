@@ -25,9 +25,9 @@ class EventRequest extends FormRequest
     {
         return [
             //  種目の部位、名、は必須
-            'eventPart' => 'required|string|max:10',
-            'eventName' => 'required|string|max:30',
-            'eventExplanation' => 'required|string|max:200'
+            'event_part' => 'required|string|max:10',
+            'event_name' => 'required|string|max:30',
+            'event_explanation' => 'required|string|max:200'
         ];
     }
 }

@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-card>
+      <v-card class="mx-auto orange lighten-5">
         <div class="errors" v-if="errors">
           <ul v-if="errors.title">
             <li v-for="msg in errors.title" :key="msg">{{ msg }}</li>
@@ -48,7 +48,6 @@ export default {
         user_id: this.userId,
         title: this.logTitle
       })
-      console.log(response)
       
       if (response.status === UNPROCESSABLE_ENTITY) {
         this.errors = response.data.errors

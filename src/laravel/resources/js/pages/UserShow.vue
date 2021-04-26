@@ -145,7 +145,6 @@ export default {
     async getUser () {
       const response = await axios.get(`/api/users/${this.$route.params.userId}`)
 
-      console.log(response)
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -162,7 +161,6 @@ export default {
     async getUserLogs () {
       const response = await axios.get(`/api/users/${this.$route.params.userId}/logs/?page=${this.page}`)
 
-      console.log(response)
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -175,8 +173,6 @@ export default {
     // 指定したIDのユーザーの種目取得
     async getUserEvents () {
       const response = await axios.get(`/api/users/${this.$route.params.userId}/events`)
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
@@ -191,8 +187,6 @@ export default {
         log_id: id
       })
 
-      console.log(response)
-
       if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)
         return false  
@@ -203,8 +197,6 @@ export default {
     // Log子コンポーネントからemitで渡される、いいね解除
    async unFavoriteLog ({ id }) {
       const response = await axios.post('/api/favorites/' + id)
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
@@ -217,8 +209,6 @@ export default {
     async follow (id) {
       const response = await axios.post(`/api/users/follow/${id}`)
 
-      console.log(response)
-
       if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -229,8 +219,6 @@ export default {
     // 指定したIDのユーザーのフォローを解除する
     async unFollow (id) {
       const response = await axios.post(`/api/users/unfollow/${id}`)
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)

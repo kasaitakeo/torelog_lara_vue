@@ -106,8 +106,6 @@ export default {
         return false
       }
 
-      console.log(response.data)
-
       this.logTitle = response.data.title
       this.logContent = response.data.text
       this.eventLogs = response.data.event_logs
@@ -117,7 +115,7 @@ export default {
     async deleteEventLog ({ id }) {
       
       const response = await axios.delete(`/api/event_logs/${id}`)
-      console.log(response)
+
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -134,7 +132,7 @@ export default {
     async deleteAllEventLog () {
       
       const response = await axios.delete(`/api/${this.$route.params.logId}/event_logs`)
-      console.log(response)
+
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -164,8 +162,6 @@ export default {
         text: this.logContent
       })
 
-      console.log(response.data)
-
       if (response.status === UNPROCESSABLE_ENTITY) {
         this.errors = response.data.errors
         return false
@@ -188,8 +184,6 @@ export default {
     async deleteLog () {
       const response = await axios.delete(`/api/logs/${this.$route.params.logId}`)
 
-      console.log(response)
-
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false  
@@ -206,8 +200,6 @@ export default {
     async getUserEvents () {
       const response = await axios.get(`/api/users/${this.userId}/events`)
 
-      console.log(response)
-
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -218,8 +210,6 @@ export default {
     // 現在作成しているログに登録している全ての種目ログの取得
     async getEventLogs () {
       const response = await axios.get(`/api/${this.$route.params.logId}/event_logs`)
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
@@ -242,7 +232,6 @@ export default {
         rep: e.rep,
         set: e.set
       })
-      console.log(response)
 
       if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)

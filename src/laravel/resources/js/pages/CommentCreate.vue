@@ -43,8 +43,6 @@ export default {
         text: this.commentContent
       })
 
-      console.log(response)
-
       if (response.status === UNPROCESSABLE_ENTITY) {
         this.errors = response.data.errors
         return false

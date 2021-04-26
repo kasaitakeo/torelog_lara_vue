@@ -36,8 +36,6 @@ export default {
         return false
       }
 
-      console.log(response)
-
       this.log = response.data
     },
     // ログのいいねを登録する（いいね登録後ページ更新する時にこのコンポーネントのthis.getLogメソッドを使用する為、子からemitで投げてもらう）
@@ -51,8 +49,6 @@ export default {
       const response = await axios.post('/api/favorites', {
         log_id: e.id
       })
-
-      console.log(response)
 
       if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)
@@ -70,8 +66,6 @@ export default {
       }
 
       const response = await axios.post('/api/favorites/' + e.id)
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)

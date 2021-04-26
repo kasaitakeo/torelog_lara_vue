@@ -65,7 +65,6 @@ export default {
     async getLogs () {
       const response = await axios.get(`/api/logs/?page=${this.page}`)
 
-      console.log(response)
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -87,8 +86,6 @@ export default {
         log_id: id
       })
 
-      console.log(response)
-
       if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)
         return false  
@@ -103,8 +100,6 @@ export default {
         return false
       }
       const response = await axios.post('/api/favorites/' + id)
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)

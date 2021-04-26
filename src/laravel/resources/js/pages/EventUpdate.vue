@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { OK, CREATED, UNPROCESSABLE_ENTITY } from '../util'
+import { OK, UNPROCESSABLE_ENTITY } from '../util'
 import EventEdit from '../components/EventEdit.vue'
 
 export default {
@@ -47,18 +47,16 @@ export default {
         return false
       }
   
-      console.log(response.data)
       this.event = response.data
     },
     // 子コンポーネントのevent-editイベントから渡される
     async eventUpdate (e) {
       const response = await axios.put(`/api/events/${this.$route.params.eventId}`, {
-        eventPart: e.eventPart,
-        eventName: e.eventName,
-        eventExplanation: e.eventExplanation
+        event_part: e.eventPart,
+        event_name: e.eventName,
+        event_explanation: e.eventExplanation
       })
 
-      console.log(response.data)
       if (response.status === UNPROCESSABLE_ENTITY) {
         this.errors = response.data.errors
         return false
