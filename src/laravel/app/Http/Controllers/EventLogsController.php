@@ -45,9 +45,9 @@ class EventLogsController extends Controller
      * @param App\Models\EventLog $event_log
      * @return void
      */
-    public function delete(EventLog $event_log, $event_log_id)
+    public function delete(EventLog $event_log)
     {
-        $event_log->where('id', $event_log_id)->delete();
+        $event_log->delete();
 
         return response('', 200);
     }

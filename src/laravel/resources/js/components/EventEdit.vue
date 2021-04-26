@@ -1,7 +1,6 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <!-- <v-card> -->
         <form @submit.prevent="eventEdit">
           <v-select
             v-model="eventPart"
@@ -35,7 +34,6 @@
           </div>
       
         </form>
-      <!-- </v-card> -->
     </v-col>
   </v-row>
 </template>
@@ -47,7 +45,7 @@ export default {
     event: {
       type: Object,
       default: () => ({
-        part: '',
+        event_part: '',
         event_name: '',
         event_explanation: ''
       })
@@ -81,7 +79,7 @@ export default {
   watch: {
     event: {
       handler() {
-        this.eventPart = this.event.part
+        this.eventPart = this.event.event_part
         this.eventName = this.event.event_name
         this.eventExplanation = this.event.event_explanation
       },
