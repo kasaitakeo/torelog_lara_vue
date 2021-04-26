@@ -84,7 +84,12 @@
               @favoriteLog="favoriteLog"
               @unFavoriteLog="unFavoriteLog"
             />
-            <Pagination :current-page="currentPage" :last-page="lastPage" :user-id="Number($route.params.userId)"/>
+            <Pagination 
+              :current-page="currentPage" 
+              :last-page="lastPage" 
+              :user-id="Number($route.params.userId)"  
+              @loadingStart="loadingStart"
+            />
           </v-col>
         </v-row>
       </v-card>
@@ -234,22 +239,26 @@ export default {
 
       this.getUser()
     },
+    loadingStart () {
+      this.loading = true
+    }
   },
   watch: {
     $route: {
       async handler () {
         await this.getUserLogs()
+
         await this.getUser()
+
         await this.getUserEvents()
+
+        setTimeout(() => {
+          this.loading = false
+        }, 3000)
       },
       immediate: true
     }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 3000);
-  },
+  }
 }
 </script>
 

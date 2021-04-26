@@ -19,7 +19,11 @@
         @favoriteLog="favoriteLog"
         @unFavoriteLog="unFavoriteLog"
       />
-      <Pagination :current-page="currentPage" :last-page="lastPage" />
+      <Pagination 
+        :current-page="currentPage" 
+        :last-page="lastPage" 
+        @loadingStart="loadingStart"
+      />
     </v-col>
   </v-row>
 </template>
@@ -109,19 +113,21 @@ export default {
 
       this.getLogs()
     },
+    loadingStart () {
+      this.loading = true
+    }
   },
   watch: {
     $route: {
       async handler () {
         await this.getLogs()
+
+        setTimeout(() => {
+          this.loading = false
+        }, 3000)
       },
       immediate: true
     }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 3000);
   },
 }
 </script>

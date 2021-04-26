@@ -17,10 +17,13 @@
     </v-row>
     <v-row>
       <v-col cols="12">
+        <v-card class="mx-auto orange lighten-4">
         <!-- ログのテキストの表示 -->
-        <v-card-text class="px-2">
+        <v-card-text class="">
           <p class="font-weight-regular">torememo</p><p class="headline">{{ log.text }}</p>
         </v-card-text>
+
+        </v-card>
       </v-col>
     </v-row>
     <v-row>
