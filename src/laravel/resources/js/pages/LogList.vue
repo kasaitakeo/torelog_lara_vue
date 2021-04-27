@@ -19,7 +19,11 @@
         @favoriteLog="favoriteLog"
         @unFavoriteLog="unFavoriteLog"
       />
-      <Pagination :current-page="currentPage" :last-page="lastPage" />
+      <Pagination 
+        :current-page="currentPage" 
+        :last-page="lastPage" 
+        @loadingStart="loadingStart"
+      />
     </v-col>
   </v-row>
 </template>
@@ -61,7 +65,6 @@ export default {
     async getLogs () {
       const response = await axios.get(`/api/logs/?page=${this.page}`)
 
-      console.log(response)
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -83,8 +86,6 @@ export default {
         log_id: id
       })
 
-      console.log(response)
-
       if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)
         return false  
@@ -100,8 +101,6 @@ export default {
       }
       const response = await axios.post('/api/favorites/' + id)
 
-      console.log(response)
-
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false  
@@ -109,19 +108,21 @@ export default {
 
       this.getLogs()
     },
+    loadingStart () {
+      this.loading = true
+    }
   },
   watch: {
     $route: {
       async handler () {
         await this.getLogs()
+
+        setTimeout(() => {
+          this.loading = false
+        }, 3000)
       },
       immediate: true
     }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 3000);
   },
 }
 </script>

@@ -107,8 +107,6 @@ export default {
     async getUser () {
       const response = await axios.get(`/api/users/${this.$route.params.userId}`)
 
-      console.log(response.data)
-
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -129,10 +127,6 @@ export default {
       formData.append('profile_text', this.profileText)
       formData.append('profile_image', this.image ? this.image : '')
 
-      // フォームデータ情報の表示
-      console.log(formData.get('name'))
-      console.log(...formData.entries())
-
       // 画像データ送信の際にコンテンツタイプにmultipartを指定する、
       const response = await axios.post('/api/users/', formData, {
         headers: {
@@ -141,9 +135,7 @@ export default {
         }
       })  
 
-      console.log(response)
       if (response.status === UNPROCESSABLE_ENTITY) {
-        console.log(response)
         this.errors = response.data.errors
         return false
       }

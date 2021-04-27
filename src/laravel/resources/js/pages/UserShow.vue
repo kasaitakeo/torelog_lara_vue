@@ -84,7 +84,12 @@
               @favoriteLog="favoriteLog"
               @unFavoriteLog="unFavoriteLog"
             />
-            <Pagination :current-page="currentPage" :last-page="lastPage" :user-id="Number($route.params.userId)"/>
+            <Pagination 
+              :current-page="currentPage" 
+              :last-page="lastPage" 
+              :user-id="Number($route.params.userId)"  
+              @loadingStart="loadingStart"
+            />
           </v-col>
         </v-row>
       </v-card>
@@ -140,7 +145,6 @@ export default {
     async getUser () {
       const response = await axios.get(`/api/users/${this.$route.params.userId}`)
 
-      console.log(response)
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -157,7 +161,6 @@ export default {
     async getUserLogs () {
       const response = await axios.get(`/api/users/${this.$route.params.userId}/logs/?page=${this.page}`)
 
-      console.log(response)
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -170,8 +173,6 @@ export default {
     // 指定したIDのユーザーの種目取得
     async getUserEvents () {
       const response = await axios.get(`/api/users/${this.$route.params.userId}/events`)
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
@@ -186,8 +187,6 @@ export default {
         log_id: id
       })
 
-      console.log(response)
-
       if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)
         return false  
@@ -198,8 +197,6 @@ export default {
     // Log子コンポーネントからemitで渡される、いいね解除
    async unFavoriteLog ({ id }) {
       const response = await axios.post('/api/favorites/' + id)
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
@@ -212,8 +209,6 @@ export default {
     async follow (id) {
       const response = await axios.post(`/api/users/follow/${id}`)
 
-      console.log(response)
-
       if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -225,8 +220,6 @@ export default {
     async unFollow (id) {
       const response = await axios.post(`/api/users/unfollow/${id}`)
 
-      console.log(response)
-
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false  
@@ -234,22 +227,26 @@ export default {
 
       this.getUser()
     },
+    loadingStart () {
+      this.loading = true
+    }
   },
   watch: {
     $route: {
       async handler () {
         await this.getUserLogs()
+
         await this.getUser()
+
         await this.getUserEvents()
+
+        setTimeout(() => {
+          this.loading = false
+        }, 3000)
       },
       immediate: true
     }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 3000);
-  },
+  }
 }
 </script>
 

@@ -2,35 +2,28 @@
   <div>
     <v-app id="inspire">
     <Header/>
-      <!-- <Navbar /> -->
       <v-main class="pa-2 mt-15">
         <v-container fluid>
           <Message />
           <RouterView />
         </v-container>
       </v-main>
-    <!-- <Footer /> -->
     <BottomNav/>
-
     </v-app>
   </div>
 </template>
 
 <script>
-import Navbar from './components/Navbar.vue'
 import Header from './components/Header.vue'
 import Message from './components/Message.vue'
-import Footer from './components/Footer.vue'
 import BottomNav from './components/BottomNav.vue'
 
 import { NOT_FOUND, UNAUTHORIZED, INTERNAL_SERVER_ERROR } from './util'
 
 export default {
   components: {
-    Navbar,
     Header,
     Message,
-    Footer,
     BottomNav
   },
   computed: {

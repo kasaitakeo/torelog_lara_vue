@@ -32,9 +32,7 @@ class EventsController extends Controller
         $user = auth()->user();
 
         $event->user_id = $user->id;
-        $event->event_part = $request->input('eventPart');
-        $event->event_name = $request->input('eventName');
-        $event->event_explanation = $request->input('eventExplanation');
+        $event->fill($request->validated())->save();
 
         $event->save();
 
@@ -43,13 +41,12 @@ class EventsController extends Controller
 
     /**
      * EventUpdate.vueにて使用する種目データを取得
-     * @param  integer  $id
+     * @param  App\Models\Event  $event
      * @return array $event_data
      */
-    public function edit($id)
+    public function edit(Event $event)
     {
-        $event_data = event::with(['user'])
-        ->where('id', $id)->first();
+        $event_data = Event::with(['user'])->first();
 
         return $event_data ?? abort(404);;
     }
@@ -61,11 +58,7 @@ class EventsController extends Controller
      */
     public function update(EventRequest $request, Event $event)
     {
-        $event->event_part = $request->input('eventPart');
-        $event->event_name = $request->input('eventName');
-        $event->event_explanation = $request->input('eventExplanation');
-
-        $event->save();
+        $event->fill($request->validated())->save();
 
         return response('', 200);
     }

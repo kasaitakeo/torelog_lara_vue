@@ -16,7 +16,7 @@
     </div>
     <v-col>
       <v-card
-        class="mx-auto mb-3"
+        class="mx-auto mb-3 orange lighten-5"
         max-width="800"
       >
         <v-text-field
@@ -25,7 +25,7 @@
             label="トレログにタイトルをつけよう"
             placeholder="胸の日"
             required
-            background-color="orange lighten-4"
+            background-color="orange lighten-5"
           ></v-text-field>
         <v-row>
           <v-col>
@@ -46,7 +46,7 @@
           </v-col>
         </v-row>
         <v-card
-          class="mx-auto"
+          class="mx-auto orange lighten-5"
           max-width="800"
         >
           <form @submit.prevent="updateLog">
@@ -57,11 +57,11 @@
               filled
               label="今回のトレログに一言"
               auto-grow
-              background-color="orange lighten-4"
+              background-color="orange lighten-5"
             ></v-textarea>
-            <div class="d-flex justify-center mb-6">
+            <div class="d-flex justify-center mb-6 orange lighten-5">
               <v-btn @click="deleteLog">このトレログを削除する</v-btn>
-              <v-btn type="submit">編集終了</v-btn>
+              <v-btn type="submit" color="green accent-3">編集終了</v-btn>
             </div>
           </form>  
         </v-card>
@@ -106,8 +106,6 @@ export default {
         return false
       }
 
-      console.log(response.data)
-
       this.logTitle = response.data.title
       this.logContent = response.data.text
       this.eventLogs = response.data.event_logs
@@ -117,7 +115,7 @@ export default {
     async deleteEventLog ({ id }) {
       
       const response = await axios.delete(`/api/event_logs/${id}`)
-      console.log(response)
+
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -134,7 +132,7 @@ export default {
     async deleteAllEventLog () {
       
       const response = await axios.delete(`/api/${this.$route.params.logId}/event_logs`)
-      console.log(response)
+
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -164,8 +162,6 @@ export default {
         text: this.logContent
       })
 
-      console.log(response.data)
-
       if (response.status === UNPROCESSABLE_ENTITY) {
         this.errors = response.data.errors
         return false
@@ -188,8 +184,6 @@ export default {
     async deleteLog () {
       const response = await axios.delete(`/api/logs/${this.$route.params.logId}`)
 
-      console.log(response)
-
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false  
@@ -206,8 +200,6 @@ export default {
     async getUserEvents () {
       const response = await axios.get(`/api/users/${this.userId}/events`)
 
-      console.log(response)
-
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
@@ -218,8 +210,6 @@ export default {
     // 現在作成しているログに登録している全ての種目ログの取得
     async getEventLogs () {
       const response = await axios.get(`/api/${this.$route.params.logId}/event_logs`)
-
-      console.log(response)
 
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
@@ -242,7 +232,6 @@ export default {
         rep: e.rep,
         set: e.set
       })
-      console.log(response)
 
       if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)

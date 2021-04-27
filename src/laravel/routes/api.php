@@ -72,7 +72,7 @@ Route::group(['prefix' => 'events'], function () {
     // 種目作成
     Route::post('', 'EventsController@store')->name('event.store');
 
-    // 種目情報
+    // 種目情報（編集用）
     Route::get('/{event}', 'EventsController@edit')->name('event.edit');
     
     // 種目更新
@@ -94,7 +94,7 @@ Route::group(['prefix' => 'event_logs'], function () {
     Route::post('', 'EventLogsController@store')->name('event_log.store');
 
     // 種目ログ削除
-    Route::delete('/{event_log_id}', 'EventLogsController@delete')->name('event_log.delete');
+    Route::delete('/{event_log}', 'EventLogsController@delete')->name('event_log.delete');
 });
 
 // コメント作成

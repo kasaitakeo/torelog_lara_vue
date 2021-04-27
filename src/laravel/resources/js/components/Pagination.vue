@@ -1,5 +1,5 @@
 <template>
-  <div class="pagination text-center">
+  <div class="pagination text-center" @click="loadingStart">
     <div v-if="$route.name === '/'">
       <RouterLink
         v-if="! isFirstPage"
@@ -43,6 +43,11 @@ export default {
     },
     userId: {
       type: Number,
+    }
+  },
+  methods: {
+    loadingStart () {
+      this.$emit('loadingStart')
     }
   },
   computed: {

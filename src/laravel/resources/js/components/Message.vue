@@ -2,7 +2,7 @@
   <v-card 
     v-show="message"
     raised
-    color="#B3E5FC"
+    color="orange lighten-2"
     class="mx-auto"
     max-width="800"
     height="60"
