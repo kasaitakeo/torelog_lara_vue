@@ -1,10 +1,12 @@
 # 無料ブラウザアプリ「トレログ」
-![youtube_profile_image](https://user-images.githubusercontent.com/73113050/116174311-1ca5a100-a749-11eb-9bec-66e64fdee4b3.png)
 <img src="https://user-images.githubusercontent.com/73113050/116174311-1ca5a100-a749-11eb-9bec-66e64fdee4b3.png" width="100">
+[URL] https://torelog.work
+
 トレーニング中にノートを取ると汗で濡れてしまう…
+
 あの人はどんなトレーニングメニューを行っているんだろう…
+
 そんなあなたの問題をこのアプリが解決します！
-URL:https://torelog.work
 
 # デモ
 ![toreloghome mypage](https://user-images.githubusercontent.com/73113050/116174410-4f4f9980-a749-11eb-9b1c-7654802da62b.gif) ![torelogsakusei](https://user-images.githubusercontent.com/73113050/116174451-61c9d300-a749-11eb-9ff9-52bcbd8b90bd.gif)
