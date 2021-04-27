@@ -1,5 +1,4 @@
-# 無料ブラウザアプリ「トレログ」
-<img src="https://user-images.githubusercontent.com/73113050/116174311-1ca5a100-a749-11eb-9bec-66e64fdee4b3.png" width="100">
+# 無料ブラウザアプリ「トレログ」<img src="https://user-images.githubusercontent.com/73113050/116174311-1ca5a100-a749-11eb-9bec-66e64fdee4b3.png" width="100">
 [URL] https://torelog.work
 
 トレーニング中にノートを取ると汗で濡れてしまう…
