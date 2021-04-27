@@ -22,7 +22,7 @@
           </th>
         </tr>
       </thead>
-      <tbody  class="brown lighten-5">
+      <tbody>
         <tr
           v-for="item in items"
           :key="item.id"

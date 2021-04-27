@@ -1,8 +1,8 @@
 <template>
   <v-card
-    class="my-5 ma-1 pa-2" elevation="10"
+    class="my-5 ma-1" elevation="10"
   >
-    <v-row class="ma-1">
+    <v-row class="ma-1 mt-1 font-weight-regular">
       <v-col cols="3">{{ log.created_at | moment }}</v-col>
       <v-col cols="9">title: {{ log.title }}</v-col>
     </v-row>
@@ -18,8 +18,8 @@
     <v-row>
       <v-col cols="12">
         <!-- ログのテキストの表示 -->
-        <v-card-text class="brown lighten-5">
-          <p class="font-weight-regular">torememo</p><p class="headline">{{ log.text }}</p>
+        <v-card-text class="">
+          <p class="font-weight-regular">{{ log.text }}</p>
         </v-card-text>
 
       </v-col>
@@ -63,23 +63,23 @@
           cols="4" 
           align="start" 
           justify="start"
+          class=""
         >
-        <v-row class="d-flex justify-start pl-2">
-          <v-avatar color="grey darken-3">
-            <v-img
-              class="elevation-6"
-              alt=""
-              :src="log.user.profile_image"
-            ></v-img>
-          </v-avatar>
-
-        </v-row>
-        <v-row class="d-flex justify-start">
-          <!-- ログ作成ユーザーの名前をクリックするとユーザー詳細ページへ飛ぶ -->
-          <RouterLink class="button button--link" :to="{ name: 'user.show', params: { userId: log.user.id }}">
-            <div class="font-weight-bold">{{ log.user.screen_name }}</div>
-          </RouterLink>
-        </v-row>
+          <v-row class="d-flex justify-start pl-2">
+            <v-avatar color="grey darken-3">
+              <v-img
+                class="elevation-6"
+                alt=""
+                :src="log.user.profile_image"
+              ></v-img>
+            </v-avatar>
+          </v-row>
+          <v-row class="d-flex justify-start">
+            <!-- ログ作成ユーザーの名前をクリックするとユーザー詳細ページへ飛ぶ -->
+            <RouterLink class="button button--link" :to="{ name: 'user.show', params: { userId: log.user.id }}">
+              <div class="font-weight-bold">{{ log.user.screen_name }}</div>
+            </RouterLink>
+          </v-row>
         </v-col>
         <v-col
           cols="8"
