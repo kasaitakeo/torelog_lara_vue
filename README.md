@@ -1,14 +1,13 @@
 # 無料ブラウザアプリ「トレログ」
 ![youtube_profile_image](https://user-images.githubusercontent.com/73113050/116174311-1ca5a100-a749-11eb-9bec-66e64fdee4b3.png)
+<img src="https://user-images.githubusercontent.com/73113050/116174311-1ca5a100-a749-11eb-9bec-66e64fdee4b3.png" width="100">
 トレーニング中にノートを取ると汗で濡れてしまう…
 あの人はどんなトレーニングメニューを行っているんだろう…
 そんなあなたの問題をこのアプリが解決します！
 URL:https://torelog.work
 
 # デモ
-![toreloghome mypage](https://user-images.githubusercontent.com/73113050/116174410-4f4f9980-a749-11eb-9b1c-7654802da62b.gif)
-
-![torelogsakusei](https://user-images.githubusercontent.com/73113050/116174451-61c9d300-a749-11eb-9ff9-52bcbd8b90bd.gif)
+![toreloghome mypage](https://user-images.githubusercontent.com/73113050/116174410-4f4f9980-a749-11eb-9b1c-7654802da62b.gif) ![torelogsakusei](https://user-images.githubusercontent.com/73113050/116174451-61c9d300-a749-11eb-9ff9-52bcbd8b90bd.gif)
 
 # 実装機能一覧
 * ゲストログイン機能
@@ -27,7 +26,7 @@ URL:https://torelog.work
 ![torelog_ERD](https://user-images.githubusercontent.com/73113050/116173986-84a7b780-a748-11eb-974a-1fbe7b1305b6.png)
 
 # クラウドアーキテクチャ
-![aws_diagram](https://user-images.githubusercontent.com/73113050/116174257-0697e080-a749-11eb-812c-3c95fbe1e49c.png)
+![2FF39ED7-A9AD-431F-8FD8-C67D5DFAB1C3_1_105_c](https://user-images.githubusercontent.com/73113050/116175247-e9641180-a74a-11eb-90f6-7b8cff3b13a0.jpeg)
 
 # 技術スタック
 * フロントエンド Vue.js2.5（Vue Router, Vuetify, Vuex）を使用しSPA化
