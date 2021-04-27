@@ -71,7 +71,7 @@
             <UserEvent
               :events="events"
               :userId="user.id"
-              />
+            />
           </v-col>
         </v-row>
         <v-row>

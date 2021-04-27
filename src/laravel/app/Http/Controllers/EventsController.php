@@ -41,15 +41,16 @@ class EventsController extends Controller
 
     /**
      * EventUpdate.vueにて使用する種目データを取得
-     * @param  App\Models\Event  $event
+     * @param  integer $event
      * @return array $event_data
      */
-    public function edit(Event $event)
+    public function edit($event)
     {
-        $event_data = Event::with(['user'])->first();
+        $event_data = Event::with(['user'])->where('id', $event)->first();
 
         return $event_data ?? abort(404);;
     }
+
     /**
      * 種目データの更新
      * @param  App\Http\Requests\EventRequestt  $request
@@ -59,18 +60,6 @@ class EventsController extends Controller
     public function update(EventRequest $request, Event $event)
     {
         $event->fill($request->validated())->save();
-
-        return response('', 200);
-    }
-
-    /**
-     * 種目の削除
-     * @param  App\Models\Event  $event
-     * @return void
-     */
-    public function destroy(Event $event)
-    {
-        $event->delete();
 
         return response('', 200);
     }

@@ -38,12 +38,7 @@
     },
     computed: {
       color () {
-        switch (this.value) {
-          case 0: return 'deep-orange lighten-1'
-          case 1: return 'red darken-1'
-          case 2: return 'orange lighten-2'
-          default: return 'deep-orange lighten-1'
-        }
+          return 'brown lighten-3'
       },
       isLogin () {
         return this.$store.getters['auth/check']

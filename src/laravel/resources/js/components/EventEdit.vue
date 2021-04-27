@@ -29,7 +29,8 @@
         <v-btn @click="back">戻る</v-btn>
       </div>
       <div v-else>
-        <v-btn block type="submit" color="green accent-3">種目更新</v-btn>
+        <v-btn type="submit" color="green accent-3">種目更新</v-btn>
+        <v-btn @click="back">戻る</v-btn>
       </div>
     </form>
   </div>

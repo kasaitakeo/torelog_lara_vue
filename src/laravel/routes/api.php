@@ -77,9 +77,6 @@ Route::group(['prefix' => 'events'], function () {
     
     // 種目更新
     Route::put('/{event}', 'EventsController@update')->name('event.update');
-    
-    // 種目削除
-    Route::delete('/{event}', 'EventsController@destroy')->name('event.destroy');
 });
 
 

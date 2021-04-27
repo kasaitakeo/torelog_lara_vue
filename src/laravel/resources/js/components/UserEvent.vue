@@ -1,15 +1,15 @@
 <template>
-  <v-card class="ma-1 pa-2" elevation="10">
+  <div>
     <!-- 種目作成のリンク -->
     <RouterLink v-if="this.$route.name === 'log.show' || 'log.edit'" class="d-flex justify-center button button--link" :to="{name: 'event.create'}">
       種目追加
     </RouterLink>
     <v-tabs
-      background-color="orange lighten-1"
+      background-color="brown lighten-4"
       show-arrows
     >
     <!-- タブで各部位毎に種目を分ける -->
-    <v-tabs-slider color="teal lighten-3"></v-tabs-slider>
+    <v-tabs-slider color="brown lighten-5"></v-tabs-slider>
       <!-- クリックしたタブがアクティブになるようイベント作動 -->
       <v-tab v-for="eventPart in eventParts" :key="eventPart.id" @click="activate(eventPart.id)">
         {{ eventPart.name }}
@@ -33,11 +33,11 @@
         </div>
       </div>
     </v-col>
-  </v-card>
+ </div>
 </template>
 
 <script>
-// LogCreate UserShowが親コンポーネント
+// LogEdit UserShowが親コンポーネント
 import Event from '../components/Event.vue'
 
 export default {
@@ -84,7 +84,7 @@ export default {
         rep: e.rep,
         set: e.set
       })
-    }
+    },
   },
 }
 </script>

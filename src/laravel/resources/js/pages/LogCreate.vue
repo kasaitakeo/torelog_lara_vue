@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-card class="mx-auto orange lighten-5">
+      <v-card class="mx-auto brown lighten-5">
         <div class="errors" v-if="errors">
           <ul v-if="errors.title">
             <li v-for="msg in errors.title" :key="msg">{{ msg }}</li>
@@ -15,10 +15,10 @@
             filled
             label="トレログにタイトルをつけよう"
             auto-grow
-            background-color="orange lighten-4"
+            background-color="brown lighten-5"
           ></v-textarea>
           <div>
-            <v-btn type="submit" block color="orange lighten-4">トレログ編集へ</v-btn>
+            <v-btn type="submit" block>トレログ編集へ</v-btn>
           </div>
         </form>
       </v-card>

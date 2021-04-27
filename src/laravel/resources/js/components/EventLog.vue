@@ -1,7 +1,7 @@
 <template>
-  <v-simple-table class="orange lighten-4">
+  <v-simple-table>
     <template v-slot:default>
-      <thead>
+      <thead  class="brown lighten-4">
         <tr>
           <th class="text-left">
             部位
@@ -22,7 +22,7 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody  class="brown lighten-5">
         <tr
           v-for="item in items"
           :key="item.id"

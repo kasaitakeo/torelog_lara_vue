@@ -5,7 +5,7 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-        color="orange lighten-5"
+        color="brown lighten-4"
           v-bind="attrs"
           v-on="on"
         >
@@ -78,11 +78,15 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn  @click="close">Cancel</v-btn>
-            <RouterLink v-if="userId === loginUserId" :to="{name: 'event.update', params: {eventId: event.id}}">
-              <v-btn color="blue darken-1">
+            <v-btn class="mx-1" @click="close">閉じる</v-btn>
+            <RouterLink 
+              class="button button--link" 
+              v-if="userId === loginUserId" 
+              :to="{name: 'event.update', params: {eventId: event.id}}"
+            >
+              <v-btn class="mx-1">
                 <v-icon dark>
-                  mdi-pencil
+                  mdi-lead-pencil
                 </v-icon>
               </v-btn>
             </RouterLink>

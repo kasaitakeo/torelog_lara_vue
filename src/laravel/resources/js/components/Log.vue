@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="my-5 ma-1 pa-2 orange lighten-2" elevation="10"
+    class="my-5 ma-1 pa-2" elevation="10"
   >
     <v-row class="ma-1">
       <v-col cols="3">{{ log.created_at | moment }}</v-col>
@@ -17,13 +17,11 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <v-card class="mx-auto orange lighten-4">
         <!-- ログのテキストの表示 -->
-        <v-card-text class="">
+        <v-card-text class="brown lighten-5">
           <p class="font-weight-regular">torememo</p><p class="headline">{{ log.text }}</p>
         </v-card-text>
 
-        </v-card>
       </v-col>
     </v-row>
     <v-row>
@@ -37,16 +35,17 @@
             <!-- ログを作成したユーザーがログインユーザーの場合 -->
             <div v-if="log.user.id === loginUserId">
               <RouterLink class="button button--link" v-bind:to="{ name: 'log.edit', params: { logId: log.id }}">
-                <v-btn
-                  outlined
-                  x-small
-                >編集</v-btn> 
+                <v-btn text class="mx-1">
+                  <v-icon dark>
+                    mdi-lead-pencil
+                  </v-icon>
+                </v-btn> 
               </RouterLink>
-              <v-btn
-                @click="deleteLog(log.id)"
-                outlined
-                x-small
-              >削除</v-btn>
+              <v-btn text @click="deleteLog(log.id)">
+                <v-icon dark>
+                  mdi-delete
+                </v-icon>
+              </v-btn>
             </div>
           </div>
           <!-- LogShowページでない場合、ログの詳細ボタンを表示 -->
@@ -117,7 +116,7 @@
     </v-card-actions>
     <v-expand-transition>
       <v-card v-show="show">
-        <v-list two-line  class="orange lighten-4">
+        <v-list two-line  class="brown lighten-5">
           <!-- 全てのコメントの内5つまで表示（0番目から5番目までのコメント） -->
           <template v-for="comment in log.comments.slice(0, 5)" >
             <v-list-item :key="comment.id">
