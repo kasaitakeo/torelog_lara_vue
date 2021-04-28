@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="my-5 ma-1" elevation="10"
+    class="my-5 ma-1 brown lighten-5" elevation="10"
   >
     <v-row class="ma-1 mt-1 font-weight-regular">
       <v-col cols="3">{{ log.created_at | moment }}</v-col>
@@ -19,7 +19,7 @@
       <v-col cols="12">
         <!-- ログのテキストの表示 -->
         <v-card-text class="">
-          <p class="font-weight-regular">{{ log.text }}</p>
+          <p class="text-justify font-weight-regular">{{ log.text }}</p>
         </v-card-text>
 
       </v-col>

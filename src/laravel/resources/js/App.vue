@@ -5,6 +5,7 @@
       <v-main class="pa-2 mt-15">
         <v-container fluid>
           <Message />
+          <Calendar />
           <RouterView />
         </v-container>
       </v-main>
@@ -17,6 +18,7 @@
 import Header from './components/Header.vue'
 import Message from './components/Message.vue'
 import BottomNav from './components/BottomNav.vue'
+import Calendar from './components/Calendar.vue'
 
 import { NOT_FOUND, UNAUTHORIZED, INTERNAL_SERVER_ERROR } from './util'
 
@@ -24,7 +26,8 @@ export default {
   components: {
     Header,
     Message,
-    BottomNav
+    BottomNav,
+    Calendar
   },
   computed: {
     errorCode () {

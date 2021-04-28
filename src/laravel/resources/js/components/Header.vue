@@ -40,17 +40,16 @@
     <v-app-bar
       app
       color="brown lighten-3"
+      height="60"
       dark
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>
-        <RouterLink class="button button--link white--text" to="/">
+        <RouterLink class="button button--link white--text text-h4 text-center font-weight-black" to="/">
           トレログ
         </RouterLink>
-      </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="isLogin">  
-        <span class="button button--link  white--text" @click="logout">
+        <span class="white--text" @click="logout">
           Logout
         </span>
 

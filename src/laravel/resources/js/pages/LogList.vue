@@ -7,7 +7,7 @@
           v-if="!logs.length"
           to="/users"
           block
-          color="orange lighten-4"
+          color="brown lighten-5"
           elevation="4"
         >ユーザーリストから他のユーザーをフォローしてください！</v-btn>
       <!-- </RouterLink> -->
